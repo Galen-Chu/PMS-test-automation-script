@@ -16,7 +16,7 @@ jobs:
       id-token: write  # Required for some OIDC providers
       
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 #
 # on:
 #   push:
@@ -48,7 +48,7 @@ jobs:
 #     runs-on: ubuntu-latest
 #     steps:
 #       - name: Checkout code
-#         uses: actions/checkout@v6
+#         uses: actions/checkout@v7
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -92,7 +92,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -177,7 +177,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v7
@@ -261,7 +261,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download Allure Results (Smoke)
         uses: actions/download-artifact@v8
