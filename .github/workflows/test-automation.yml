@@ -78,7 +78,7 @@ jobs:
         run: bandit -r src/ -f json -o security-report.json || true
 
       - name: Upload Security Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: security-report
@@ -151,14 +151,14 @@ jobs:
         run: docker compose down
 
       - name: Upload Allure Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: allure-results-smoke
           path: allure-results/
 
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: screenshots-smoke
@@ -238,14 +238,14 @@ jobs:
         run: docker compose down
 
       - name: Upload Allure Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: allure-results-${{ matrix.browser }}-py${{ matrix.python-version }}
           path: allure-results-${{ matrix.browser }}-py${{ matrix.python-version }}/
 
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: screenshots-${{ matrix.browser }}-py${{ matrix.python-version }}
@@ -287,7 +287,7 @@ jobs:
           keep_reports: 20
 
       - name: Upload Allure Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: allure-report
