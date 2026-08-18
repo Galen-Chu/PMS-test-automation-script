@@ -20,13 +20,10 @@ updates:
       prefix: "deps"
       include: "scope"
     ignore:
-      # allure-pytest 2.13.5 pins allure-python-commons==2.13.5 exactly;
-      # bumping commons alone makes pip resolution impossible.
-      # Re-evaluate when allure-pytest ships a matching release.
+      # allure-pytest and allure-python-commons pin each other exactly;
+      # commons-only bumps are unmergeable. Bump allure-pytest and pin
+      # commons to the matching version in the same change instead.
       - dependency-name: "allure-python-commons"
-      # pytest-env >=1.6.0 requires pytest>=9.0.2; project pins pytest 8.3.4.
-      # Re-evaluate when the project migrates to pytest 9.
-      - dependency-name: "pytest-env"
       # numpy >=2.5 requires Python >=3.12; the CI matrix still tests 3.11.
       # Re-evaluate when the 3.11 matrix entry is dropped.
       - dependency-name: "numpy"
