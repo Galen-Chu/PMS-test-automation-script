@@ -2,8 +2,12 @@ name: Test Automation CI/CD
 
 on: [push]
 
+env:
+  PYTHON_VERSION: '3.12'
+  SELENIUM_HUB: 'http://localhost:4444/wd/hub'
+
 jobs:
-  test:
+  lint-and-security:
     runs-on: ubuntu-latest
     # Add these lines here:
     permissions:
