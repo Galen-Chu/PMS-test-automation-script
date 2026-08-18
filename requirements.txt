@@ -10,6 +10,6 @@ pytest-xdist==3.6.1
 pytest-dependency==0.6.1
 pytest-env==1.1.5
 tensorflow==2.21.0
-numpy==2.4.3
+numpy==2.5.2
 scikit-learn==1.8.0
 opencv-python==4.11.0.86
