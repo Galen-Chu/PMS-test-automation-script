@@ -64,13 +64,15 @@ class DriverHelper:
 
     @staticmethod
     def save_session_storages():
-        session_data_dict = DriverHelper.DRIVER.execute_script("""
+        session_data_dict = DriverHelper.DRIVER.execute_script(
+            """
             let data = {};
             for (let [key, value] of Object.entries(sessionStorage)) {
                 data[key] = value;
             }
             return data;
-        """)
+        """
+        )
         with open(DriverHelper.TMP_SESSION, "w", encoding="utf-8") as file:
             json.dump(session_data_dict, file)
 

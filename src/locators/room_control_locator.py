@@ -84,8 +84,11 @@ class RoomControlLocator(BaseLocator):
     )
 
     room_repair_list = (By.XPATH, "//table[@class='datagrid-btable']//td[@field='room_nos']")
-    room_repair_list_item = (By.XPATH, "//table[@class='datagrid-btable']//td[@field='room_nos' \
-                                    and child::div[normalize-space()='%s']]/preceding-sibling::td")
+    room_repair_list_item = (
+        By.XPATH,
+        "//table[@class='datagrid-btable']//td[@field='room_nos' \
+                                    and child::div[normalize-space()='%s']]/preceding-sibling::td",
+    )
     room_repair_datepicker = (
         By.XPATH,
         "//div[child::div/span[normalize-space()='%s']]/following-sibling::div//span[@aria-label='select']",

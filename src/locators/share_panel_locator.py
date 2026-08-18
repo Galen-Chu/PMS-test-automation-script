@@ -32,15 +32,24 @@ class SharePanelLocator(BaseLocator):
         By.XPATH,
         "//label[normalize-space()='%s']/following-sibling::div//input[not(@validatehidden)]",
     )
-    label_input_3 = (By.XPATH, "(//div[child::div[child::span[normalize-space()='%s']]]\
-                     /following-sibling::div//input[not(@aria-label='hidden')])[last()]")
+    label_input_3 = (
+        By.XPATH,
+        "(//div[child::div[child::span[normalize-space()='%s']]]\
+                     /following-sibling::div//input[not(@aria-label='hidden')])[last()]",
+    )
     # ---- 開班 panel END ----
 
     # ---- 房價 panel ----
-    label_span_select_3 = (By.XPATH, "//div[child::div[child::span[normalize-space()='%s']]]\
-                           /following-sibling::div")
-    label_span_select_value_3 = (By.XPATH, "//div[child::div[child::span[normalize-space()='%s']]]\
-                                 /following-sibling::div//span[@class='e-input-value']")
+    label_span_select_3 = (
+        By.XPATH,
+        "//div[child::div[child::span[normalize-space()='%s']]]\
+                           /following-sibling::div",
+    )
+    label_span_select_value_3 = (
+        By.XPATH,
+        "//div[child::div[child::span[normalize-space()='%s']]]\
+                                 /following-sibling::div//span[@class='e-input-value']",
+    )
     label_span_select_item_3 = (
         By.XPATH,
         "//li[contains(@class, 'e-list-item') and normalize-space()='%s']",

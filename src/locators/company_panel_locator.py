@@ -6,8 +6,11 @@ from locators.base_locator import BaseLocator
 class CompanyPanelLocator(BaseLocator):
 
     btn_target_contract = (By.XPATH, "//tr[contains(@id, 'companyContractDgId')]")
-    btn_add_contract = (By.XPATH, "//div[@class='panel-title' and contains(text(), '商務公司維護')]\
-                        /parent::div/following-sibling::div//div[@id='contractPanel']//button[1]")
+    btn_add_contract = (
+        By.XPATH,
+        "//div[@class='panel-title' and contains(text(), '商務公司維護')]\
+                        /parent::div/following-sibling::div//div[@id='contractPanel']//button[1]",
+    )
     btn_remove_contract = (
         By.XPATH,
         "//div[@class='panel-title' and contains(text(), '商務公司維護')]\
@@ -37,8 +40,11 @@ class CompanyPanelLocator(BaseLocator):
     td_input_value = (By.XPATH, "//tr[contains(@id, 'companyContractDgId')]/td[@field='%s']/div")
     item_cod = (By.XPATH, "(//div[@class='combobox-item' and text()='%s'])[last()]")
 
-    btn_save = (By.XPATH, "(//div[child::div[@class='panel-title' and text()='商務公司維護']]\
-                /following-sibling::div//div[contains(@class, 'justify-content-end')]//button)[1]")
+    btn_save = (
+        By.XPATH,
+        "(//div[child::div[@class='panel-title' and text()='商務公司維護']]\
+                /following-sibling::div//div[contains(@class, 'justify-content-end')]//button)[1]",
+    )
 
     calendar_title = (
         By.XPATH,

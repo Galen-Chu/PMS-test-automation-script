@@ -9,8 +9,11 @@ class GuestAccountLocator(BaseLocator):
     # ----- 入帳 ----
     btn_credit = (By.XPATH, "//button[@data-field-id='r_1040']")
     select_consumption = (By.XPATH, "//div[@class='el-select select required']")
-    input_amount = (By.XPATH, "(//div[@class='panel-title' and text()='入帳']/parent::div\
-                    /following-sibling::div//input[contains(@id, 'numerictextbox_')])[1]")
+    input_amount = (
+        By.XPATH,
+        "(//div[@class='panel-title' and text()='入帳']/parent::div\
+                    /following-sibling::div//input[contains(@id, 'numerictextbox_')])[1]",
+    )
     # ----- 入帳 END -----
 
     # ----- 住客帳維護單筆 -----
