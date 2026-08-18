@@ -7,8 +7,13 @@ pytesseract==0.3.13
 pytest==8.3.4
 selenium==4.32.0
 pytest-xdist==3.6.1
+<<<<<<< HEAD
 pytest-dependency==0.6.1
 pytest-env==1.1.5
+=======
+pytest-dependency==0.6.0
+pytest-env==1.6.0
+>>>>>>> origin/dependabot/pip/pytest-env-1.6.0
 tensorflow==2.20.0
 numpy==2.3.0
 scikit-learn==1.7.2
