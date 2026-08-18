@@ -1,4 +1,4 @@
-allure-pytest==2.13.5
+allure-pytest==2.16.0
 allure_python_commons==2.13.5
 names==0.3.0
 pillow==12.1.1
