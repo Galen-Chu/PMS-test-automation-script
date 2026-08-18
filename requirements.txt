@@ -5,7 +5,7 @@ pillow==12.1.1
 pyhumps==3.8.0
 pytesseract==0.3.13
 pytest==8.3.4
-selenium==4.32.0
+selenium==4.47.0
 pytest-xdist==3.6.1
 pytest-dependency==0.6.1
 pytest-env==1.1.5
