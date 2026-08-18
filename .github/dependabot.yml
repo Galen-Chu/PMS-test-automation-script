@@ -19,6 +19,14 @@ updates:
     commit-message:
       prefix: "deps"
       include: "scope"
+    ignore:
+      # allure-pytest 2.13.5 pins allure-python-commons==2.13.5 exactly;
+      # bumping commons alone makes pip resolution impossible.
+      # Re-evaluate when allure-pytest ships a matching release.
+      - dependency-name: "allure-python-commons"
+      # pytest-env >=1.6.0 requires pytest>=9.0.2; project pins pytest 8.3.4.
+      # Re-evaluate when the project migrates to pytest 9.
+      - dependency-name: "pytest-env"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
@@ -53,3 +61,7 @@ updates:
     commit-message:
       prefix: "docker"
       include: "scope"
+    ignore:
+      # tensorflow (2.20/2.21) and opencv-python (4.11) ship no cp314 wheels;
+      # python:3.14-slim breaks the docker build. Re-evaluate when wheels exist.
+      - dependency-name: "python"
