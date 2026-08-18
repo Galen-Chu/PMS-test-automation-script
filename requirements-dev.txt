@@ -20,7 +20,7 @@ freezegun==1.5.5
 # Documentation
 sphinx==9.1.0
 sphinx-rtd-theme==3.0.2
-myst-parser==4.0.1
+myst-parser==5.1.0
 
 # Development Tools
 ipython==9.16.1
