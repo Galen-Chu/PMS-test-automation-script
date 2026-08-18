@@ -27,6 +27,9 @@ updates:
       # pytest-env >=1.6.0 requires pytest>=9.0.2; project pins pytest 8.3.4.
       # Re-evaluate when the project migrates to pytest 9.
       - dependency-name: "pytest-env"
+      # numpy >=2.5 requires Python >=3.12; the CI matrix still tests 3.11.
+      # Re-evaluate when the 3.11 matrix entry is dropped.
+      - dependency-name: "numpy"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
