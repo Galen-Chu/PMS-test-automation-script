@@ -15,7 +15,7 @@ mypy==1.19.1
 pytest-cov==7.0.0
 pytest-mock==3.15.1
 faker==36.1.1
-freezegun==1.5.1
+freezegun==1.5.5
 
 # Documentation
 sphinx==8.1.3
