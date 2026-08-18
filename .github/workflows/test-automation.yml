@@ -264,14 +264,14 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download Allure Results (Smoke)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: allure-results-smoke
           path: allure-results/
         continue-on-error: true
 
       - name: Download Allure Results (Regression)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: allure-results-*
           path: allure-results/
@@ -321,7 +321,7 @@ jobs:
           echo "| Allure Report | ${{ needs.generate-allure-report.result }} |" >> $GITHUB_STEP_SUMMARY
 
       - name: Download Allure Report
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: allure-report
           path: allure-report/
