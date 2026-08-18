@@ -6,16 +6,16 @@
 
 # Code Quality
 pylint==4.0.7
-black==25.1.0
+black==26.5.1
 flake8==7.1.2
 bandit==1.8.3
 mypy==1.19.1
 
 # Testing
-pytest-cov==7.0.0
+pytest-cov==7.1.0
 pytest-mock==3.15.1
 faker==36.1.1
-freezegun==1.5.1
+freezegun==1.5.5
 
 # Documentation
 sphinx==9.1.0
@@ -23,5 +23,5 @@ sphinx-rtd-theme==3.0.2
 myst-parser==4.0.1
 
 # Development Tools
-ipython==8.32.0
+ipython==9.16.1
 pre-commit==4.1.0
