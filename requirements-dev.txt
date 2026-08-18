@@ -24,4 +24,4 @@ myst-parser==4.0.1
 
 # Development Tools
 ipython==9.16.1
-pre-commit==4.1.0
+pre-commit==4.6.2
