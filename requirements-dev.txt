@@ -12,7 +12,7 @@ bandit==1.8.3
 mypy==1.15.0
 
 # Testing
-pytest-cov==6.0.0
+pytest-cov==7.0.0
 pytest-mock==3.14.0
 faker==36.1.1
 freezegun==1.5.1
