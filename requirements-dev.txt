@@ -6,7 +6,7 @@
 
 # Code Quality
 pylint==3.3.4
-black==25.1.0
+black==26.5.1
 flake8==7.1.2
 bandit==1.8.3
 mypy==1.19.1
