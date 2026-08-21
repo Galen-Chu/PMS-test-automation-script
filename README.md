@@ -33,7 +33,7 @@ pms-test-automation/
 │   ├── pages/             # Page Object Model classes
 │   │   ├── components/    # Reusable UI components (11)
 │   │   └── dialogs/       # Dialog/modal handlers (3)
-│   ├── tests/             # Test suites (15 files, 250 tests)
+│   ├── tests/             # Test suites (15 files, 230 tests)
 │   │   ├── dynamic_steps/ # Shared step libraries
 │   │   ├── examples/      # Data-driven example tests
 │   │   └── fixtures/      # Pytest fixtures + static test data
