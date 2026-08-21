@@ -1,0 +1,46 @@
+{
+  "valid_guest": {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "+1-555-0100",
+    "country": "United States",
+    "vip_status": "normal"
+  },
+  "vip_guest": {
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "phone": "+1-555-0101",
+    "country": "United States",
+    "vip_status": "platinum",
+    "loyalty_number": "LY-000123"
+  },
+  "corporate_guest": {
+    "name": "Robert Chen",
+    "email": "robert.chen@corp-example.com",
+    "phone": "+886-2-5550-1002",
+    "country": "Taiwan",
+    "vip_status": "gold",
+    "company": "Example Trading Co."
+  },
+  "international_guest": {
+    "name": "Maria Garcia",
+    "email": "maria.garcia@example.com",
+    "phone": "+34-555-010-03",
+    "country": "Spain",
+    "vip_status": "normal",
+    "preferred_language": "en-US"
+  },
+  "invalid_guest_missing_email": {
+    "name": "No Email",
+    "phone": "+1-555-0104"
+  },
+  "invalid_guest_invalid_email": {
+    "name": "Bad Email",
+    "email": "not-an-email",
+    "phone": "+1-555-0105"
+  },
+  "invalid_guest_missing_name": {
+    "email": "noname@example.com",
+    "phone": "+1-555-0106"
+  }
+}

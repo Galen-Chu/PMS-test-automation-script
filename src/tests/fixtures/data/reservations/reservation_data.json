@@ -1,0 +1,59 @@
+{
+  "valid_reservation": {
+    "reservation_no": "RES-2024001",
+    "guest_name": "John Doe",
+    "room_type": "DELUXE",
+    "adults": 2,
+    "children": 0,
+    "arrival_date": "2026-09-04",
+    "departure_date": "2026-09-06"
+  },
+  "weekend_reservation": {
+    "reservation_no": "RES-2024002",
+    "guest_name": "Jane Smith",
+    "room_type": "SUITE",
+    "adults": 2,
+    "children": 1,
+    "arrival_date": "2026-09-04",
+    "departure_date": "2026-09-06"
+  },
+  "group_reservation": {
+    "reservation_no": "RES-2024003",
+    "guest_name": "Example Tour Group",
+    "room_type": "STANDARD",
+    "adults": 10,
+    "children": 2,
+    "rooms": 5,
+    "arrival_date": "2026-09-04",
+    "departure_date": "2026-09-07"
+  },
+  "long_stay_reservation": {
+    "reservation_no": "RES-2024004",
+    "guest_name": "Robert Chen",
+    "room_type": "DELUXE",
+    "adults": 1,
+    "children": 0,
+    "arrival_date": "2026-09-01",
+    "departure_date": "2026-09-30"
+  },
+  "corporate_reservation": {
+    "reservation_no": "RES-2024005",
+    "guest_name": "Anna Mueller",
+    "room_type": "STANDARD",
+    "adults": 1,
+    "children": 0,
+    "company": "Example Trading Co.",
+    "cost_center": "CC-8821",
+    "arrival_date": "2026-09-04",
+    "departure_date": "2026-09-06"
+  },
+  "invalid_reservation_past_date": {
+    "reservation_no": "RES-2024006",
+    "guest_name": "Bad Dates",
+    "room_type": "STANDARD",
+    "adults": 1,
+    "children": 0,
+    "arrival_date": "2026-09-10",
+    "departure_date": "2026-09-06"
+  }
+}

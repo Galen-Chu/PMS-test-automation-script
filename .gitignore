@@ -88,3 +88,6 @@ image.png
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Local test configuration (copy from pytest.ini.example)
+pytest.ini

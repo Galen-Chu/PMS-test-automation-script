@@ -1,0 +1,13 @@
+{
+  "browser_settings": {
+    "default_browser": "chrome",
+    "headless": true,
+    "window_size": "1920x1080",
+    "page_load_timeout": 30
+  },
+  "timeout_settings": {
+    "implicit_wait": 10,
+    "explicit_wait": 15,
+    "poll_frequency": 0.5
+  }
+}

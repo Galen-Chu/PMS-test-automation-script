@@ -1,0 +1,20 @@
+{
+  "room_types": [
+    { "code": "STD", "name": "Standard", "max_occupancy": 2 },
+    { "code": "DLX", "name": "Deluxe", "max_occupancy": 3 },
+    { "code": "SUITE", "name": "Suite", "max_occupancy": 4 }
+  ],
+  "room_statuses": [
+    { "code": "VA", "name": "Vacant Arrived", "occupiable": true },
+    { "code": "VD", "name": "Vacant Dirty", "occupiable": false },
+    { "code": "OC", "name": "Occupied", "occupiable": false },
+    { "code": "DD", "name": "Due Out", "occupiable": false }
+  ],
+  "sample_rooms": [
+    { "room_no": "301", "room_type": "STD", "floor": 3, "status": "VA" },
+    { "room_no": "302", "room_type": "STD", "floor": 3, "status": "OC" },
+    { "room_no": "501", "room_type": "DLX", "floor": 5, "status": "VA" },
+    { "room_no": "801", "room_type": "SUITE", "floor": 8, "status": "VA" },
+    { "room_no": "802", "room_type": "SUITE", "floor": 8, "status": "DD" }
+  ]
+}
