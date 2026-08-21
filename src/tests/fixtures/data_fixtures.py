@@ -5,6 +5,7 @@ Provides reusable test data across all test files.
 
 import json
 import csv
+from datetime import date
 from pathlib import Path
 from typing import Dict, List, Any
 import pytest
@@ -280,7 +281,12 @@ def reservation_factory():
     ) -> Dict[str, Any]:
         arrival = arrival_date or fake.date_between(start_date="today", end_date="+30d").isoformat()
         departure = (
-            departure_date or fake.date_between(start_date=arrival, end_date="+60d").isoformat()
+            departure_date
+            or fake.date_between(
+                # faker no longer parses ISO date strings - pass a date object
+                start_date=date.fromisoformat(arrival),
+                end_date="+60d",
+            ).isoformat()
         )
 
         return {

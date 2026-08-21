@@ -4,6 +4,10 @@ import allure
 
 from tools.driver_helper import DriverHelper
 
+# pytest registers fixtures from conftest modules only; re-export the
+# data fixtures here so every test module under tests/ can request them.
+from tests.fixtures.data_fixtures import *  # noqa: E402,F401,F403
+
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):  # pylint: disable=unused-argument
@@ -21,8 +25,9 @@ def pytest_runtest_makereport(item, call):  # pylint: disable=unused-argument
 
     if rep.when == "teardown":
         try:
-            DriverHelper.DRIVER.quit()
-            DriverHelper.DRIVER = None
+            if DriverHelper.DRIVER is not None:
+                DriverHelper.DRIVER.quit()
+                DriverHelper.DRIVER = None
         except Exception as e:  # pylint: disable=broad-exception-caught
             print(e)
 

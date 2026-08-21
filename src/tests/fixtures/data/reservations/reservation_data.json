@@ -55,5 +55,14 @@
     "children": 0,
     "arrival_date": "2026-09-10",
     "departure_date": "2026-09-06"
+  },
+  "invalid_reservation_departure_before_arrival": {
+    "reservation_no": "RES-2024007",
+    "guest_name": "Wrong Order",
+    "room_type": "STANDARD",
+    "adults": 1,
+    "children": 0,
+    "arrival_date": "2026-09-08",
+    "departure_date": "2026-09-06"
   }
 }
