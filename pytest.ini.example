@@ -13,3 +13,4 @@ env =
     USERNAME = your_username
     PASSWORD = your_password
     SELENIUM_HUB = http://localhost:4444/wd/hub
+    QASE_API_TOKEN =

@@ -137,7 +137,7 @@ pms-test-automation-showcase/
 │   ├── tests/              # Test suites
 │   │   ├── conftest.py     # Pytest configuration
 │   │   ├── test_login.py
-│   │   ├── dymamic_steps/  # Dynamic test steps
+│   │   ├── dynamic_steps/  # Dynamic test steps
 │   │   └── ...
 │   │
 │   └── tools/ # Utility modules
