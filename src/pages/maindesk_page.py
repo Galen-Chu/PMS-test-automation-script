@@ -65,6 +65,18 @@ class MaindeskPage(BasePage):
         self.click(tmp_locator)
         return self
 
+    def click_edit_card_nos_button(self):
+        self._click_span_button("openCarNosDialog")
+        return self
+
+    def input_car_nos(self, car_nos):
+        self.input_with_clear(self.locator.carNos_textarea, car_nos)
+        return self
+
+    def input_guest_remark(self, guest_remark):
+        self.input_with_clear(self.locator.guest_remark_column, guest_remark)
+        return self
+
     def input_guest_name(self, guest_name):
         self.input(self.locator.guest_row_field, guest_name)
         self.input(self.locator.guest_row_field, Keys.ENTER)
@@ -83,6 +95,9 @@ class MaindeskPage(BasePage):
         self.click(tmp_locator)
         return self
 
+    def has_profile_note(self):
+        return self.driver.find_elements(*self.locator.check_precredit)
+
     def get_room_mn_text(self, field):
         return self._get_input_value(field)
 
@@ -96,9 +111,16 @@ class MaindeskPage(BasePage):
         guest_name = self.driver.find_element(*self.locator.guest_row_field).get_attribute("value")
         return guest_name
 
+    def get_maindesk_precredit_amount(self):
+        guest_name = self.driver.find_element(*self.locator.text_precredit_amount).text
+        return guest_name
+
     def get_room_dt_row_text(self, field):
         tmp_locator = self.formator_locator(self.locator.text_in_room_dt_row, field)
         return self.driver.find_element(*tmp_locator).text
+
+    def get_guest_remark(self):
+        return self.driver.find_element(*self.locator.guest_remark_column).get_attribute("value")
 
     # ----- 房間單筆 End -----
 
@@ -127,7 +149,7 @@ class MaindeskPage(BasePage):
         self.click(self.locator.btn_save)
         return self
 
-    def set_colume_data(self, field, value):
+    def set_column_data(self, field, value):
         tmp_locator = self.formator_locator(self.locator.text_by_field, "rent_amt")
         self.click(tmp_locator)
         tmp_locator = self.formator_locator(self.locator.input_row_data, field)
@@ -189,4 +211,19 @@ class MaindeskPage(BasePage):
     # ----- 注意事項 視窗 -----
     def input_note_content(self, value):
         self.input_with_clear(self.locator.notice_content_textarea, value)
+        return self
+
+    # ----- 預授權 視窗 -----
+    def click_edit_precredit(self):
+        self.click(self.locator.btn_edit_precredit)
+        return self
+
+    # ----- 車號 視窗 -----
+    def get_car_nos(self):
+        tmp_locator = self.formator_locator(self.locator.input_by_data_field_id, "carNos")
+        return self.driver.find_element(*tmp_locator).get_attribute("value")
+
+    def click_confirm_button(self):
+        tmp_locator = self.formator_locator(self.locator.button_by_text, "確定")
+        self.click(tmp_locator)
         return self

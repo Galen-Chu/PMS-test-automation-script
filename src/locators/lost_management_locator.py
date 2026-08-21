@@ -12,9 +12,9 @@ class LostManagementLocator(BaseLocator, LostItemLocator):
     rent_day = (By.XPATH, "//label[@title='查詢日期']/following-sibling::div/input")
     # ----- 失物管理頁面 End ----
 
-    # ----- 驗證失誤資料 -----
+    # ----- 驗證失物資料 -----
     text_data_in_page = (
         By.XPATH,
         "//div[@class='panel datagrid panel-htop']//tr[@datagrid-row-index='%s']//td[@field='%s']/div",
     )
-    # ----- 驗證失誤資料 End -----
+    # ----- 驗證失物資料 End -----

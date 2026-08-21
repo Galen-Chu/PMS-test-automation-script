@@ -48,11 +48,8 @@ class ReservationLocator(BaseLocator):
     # ----- 明細頁籤 End -----
 
     # ----- 依房型訂房 -----
-    select_room_type = (
-        By.XPATH,
-        "//tr[contains(@data-tt-id, '%s') and not(@data-tt-parent-id)]\
-                        /td[contains(@class, 'pointer') and not(contains(@class, 'is_selected'))]",
-    )
+    select_room_type = (By.XPATH, "//tr[contains(@data-tt-id, '%s') and not(@data-tt-parent-id)]\
+                        /td[contains(@class, 'pointer') and not(contains(@class, 'is_selected'))]")
     btn_edit_item = (
         By.XPATH,
         "//div[@id='pane-Summary']//button[@title='編輯' and not(contains(@class, 'e-hide'))]",

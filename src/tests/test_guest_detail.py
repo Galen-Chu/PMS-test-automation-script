@@ -368,7 +368,7 @@ class TestGuestDetail:
             web.reservation_card_dialog.click_tab_guest_function("notesButton").sleep(1)
             web.base_page.screenshot("And 驗證Notes正確")
             web.base_page.assert_data(
-                "Notes內容", web.reservation_card_dialog.get_notestext(), text
+                "Notes內容", web.reservation_card_dialog.get_notes_text(), text
             )
 
     @allure.story("新增一筆預授權")
@@ -748,7 +748,7 @@ class TestGuestDetail:
 
         with allure.step("And 驗證訂房提醒跳出正確"):
             web.base_page.close_panel().sleep(3)
-            popup_alert_content = web.reservation_card_dialog.get_popup_reservation_remind_content()
+            popup_alert_content = web.share_panel_component.get_remind_panel_content("訂房提醒")
             web.base_page.screenshot("And 驗證訂房提醒跳出正確")
             web.base_page.assert_data("彈窗提醒內容", popup_alert_content, alert_content)
 

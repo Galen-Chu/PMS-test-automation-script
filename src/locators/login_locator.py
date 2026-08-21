@@ -10,7 +10,6 @@ class LoginLocator:
 
     dialog_tip = (By.XPATH, "//div[@role='dialog' and @aria-label='提示']")
     dialog_tip_btn = (By.XPATH, "//div[@role='dialog' and @aria-label='提示']//button/span")
-    input_valid_code = (By.XPATH, "//input[@placeholder='驗證碼']")
 
     # ----- 130與128登入頁切換 -----
     btn_login = (

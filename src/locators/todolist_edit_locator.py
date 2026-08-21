@@ -3,7 +3,10 @@ from locators.base_locator import BaseLocator
 
 
 class TodolistEditLocator(BaseLocator):
-    department_dropdown = (By.XPATH, "//span[@class='textbox combo']")
+    department_dropdown = (
+        By.XPATH,
+        "//div[.//label[normalize-space()='處理部門']]//span[@class='textbox combo']",
+    )
     department_options = (By.XPATH, "//div[text()='%s']")
     todolist_table = (
         By.XPATH,

@@ -1,0 +1,2 @@
+#!/bin/bash
+exec .venv/Scripts/python.exe tools/selenium_cli.py "$@"

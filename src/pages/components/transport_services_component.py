@@ -79,3 +79,6 @@ class TransportServicesComponent(BasePage):
         """取得接送服務表格的資料筆數"""
         transport_count = len(self.driver.find_elements(*self.locator.transport_data_rows))
         return transport_count
+
+    def has_transport_service(self):
+        return self.driver.find_elements(*self.locator.transport_grid_last_row)

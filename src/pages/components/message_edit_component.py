@@ -28,6 +28,14 @@ class MessageEditComponent(BasePage):
         self.click(self.locator.message_grid_last_row)
         return self
 
+    def click_add_message(self):
+        self.click_toolbar_with_icon("add")
+        return self
+
+    def click_delete_message(self):
+        self.click_toolbar_with_icon("remove")
+        return self
+
     def message_field_is_enabled(self, field):
         field_locator = self.formator_locator(self.locator.message_input_field, field)
         return self.driver.find_element(*field_locator).get_attribute("disabled")
@@ -36,3 +44,6 @@ class MessageEditComponent(BasePage):
         return self.driver.find_element(*self.locator.message_textarea_field).get_attribute(
             "disabled"
         )
+
+    def has_message(self):
+        return self.driver.find_elements(*self.locator.message_grid_last_row)

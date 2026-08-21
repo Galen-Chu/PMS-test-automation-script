@@ -1,0 +1,142 @@
+{
+  "$schema": "test_data_schema",
+  "description": "測試資料分配表。groups 存 common 資料和 test-specific 資料。依賴鏈由 scan_test_file() 從 .py decorator 即時掃描，不存在此檔。",
+  "rules": {
+    "group_max_tests": 5,
+    "exclusive_resources": {
+      "spare_parts": "同一個備品只能被一個 group 使用（影響數量統計）",
+      "rooms": "同一間房只能被一個 group 使用",
+      "link_nos_target": "關聯單號綁定後不可重複綁定"
+    },
+    "room_allocation": "4F 給綜合櫃台腳本、5F-STD 給房務帳腳本，新 group 按區域選房"
+  },
+  "new_group_guide": {
+    "room_pool": "CLI 掃綜合櫃台頁面取得全部房間，扣除 shared_resources.rooms 和各 group common.room 已佔用的 = 可用房間",
+    "card_setup": "可用 Walk-In 流程自動建卡（CLI 操作綜合櫃台），或請使用者手動建立",
+    "card_naming": "Card Maindesk FLow {letter}，letter 遞增（A~E 已用）",
+    "card_search_by": "住客姓名",
+    "checkin_date": "與環境 system_date 一致"
+  },
+  "environments": {
+    "autotest": {
+      "system_date": "2024/01/05",
+      "groups": {
+        "test_maindesk_flow_a": {
+          "common": {
+            "card_name": "Card Maindesk FLow A",
+            "room": "204",
+            "checkin_date": "+0",
+            "checkout_date": "+1"
+          },
+          "tests": [
+            { "key": "add_link_nos", "link_nos_target": "00008236" }
+          ]
+        },
+        "test_maindesk_flow_b": {
+          "common": {
+            "card_name": "Card Maindesk FLow B",
+            "room": "205",
+            "checkin_date": "+0",
+            "checkout_date": "+1"
+          },
+          "tests": [
+            { "key": "change_room", "swap_room": "206" },
+            { "key": "assign_deposit", "deposit_nos": "2204" },
+            { "key": "add_spare_parts", "spare_part": "熨斗", "spare_part_dept": "A001 : 客務部-櫃台" }
+          ]
+        },
+        "test_maindesk_flow_c": {
+          "common": {
+            "card_name": "Card Maindesk FLow C",
+            "room": "207",
+            "checkin_date": "+0",
+            "checkout_date": "+1"
+          },
+          "tests": [
+            { "key": "add_guest", "guest_name": "cathy" },
+            { "key": "add_precredit", "card_type": "VISA", "card_number": "4826008693090653", "expire_date": "11/29", "auth_code": "492", "amount": 10000 },
+            { "key": "add_todo_item", "dept": "A001 : 客務部-櫃台" }
+          ]
+        },
+        "test_maindesk_flow_d": {
+          "common": {
+            "card_name": "Card Maindesk FLow D",
+            "room": "208",
+            "checkin_date": "+0",
+            "checkout_date": "+1"
+          },
+          "tests": []
+        },
+        "test_maindesk_flow_e": {
+          "common": {
+            "card_name": "Card Maindesk FLow E",
+            "room": "209",
+            "checkin_date": "+0",
+            "checkout_date": "+1"
+          },
+          "tests": []
+        },
+        "test_maindesk_edit_note": {
+          "common": {
+            "card_name": "Steven"
+          },
+          "tests": []
+        },
+        "test_ci_list_flow_a": {
+          "common": {
+            "card_name": "Card CO List A",
+            "room": "301",
+            "checkin_date": "+0",
+            "checkout_date": "+1"
+          },
+          "tests": [
+            { "key": "single_check_in" }
+          ]
+        }
+      },
+      "shared_resources": {
+        "rooms": {
+          "maindesk_flow": ["204", "205", "206", "207", "208", "209"],
+          "group_list": ["202", "203"],
+          "room_control": ["215", "217", "220", "221", "222", "223", "224", "225", "226", "227", "228", "229"],
+          "reservation": "5F-STD"
+        },
+        "spare_parts_occupied": {
+          "充電器": "Card Test（自動入帳測試）",
+          "除濕機": "備品設定（入交辦，處理部門：西餐廳）",
+          "Baby Cot": "備品設定（入交辦，處理部門：西餐廳）",
+          "熨斗": "test_maindesk_flow_b（入交辦，處理部門：客務部-櫃台）"
+        },
+        "link_nos_occupied": {
+          "00008234": "test_edit_reservation_card_add_link_nos（已綁 00008235，不可再綁）",
+          "00008236": "test_maindesk_flow_a"
+        },
+        "companies": {
+          "commercial": "測測BB22"
+        },
+        "contract_rates": ["comcon", "comcon 2", "comcon3"]
+      }
+    },
+    "qa": {
+      "system_date": "2026/05/19",
+      "groups": {
+        "test_ci_list_flow_a": {
+          "common": {
+            "card_name": "Galen ChuChu 5",
+            "room": "110",
+            "checkin_date": "+0",
+            "checkout_date": "+1"
+          },
+          "tests": [
+            { "key": "single_check_in" }
+          ]
+        }
+      },
+      "shared_resources": {
+        "rooms": {
+          "ci_list": ["110"]
+        }
+      }
+    }
+  }
+}

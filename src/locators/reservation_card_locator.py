@@ -92,18 +92,12 @@ class ReservationCardLocator(BaseLocator):
     # ----- notes 視窗 -----
     textarea = (By.XPATH, "(//textarea)[last()]")
     btn_add_note = (By.XPATH, "(//span[@class='sub-button--add'])[last()]")
+    btn_remove_note = (By.XPATH, "(//span[@class='sub-button--remove'])[last()]")
     # ----- notes 視窗 End -----
 
     # ----- 提醒事項 視窗 -----
     input_reservation_remind = (By.XPATH, "//tr[td[normalize-space()='%s']]//input")
     # ----- 提醒事項 視窗 End -----
-
-    # ----- 訂房提醒彈窗 -----
-    popup_reservation_remind_content = (
-        By.XPATH,
-        "//div[./div[text()='訂房提醒']]/following-sibling::div//textarea",
-    )
-    # ----- 訂房提醒彈窗 End -----
 
     # ----- 訂房卡共用 -----
     btn_add = (By.XPATH, "(//div[@class='sub-button--add'])[last()]")

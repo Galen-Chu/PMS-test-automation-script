@@ -13,9 +13,8 @@ class CaptchaTrainer:
         self.img_width = img_width
         self.img_height = img_height
         self.max_length = max_length
-        self.characters = set()
-        self.char_to_num = {}
-        self.num_to_char = {}
+        self.model = None
+        self.mappings = {"char_to_num": {}, "num_to_char": {}, "characters": set()}
 
     def load_data(self, data_path):  # 修復逗號位置
         """載入訓練資料"""
@@ -38,15 +37,17 @@ class CaptchaTrainer:
 
                 # 收集所有字符
                 for char in label:
-                    self.characters.add(char)
+                    self.mappings["characters"].add(char)
 
         return np.array(images), labels
 
     def create_char_mappings(self):
         """建立字符映射"""
-        self.characters = sorted(list(self.characters))
-        self.char_to_num = {char: idx for idx, char in enumerate(self.characters)}
-        self.num_to_char = dict(enumerate(self.characters))
+        self.mappings["characters"] = sorted(list(self.mappings["characters"]))
+        self.mappings["char_to_num"] = {
+            char: idx for idx, char in enumerate(self.mappings["characters"])
+        }
+        self.mappings["num_to_char"] = dict(enumerate(self.mappings["characters"]))
 
     def encode_labels(self, labels):
         """將標籤編碼為數字"""
@@ -54,10 +55,10 @@ class CaptchaTrainer:
         for label in labels:
             encoded_label = []
             for char in label:
-                encoded_label.append(self.char_to_num[char])
+                encoded_label.append(self.mappings["char_to_num"][char])
             # 填充到固定長度
             while len(encoded_label) < self.max_length:
-                encoded_label.append(len(self.characters))  # 使用特殊token填充
+                encoded_label.append(len(self.mappings["characters"]))  # 使用特殊token填充
             encoded_labels.append(encoded_label)
         return np.array(encoded_labels)
 
@@ -80,9 +81,9 @@ class CaptchaTrainer:
         # 為每個位置建立輸出層
         outputs = []
         for i in range(self.max_length):
-            output = layers.Dense(len(self.characters) + 1, activation="softmax", name=f"char_{i}")(
-                x
-            )
+            output = layers.Dense(
+                len(self.mappings["characters"]) + 1, activation="softmax", name=f"char_{i}"
+            )(x)
             outputs.append(output)
 
         model = keras.Model(inputs=input_img, outputs=outputs)
@@ -140,46 +141,33 @@ class CaptchaTrainer:
         model.save("captcha_model.keras")
 
         with open("char_mappings.pkl", "wb") as f:
-            pickle.dump(
-                {
-                    "char_to_num": self.char_to_num,
-                    "num_to_char": self.num_to_char,
-                    "characters": self.characters,
-                },
-                f,
-            )
+            pickle.dump(self.mappings, f)
 
         return model, history
 
-    def predict_captcha(self, image_path):
+    def load_model(self):
         # 載入模型
-        model_path = (
-            Path(__file__).resolve().parent.parent.parent / "ml-models" / "captcha_model.keras"
-        )
-        model = keras.models.load_model(model_path)
+        model_path = Path(__file__).resolve().parent / "captcha_model.keras"
+        self.model = keras.models.load_model(model_path)
 
         # 載入字符映射
-        pickle_path = (
-            Path(__file__).resolve().parent.parent.parent / "ml-models" / "char_mappings.pkl"
-        )
+        pickle_path = Path(__file__).resolve().parent / "char_mappings.pkl"
         with open(pickle_path, "rb") as f:
-            mappings = pickle.load(f)
-            self.char_to_num = mappings["char_to_num"]
-            self.num_to_char = mappings["num_to_char"]
-            self.characters = mappings["characters"]
+            self.mappings = pickle.load(f)
 
+    def predict_captcha(self, image_path):
         # 預測驗證碼
         img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, (self.img_width, self.img_height))
         img = img.astype(np.float32) / 255.0
         img = img.reshape((1, self.img_height, self.img_width, 1))  # 修復參數傳遞問題
 
-        predictions = model.predict(img)
+        predictions = self.model.predict(img)
 
         predicted_text = ""
         for i in range(self.max_length):
             pred_char_idx = np.argmax(predictions[i])
-            if pred_char_idx < len(self.characters):
-                predicted_text += self.num_to_char[pred_char_idx]
+            if pred_char_idx < len(self.mappings["characters"]):
+                predicted_text += self.mappings["num_to_char"][pred_char_idx]
 
         return predicted_text

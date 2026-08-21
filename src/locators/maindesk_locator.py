@@ -36,14 +36,17 @@ class MaindeskLocator(BaseLocator):
     # ----- 櫃台入住 視窗 -----
     days_dropdown = (By.XPATH, "//label[normalize-space()='天數']/following-sibling::span")
     days_options = (By.XPATH, "//div[text()='%s : %s']")
+
+    # ----- 房間細節 視窗 -----
     btn_edit_field = (By.XPATH, "//div[@data-field-id='%s']/button")
     btn_guest_function_maindesk = (By.XPATH, "//td[@data-field-id='%s']")
     btn_guest_function_span = (By.XPATH, "//span[@data-field-id='%s']")
     btn_add_guest = (By.XPATH, "//span[@data-field-id='appendSingleRow']")
-
-    # ----- 房間細節 視窗 -----
     notice_content_text = (By.XPATH, "//div[@data-field-id='notice_rmk']/textarea")
     guest_row_field = (By.XPATH, "(//td[@data-field-id='alt_nam']/span//input[1])[last()]")
+    text_precredit_amount = (By.XPATH, "//td[@data-field-id='precredit_amt']/label")
+    check_precredit = (By.XPATH, "//td[@data-field-id='notes']/i")
+    guest_remark_column = (By.XPATH, "//td[@data-field-id='fo_remark']//input")
 
     # ----- 改退房日 視窗 -----
     # -- 日期選單 --
@@ -75,3 +78,9 @@ class MaindeskLocator(BaseLocator):
 
     # ----- 注意事項 視窗 -----
     notice_content_textarea = (By.XPATH, "//textarea[@data-field-id='noticeContent']")
+
+    # ----- 預授權 視窗 -----
+    btn_edit_precredit = (By.XPATH, "(//button[child::img[@alt='edit']])[last()]")
+
+    # ----- 車號 視窗 -----
+    carNos_textarea = (By.XPATH, "//div[@data-field-id='carNos']//textarea")

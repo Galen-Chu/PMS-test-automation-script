@@ -11,6 +11,7 @@ class LoginPage(BasePage):
 
     def login(self, username, password):
         captcha_model = CaptchaTrainer()
+        captcha_model.load_model()
         retry = 0
         self.input(self.locator.input_username, username)
 

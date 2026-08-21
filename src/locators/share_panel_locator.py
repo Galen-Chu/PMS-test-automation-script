@@ -25,6 +25,9 @@ class SharePanelLocator(BaseLocator):
         "(//div[@class='panel-title' and text()='%s']/following-sibling::div/a)[last()]",
     )
 
+    # 提醒彈窗內容
+    panel_remind_content = (By.XPATH, "//div[./div[text()='%s']]/following-sibling::div//textarea")
+
     # ---- 開班 panel ----
     label_select = (By.XPATH, "//label[normalize-space()='%s']/following-sibling::div//input")
     label_input = (By.XPATH, "(//label[normalize-space()='%s']/following-sibling::input)[last()]")
@@ -32,24 +35,15 @@ class SharePanelLocator(BaseLocator):
         By.XPATH,
         "//label[normalize-space()='%s']/following-sibling::div//input[not(@validatehidden)]",
     )
-    label_input_3 = (
-        By.XPATH,
-        "(//div[child::div[child::span[normalize-space()='%s']]]\
-                     /following-sibling::div//input[not(@aria-label='hidden')])[last()]",
-    )
+    label_input_3 = (By.XPATH, "(//div[child::div[child::span[normalize-space()='%s']]]\
+                     /following-sibling::div//input[not(@aria-label='hidden')])[last()]")
     # ---- 開班 panel END ----
 
     # ---- 房價 panel ----
-    label_span_select_3 = (
-        By.XPATH,
-        "//div[child::div[child::span[normalize-space()='%s']]]\
-                           /following-sibling::div",
-    )
-    label_span_select_value_3 = (
-        By.XPATH,
-        "//div[child::div[child::span[normalize-space()='%s']]]\
-                                 /following-sibling::div//span[@class='e-input-value']",
-    )
+    label_span_select_3 = (By.XPATH, "//div[child::div[child::span[normalize-space()='%s']]]\
+                           /following-sibling::div")
+    label_span_select_value_3 = (By.XPATH, "//div[child::div[child::span[normalize-space()='%s']]]\
+                                 /following-sibling::div//span[@class='e-input-value']")
     label_span_select_item_3 = (
         By.XPATH,
         "//li[contains(@class, 'e-list-item') and normalize-space()='%s']",

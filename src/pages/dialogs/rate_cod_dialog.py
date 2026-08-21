@@ -12,8 +12,8 @@ class RateCodDialog(BasePage):
         self.click(self.locator.btn_add_new_use_date)
         return self
 
-    def click_date_icon(self, ikey):
-        date_icon = self.formator_locator(self.locator.btn_date_icon, ikey)
+    def click_date_icon(self, date_icon):
+        date_icon = self.formator_locator(self.locator.btn_date_icon, date_icon)
         self.click(date_icon)
         return self
 

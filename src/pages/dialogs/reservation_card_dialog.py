@@ -306,7 +306,11 @@ class ReservationCardDialog(BasePage):
         self.click(self.locator.btn_add_note)
         return self
 
-    def get_notestext(self):
+    def click_remove_notes(self):
+        self.click(self.locator.btn_remove_note)
+        return self
+
+    def get_notes_text(self):
         notes_info = self.driver.find_element(*self.locator.textarea).get_attribute("value")
         return notes_info
 
@@ -330,16 +334,6 @@ class ReservationCardDialog(BasePage):
         return remind_content
 
     # ----- 提醒事項 視窗 End -----
-
-    # ----- 訂房提醒彈窗 -----
-    def get_popup_reservation_remind_content(self):
-        # 取得訂房提醒彈窗中的提醒內容
-        popup_content = self.driver.find_element(
-            *self.locator.popup_reservation_remind_content
-        ).get_attribute("value")
-        return popup_content
-
-    # ----- 訂房提醒彈窗 End -----
 
     # ----- 房租細項 視窗 -----
     def get_expense_detail_data(self, row):
@@ -442,7 +436,7 @@ class ReservationCardDialog(BasePage):
             "value"
         )
 
-    def grt_link_nos_row_data(self, row):
+    def get_link_nos_row_data(self, row):
         row_data = []
         tmp_locator = self.formator_locator(self.locator.link_nos_row_data, row)
         row_data_elements = self.driver.find_elements(*tmp_locator)

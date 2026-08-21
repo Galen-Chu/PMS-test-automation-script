@@ -196,10 +196,10 @@ class TestRoomControl:
             end_month = DateHelper.month_number_to_name(end_date.split(".")[1])
             start_day = DateHelper.clear_0_prefix(start_date.split(".")[2])
             end_day = DateHelper.clear_0_prefix(end_date.split(".")[2])
-            web.room_control_page.select_date(
+            web.room_control_page.select_date_by_label(
                 "開始日期", start_date.split(".")[0], start_month, start_day
             ).sleep(1)
-            web.room_control_page.select_date(
+            web.room_control_page.select_date_by_label(
                 "結束日期", end_date.split(".")[0], end_month, end_day
             ).sleep(1)
             web.room_control_page.input_reason(reason).sleep(1)
@@ -260,8 +260,8 @@ class TestRoomControl:
             web.room_control_page.screenshot("And 點擊[修理樓層]")
 
         with allure.step("And 填寫必填欄位"):
-            web.room_control_page.select_date("從", "2024", "一月", "5").sleep(1)
-            web.room_control_page.select_date("至", "2024", "一月", "12").sleep(1)
+            web.room_control_page.select_date_by_label("從", "2024", "一月", "5").sleep(1)
+            web.room_control_page.select_date_by_label("至", "2024", "一月", "12").sleep(1)
             web.room_control_page.set_reason_floor("多筆測試用修理樓層").sleep(1)
             web.room_control_page.screenshot("And 填寫必填欄位")
 

@@ -24,15 +24,27 @@ class SharePanelComponent(BasePage):
         self.click(locator_select_option)
         return self
 
-    def close_panel(self, title):
-        locator_panel_close = self.formator_locator(self.locator.btn_pnael_close, title)
-        self.click(locator_panel_close)
+    def close_panel(self, title=None):
+        if title:
+            locator_panel_close = self.formator_locator(self.locator.btn_pnael_close, title)
+            self.click(locator_panel_close)
+        else:
+            super().close_panel()
         return self
 
     def click_panel_function(self, title):
         locator_panel_function = self.formator_locator(self.locator.btn_panel_function, title)
         self.click(locator_panel_function)
         return self
+
+    # ---- 提醒視窗 -----
+    def get_remind_panel_content(self, remind_type):
+        # 取得提醒彈窗中的提醒內容
+        tmp_locator = self.formator_locator(self.locator.panel_remind_content, remind_type)
+        tmp_elements = self.driver.find_elements(*tmp_locator)
+        if tmp_elements:
+            return tmp_elements[0].get_attribute("value")
+        return False
 
     # ---- 開班 panel ----
     def select_by_label(self, label, value):

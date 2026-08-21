@@ -57,7 +57,7 @@ class RoomControlPage(BasePage):
         self.click(locator_category)
         return self
 
-    def select_date(self, label, year, month, day):
+    def select_date_by_label(self, label, year, month, day):
         locator_date = self.formator_locator(self.locator.date_by_label, label)
         self.click(locator_date)
         sleep(1)

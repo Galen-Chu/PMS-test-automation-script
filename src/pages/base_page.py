@@ -9,6 +9,8 @@ from selenium.common.exceptions import (
     NoSuchElementException,
     StaleElementReferenceException,
 )
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # pylint: disable=unused-import
 from locators.header_locator import HeaderLocator
@@ -35,6 +37,7 @@ from locators.pre_credit_locator import PreCreditLocator
 from locators.message_edit_locator import MessageEditLocator
 from locators.room_assignment_locator import RoomAssignmentLocator
 from locators.maindesk_locator import MaindeskLocator
+from locators.check_in_list_locator import CheckInListLocator
 
 # pylint: enable=unused-import
 
@@ -101,6 +104,18 @@ class BasePage:
         finally:
             self.driver.implicitly_wait(10)
 
+    def wait_clickable(self, locator, timeout=10):
+        WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(locator))
+        return self
+
+    def wait_visible(self, locator, timeout=10):
+        WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
+        return self
+
+    def wait_gone(self, locator, timeout=10):
+        WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
+        return self
+
     def screenshot(self, file_name):
         if hasattr(self.driver, "get_screenshot_as_png"):
             allure.attach(
@@ -136,7 +151,7 @@ class BasePage:
         allure.attach(f"Real: {real}", f"實際結果-{title}", allure.attachment_type.TEXT)
         assert int(real) > 0
 
-    # ----- Framework Base Methods -----
+    # ----- Athena Base -----
     def expand_search_condition(self):
         self.click(self.locator.btn_condition)
         return self
