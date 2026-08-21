@@ -2,7 +2,6 @@ import os
 from time import sleep
 from PIL import Image
 import pytesseract
-from tools.captcha.captcha_helper import CaptchaTrainer
 from tools.driver_helper import DriverHelper
 from pages.base_page import BasePage
 
@@ -10,6 +9,10 @@ from pages.base_page import BasePage
 class LoginPage(BasePage):
 
     def login(self, username, password):
+        # Lazy import: keeps the TF/cv2 stack out of module import time, so
+        # collecting unrelated tests does not require the ML dependencies.
+        from tools.captcha.captcha_helper import CaptchaTrainer
+
         captcha_model = CaptchaTrainer()
         captcha_model.load_model()
         retry = 0
