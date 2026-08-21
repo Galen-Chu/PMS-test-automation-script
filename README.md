@@ -18,7 +18,7 @@ A comprehensive test automation framework for Property Management System (PMS) a
 
 ## 📊 Project Statistics
 
-- **250 Test Cases** across 15 test suites
+- **230 Test Cases** across 15 test suites
 - **26 Page Objects** plus 11 reusable components and 3 dialog handlers
 - **26 Locator Classes** for element identification
 - **Machine Learning** integration for intelligent testing
