@@ -140,7 +140,7 @@ pms-test-automation-showcase/
 │   │   ├── dymamic_steps/  # Dynamic test steps
 │   │   └── ...
 │   │
-│   └── utils/              # Utility modules
+│   └── tools/ # Utility modules
 │       ├── driver_helper.py
 │       ├── date_helper.py
 │       ├── random_helper.py

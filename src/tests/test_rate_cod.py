@@ -10,7 +10,7 @@ from pages.components.tip_component import TipComponent
 from pages.dialogs.rate_cod_dialog import RateCodDialog
 
 # pylint: disable=unused-import
-from tests.dymamic_steps.rate_cod_step import (
+from tests.dynamic_steps.rate_cod_step import (
     CMPRateCodStep,
     DRRateCodStep,
     DURateCodStep,
@@ -32,7 +32,7 @@ from tests.dymamic_steps.rate_cod_step import (
     DPRatRateCodStep,
     DPAmtRateCodStep,
 )
-from tests.dymamic_steps.rate_cod_column_step import (
+from tests.dynamic_steps.rate_cod_column_step import (
     IdOnlyRateCodColumnStep,
     DaysOverMaxRateCodColumnStep,
     ServiceOverMaxRateCodColumnStep,

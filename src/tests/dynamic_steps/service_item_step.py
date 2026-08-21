@@ -1,4 +1,4 @@
-from tests.dymamic_steps.base_steps.base_service_item_step import BaseServiceItemStep
+from tests.dynamic_steps.base_steps.base_service_item_step import BaseServiceItemStep
 
 
 class FirstDayServiceItemStep(BaseServiceItemStep):

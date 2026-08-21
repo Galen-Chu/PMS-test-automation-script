@@ -34,7 +34,7 @@ pms-test-automation-showcase/
 │   │   └── dialogs/       # Dialog/modal handlers
 │   ├── tests/             # Test suites
 │   │   └── dymamic_steps/ # Dynamic test steps
-│   └── utils/             # Helper utilities
+│   └── tools/ # Helper utilities
 │       └── captcha/       # ML captcha solver
 ├── ml-models/             # Trained ML models
 ├── config/                # Configuration templates

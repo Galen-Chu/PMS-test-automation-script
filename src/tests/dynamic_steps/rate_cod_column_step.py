@@ -1,4 +1,4 @@
-from tests.dymamic_steps.base_steps.base_valid_column_step import BaseValidColumnStep
+from tests.dynamic_steps.base_steps.base_valid_column_step import BaseValidColumnStep
 
 
 class IdOnlyRateCodColumnStep(BaseValidColumnStep):

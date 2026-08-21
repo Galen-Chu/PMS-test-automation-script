@@ -14,7 +14,7 @@ from pages.reservation_page import ReservationPage
 from tests.share_steps import ShareSteps
 
 # pylint: disable=unused-import
-from tests.dymamic_steps.service_item_step import (
+from tests.dynamic_steps.service_item_step import (
     FirstDayServiceItemStep,
     DailyServiceItemStep,
     LastDayServiceItemStep,

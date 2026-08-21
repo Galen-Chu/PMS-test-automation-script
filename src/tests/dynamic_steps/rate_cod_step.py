@@ -1,6 +1,6 @@
 from time import sleep
 import allure
-from tests.dymamic_steps.base_steps.base_rate_cod_step import BaseRateCodStep
+from tests.dynamic_steps.base_steps.base_rate_cod_step import BaseRateCodStep
 
 
 # 預設已填好欄位，需要才調整

@@ -1,5 +1,6 @@
 [pytest]
 disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
+pythonpath = src
 env =
     ENV = demo
     WEB_URL = https://demo.example.com
