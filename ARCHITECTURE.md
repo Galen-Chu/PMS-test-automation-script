@@ -120,7 +120,7 @@ def create_web_browser(pages):
 ## Project Structure
 
 ```
-pms-test-automation-showcase/
+pms-test-automation-script/
 │
 ├── src/
 │   ├── locators/           # Element locators

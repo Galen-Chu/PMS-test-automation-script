@@ -534,8 +534,8 @@ pytest --durations=0  # Show all
 ## More Questions?
 
 - 📖 Check [Documentation](../docs/)
-- 🐛 [Report Bug](https://github.com/Galen-Chu/pms-test-automation-showcase/issues)
-- 💬 [Discussions](https://github.com/Galen-Chu/pms-test-automation-showcase/discussions)
+- 🐛 [Report Bug](https://github.com/Galen-Chu/PMS-test-automation-script/issues)
+- 💬 [Discussions](https://github.com/Galen-Chu/PMS-test-automation-script/discussions)
 - 📧 Contact maintainer
 
 ---

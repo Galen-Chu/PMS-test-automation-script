@@ -45,8 +45,8 @@ git --version
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/pms-test-automation-showcase.git
-cd pms-test-automation-showcase
+git clone https://github.com/Galen-Chu/PMS-test-automation-script.git
+cd pms-test-automation-script
 ```
 
 ### 2. Create Virtual Environment
@@ -278,7 +278,7 @@ mkdir -p screenshots
 ### Verify Directory Structure
 
 ```
-pms-test-automation-showcase/
+pms-test-automation-script/
 ├── src/
 │   ├── locators/
 │   ├── pages/

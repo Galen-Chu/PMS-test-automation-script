@@ -78,8 +78,8 @@ Feature requests are welcome! Please:
 
 1. **Fork and Clone**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/pms-test-automation-showcase.git
-   cd pms-test-automation-showcase
+   git clone https://github.com/Galen-Chu/PMS-test-automation-script.git
+   cd pms-test-automation-script
    ```
 
 2. **Create Virtual Environment**

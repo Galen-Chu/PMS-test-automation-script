@@ -59,8 +59,8 @@ pms-test-automation/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/pms-test-automation-showcase.git
-   cd pms-test-automation-showcase
+   git clone https://github.com/Galen-Chu/PMS-test-automation-script.git
+   cd pms-test-automation-script
    ```
 
 2. **Create virtual environment**
@@ -216,7 +216,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👤 Author
 
-**Your Name**
+**Galen Chu**
 - GitHub: [@Galen-Chu](https://github.com/Galen-Chu)
 - LinkedIn: [Galen-Chu](https://linkedin.com/in/ching-wen-chu-420942326/)
 

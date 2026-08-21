@@ -111,6 +111,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/Galen-Chu/pms-test-automation-showcase/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/Galen-Chu/pms-test-automation-showcase/releases/tag/v1.0.0
-[0.1.0]: https://github.com/Galen-Chu/pms-test-automation-showcase/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Galen-Chu/PMS-test-automation-script/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Galen-Chu/PMS-test-automation-script/releases/tag/v1.0.0
+[0.1.0]: https://github.com/Galen-Chu/PMS-test-automation-script/releases/tag/v0.1.0

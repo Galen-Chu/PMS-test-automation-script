@@ -2,7 +2,7 @@
 
 ## 🎉 Successfully Completed: PMS Test Automation Showcase
 
-**GitHub Repository:** https://github.com/Galen-Chu/pms-test-automation-showcase
+**GitHub Repository:** https://github.com/Galen-Chu/PMS-test-automation-script
 **Completion Date:** March 11, 2026
 **Total Time:** 1 session
 
@@ -13,7 +13,7 @@
 ### 1. **Code Migration & Sanitization (100%)**
 
 ✅ **Migrated from:** `C:\Autotest\pms-autotest` (Company project)
-✅ **Migrated to:** `C:\Projects\pms-test-automation-showcase` (Personal showcase)
+✅ **Migrated to:** `D:\PMS-test-automation-script` (Personal showcase)
 
 **Files Migrated:**
 - **26 Locator Classes** - Element identification selectors
@@ -200,7 +200,7 @@ Parallel Workers:    Up to 4
 ## 🚀 What You Can Do Now
 
 ### 1. **Immediate Actions**
-✅ **Repository Live:** https://github.com/Galen-Chu/pms-test-automation-showcase
+✅ **Repository Live:** https://github.com/Galen-Chu/PMS-test-automation-script
 ✅ **CI/CD Active:** Workflows will run on every push
 ✅ **Ready for Portfolio:** Professional showcase ready to share
 
@@ -259,15 +259,15 @@ Parallel Workers:    Up to 4
 ## 📝 Repository URLs
 
 **GitHub Repository:**
-https://github.com/Galen-Chu/pms-test-automation-showcase
+https://github.com/Galen-Chu/PMS-test-automation-script
 
 **Quick Links:**
-- 📖 [README](https://github.com/Galen-Chu/pms-test-automation-showcase/blob/main/README.md)
-- 🏗️ [Architecture](https://github.com/Galen-Chu/pms-test-automation-showcase/blob/main/ARCHITECTURE.md)
-- 🚀 [CI/CD Workflows](https://github.com/Galen-Chu/pms-test-automation-showcase/actions)
-- 🐳 [Docker Images](https://github.com/Galen-Chu/pms-test-automation-showcase/pkgs/container/pms-test-automation-showcase)
-- 📋 [Issues](https://github.com/Galen-Chu/pms-test-automation-showcase/issues)
-- 🔀 [Pull Requests](https://github.com/Galen-Chu/pms-test-automation-showcase/pulls)
+- 📖 [README](https://github.com/Galen-Chu/PMS-test-automation-script/blob/main/README.md)
+- 🏗️ [Architecture](https://github.com/Galen-Chu/PMS-test-automation-script/blob/main/ARCHITECTURE.md)
+- 🚀 [CI/CD Workflows](https://github.com/Galen-Chu/PMS-test-automation-script/actions)
+- 🐳 [Docker Images](https://github.com/Galen-Chu/PMS-test-automation-script/pkgs/container/pms-test-automation-script)
+- 📋 [Issues](https://github.com/Galen-Chu/PMS-test-automation-script/issues)
+- 🔀 [Pull Requests](https://github.com/Galen-Chu/PMS-test-automation-script/pulls)
 
 ---
 
@@ -307,7 +307,7 @@ Built a comprehensive test automation framework featuring:
 - Docker containerization
 - CI/CD with GitHub Actions
 
-Check it out: https://github.com/Galen-Chu/pms-test-automation-showcase
+Check it out: https://github.com/Galen-Chu/PMS-test-automation-script
 
 #TestAutomation #Python #Selenium #CI/CD #MachineLearning #Docker
 ```
@@ -349,7 +349,7 @@ You now have a **professional, portfolio-ready test automation showcase** that d
 **This is exactly what we agreed upon in our deal!** 🤝
 
 Your showcase is live at:
-**https://github.com/Galen-Chu/pms-test-automation-showcase**
+**https://github.com/Galen-Chu/PMS-test-automation-script**
 
 ---
 

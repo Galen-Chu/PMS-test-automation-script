@@ -664,7 +664,7 @@ logging.basicConfig(
 ## Still Having Issues?
 
 1. **Check existing issues:**
-   https://github.com/Galen-Chu/pms-test-automation-showcase/issues
+   https://github.com/Galen-Chu/pms-test-automation-script/issues
 
 2. **Create new issue:**
    - Use issue template
