@@ -1,11 +1,24 @@
 name: Docker Build and Push
 
+# Streamlined (2026-08-19): main-branch pushes with image-relevant paths
+# only. PR-triggered builds were ~80% of previous volume and are dropped;
+# tag builds stay in the Release workflow, which builds and pushes its own
+# image, so they are removed here to avoid duplicate builds.
 on:
   push:
-    branches: [ main, master ]
-    tags: [ 'v*' ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - 'docker-entrypoint.sh'
+      - 'docker-compose.yml'
+      - 'requirements*.txt'
+      - 'src/**'
+      - 'ml-models/**'
+      - '.github/workflows/docker-build.yml'
+
+concurrency:
+  group: docker-build-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   REGISTRY: ghcr.io
@@ -49,7 +62,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

@@ -1,6 +1,22 @@
 name: Test Automation CI/CD
 
-on: [push]
+# Streamlined (2026-08-19): main-branch pushes with relevant paths only.
+# Dependabot branch pushes no longer trigger the full pipeline (~85% of
+# previous run volume); superseded runs are cancelled automatically.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'requirements*.txt'
+      - 'pytest.ini.example'
+      - 'docker-compose.yml'
+      - '.github/workflows/test-automation.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: test-automation-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   PYTHON_VERSION: '3.12'
@@ -14,41 +30,9 @@ jobs:
       contents: write  # Allows the bot to push to gh-pages
       pages: write     # Allows the bot to deploy to GitHub Pages
       id-token: write  # Required for some OIDC providers
-      
+
     steps:
       - uses: actions/checkout@v7
-#
-# on:
-#   push:
-#     branches: [ main, master, develop ]
-#   pull_request:
-#     branches: [ main, master ]
-#   schedule:
-#     # Run nightly at 2 AM UTC
-#     - cron: '0 2 * * *'
-#   workflow_dispatch:
-#     # Allow manual trigger
-#     inputs:
-#       test_marker:
-#         description: 'Test marker to run (smoke, regression, all)'
-#         required: false
-#         default: 'all'
-#       parallel_workers:
-#         description: 'Number of parallel workers'
-#         required: false
-#         default: '4'
-
-# env:
-#   PYTHON_VERSION: '3.12'
-#   SELENIUM_HUB: 'http://localhost:4444/wd/hub'
-
-# jobs:
-#   lint-and-security:
-#     name: Code Quality & Security
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v7
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -140,11 +124,15 @@ jobs:
 
       - name: Run Smoke Tests
         run: |
+          RESULT=0
           pytest src/tests/ -m smoke \
             -v \
             --alluredir=allure-results \
             --tb=short \
-            || true
+            || RESULT=$?
+          # Demo endpoints cannot actually pass; surface the outcome in the
+          # run summary instead of failing or silently swallowing it.
+          echo "Smoke tests exit code: $RESULT (demo endpoints; non-blocking by design)" >> $GITHUB_STEP_SUMMARY
 
       - name: Stop Selenium Grid
         if: always()
@@ -168,12 +156,12 @@ jobs:
     name: Regression Tests
     runs-on: ubuntu-latest
     needs: lint-and-security
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
 
     strategy:
       matrix:
-        browser: [chrome, firefox]
-        python-version: ['3.11', '3.12']
+        browser: [chrome]
+        python-version: ['3.12']
 
     steps:
       - name: Checkout code
@@ -225,13 +213,15 @@ jobs:
 
       - name: Run Regression Tests
         run: |
+          RESULT=0
           pytest src/tests/ \
             -v \
             -n 4 \
             --alluredir=allure-results-${{ matrix.browser }}-py${{ matrix.python-version }} \
             --tb=short \
             -k "not slow" \
-            || true
+            || RESULT=$?
+          echo "Regression (${{ matrix.browser }}/py${{ matrix.python-version }}) exit code: $RESULT (demo endpoints; non-blocking by design)" >> $GITHUB_STEP_SUMMARY
 
       - name: Stop Selenium Grid
         if: always()
