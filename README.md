@@ -1,7 +1,6 @@
 # PMS Test Automation Framework
 
 A comprehensive test automation framework for Property Management System (PMS) applications, featuring Page Object Model architecture, ML-powered captcha recognition, and parallel test execution.
-
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue)
 ![Selenium](https://img.shields.io/badge/Selenium-4.47-green)
 ![pytest](https://img.shields.io/badge/pytest-9.1-orange)
