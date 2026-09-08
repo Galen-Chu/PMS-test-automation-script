@@ -154,6 +154,7 @@ unrelated tests does not require the ML dependencies to be importable.
 - [Data Guide](docs/DATA_GUIDE.md) - Test data fixtures and generators
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues
 - [FAQ](docs/FAQ.md) - Frequently asked questions
+- [Refactoring Roadmap](docs/REFACTORING_ROADMAP.md) - Prioritized improvement plan from the POM self-review
 - [PMS Menu Map](docs/pms-menu-map.md) - System menu overview
 - [Page Structure Maps](docs/pages/) - Per-page exploration notes (10 pages)
 - [CLI Knowledge](src/tools/cli-knowledge.md) - Selenium CLI cookbook
