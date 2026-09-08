@@ -1,5 +1,12 @@
 # GitHub Dependabot Configuration
 # Automatically create pull requests to update dependencies
+#
+# Strategy (2026-09-08):
+#   - Checks run monthly (1st of each month, 06:00 UTC).
+#   - Dev dependencies (requirements-dev.txt) arrive as ONE grouped PR and
+#     are auto-merged by .github/workflows/dependabot-auto-merge.yml.
+#   - Runtime dependencies stay individual PRs for manual review.
+#   - To pause updates entirely, remove this file.
 
 version: 2
 updates:
@@ -7,9 +14,12 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
       time: "06:00"
+    groups:
+      # All dev-tool bumps (pylint, black, faker, ipython, ...) in one PR
+      development-dependencies:
+        dependency-type: "development"
     open-pull-requests-limit: 10
     reviewers:
       - "Galen-Chu"
@@ -32,8 +42,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/.github/workflows"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
       time: "06:00"
     open-pull-requests-limit: 5
     reviewers:
@@ -49,8 +58,7 @@ updates:
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
       time: "06:00"
     open-pull-requests-limit: 5
     reviewers:
