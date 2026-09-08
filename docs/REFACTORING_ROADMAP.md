@@ -7,6 +7,18 @@ This roadmap comes from a POM-architecture self-review of the framework
 Each item is self-contained so a session can pick one, decide, and deliver it
 independently. Line references are as of the review date and will drift.
 
+## Workflow (agreed 2026-09-08)
+
+No schedule is committed yet; issues are intentionally **not** opened in
+advance. When development on this roadmap begins, the first action of that
+session is:
+
+1. Open one GitHub issue per item being started (label: `refactoring`),
+   with the matching section of this file linked in the issue body.
+2. Track execution state in the issues — this file stays the overview and
+   is updated only when priorities or sequencing change.
+3. Close issues via commit/PR references (`closes #N`).
+
 ## What Already Works Well (Do Not Regress)
 
 These are the framework's strengths; refactors must preserve them:
