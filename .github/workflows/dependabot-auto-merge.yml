@@ -35,7 +35,7 @@ jobs:
 
       - name: Fetch dependabot metadata
         id: metadata
-        uses: dependabot/fetch-metadata@v2
+        uses: dependabot/fetch-metadata@v3
 
       - name: Merge dev-only updates
         # Merge only when every updated dependency is dev-type; any runtime
