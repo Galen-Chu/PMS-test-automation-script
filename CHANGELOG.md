@@ -32,6 +32,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI streamlined (~85% fewer runs): main-branch + path-filtered
   triggers, single-job regression matrix, concurrency cancellation,
   test exit codes surfaced in run summaries instead of bare `|| true`
+- Pre-commit hook versions aligned with requirements-dev.txt (black
+  26.5.1, pylint 4.0.9, mypy 2.3.1, bandit 1.9.4); local hooks no
+  longer drift from CI
+
+### Removed
+- 14 stale root-level page objects (`src/pages/*_component.py`,
+  `*_dialog.py`) superseded by `pages/components/` + `pages/dialogs/`
+  in the 2026-08 upstream sync; 5 had silently diverged and one masked
+  a renamed method call in `test_maindesk`
 
 ### Fixed
 - Package layout: `src/utils` renamed back to `src/tools` and
@@ -46,6 +55,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   tests no longer requires TensorFlow
 - Fixtures registered via tests conftest; faker 40 ISO-date
   compatibility in reservation factory
+- `test_maindesk` called `grt_link_nos_row_data`, renamed to
+  `get_link_nos_row_data` in the dialogs port (AttributeError at
+  runtime; invisible because CI tests are non-blocking)
+- Renamed `tools/date_hepler.py` -> `tools/date_helper.py` (filename
+  typo)
+- `.gitignore` excludes `security-report.json` written by the bandit
+  pre-commit hook
 
 ## [1.0.0] - 2026-03-11
 
