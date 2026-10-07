@@ -174,7 +174,7 @@ class TestMaindesk:
             web.base_page.screenshot("And 驗證關聯單號資料")
             web.base_page.assert_data(
                 "關聯訂房卡資料",
-                web.reservation_card_dialog.grt_link_nos_row_data(2),
+                web.reservation_card_dialog.get_link_nos_row_data(2),
                 [
                     "00008236",
                     "",
