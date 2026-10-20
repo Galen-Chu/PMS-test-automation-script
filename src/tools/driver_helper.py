@@ -63,6 +63,30 @@ class DriverHelper:
         return web
 
     @staticmethod
+    def get_logged_in_browser(pages, path=None):
+        """使用已登入的共用 driver 建立頁面物件（搭配 logged_in_driver fixture）
+
+        Args:
+            pages: Page Object class 清單
+            path: 頁面路徑。None=停留當前頁；"login"=前往登入頁；其他=前往指定頁面
+        """
+        web_driver = DriverHelper.DRIVER
+        if web_driver is None:
+            raise RuntimeError("DriverHelper.DRIVER is None — 請先使用 logged_in_driver fixture")
+
+        if path == "login":
+            web_driver.get(DriverHelper.build_auth_url())
+        elif path:
+            web_driver.get(f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}/{path}")
+
+        tmp_pages = {}
+        for page in pages:
+            tmp_pages[humps.decamelize(page.__name__)] = page(web_driver)
+        web = type("Expando", (object,), tmp_pages)()
+        web.driver = web_driver
+        return web
+
+    @staticmethod
     def save_session_storages():
         session_data_dict = DriverHelper.DRIVER.execute_script("""
             let data = {};

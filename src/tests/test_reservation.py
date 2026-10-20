@@ -23,9 +23,9 @@ class TestReservation:
     @allure.story("依房號訂房")
     @pytest.mark.xdist_group("roomno_reservation")
     @pytest.mark.dependency(name="test_roomno_reservation", scope="session")
-    def test_roomno_reservation(self, cache):
+    def test_roomno_reservation(self, logged_in_driver, cache):
         pages = [BasePage, LoginPage, HomePage, HeaderComponent, TipComponent, ReservationPage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("選擇空房"):
             web.header_component.expand_menu("訂房").sleep(1)
             web.header_component.to_func_page("依房號訂房").sleep(10)

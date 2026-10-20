@@ -52,7 +52,9 @@ class BasePage:
         self.driver = driver
 
     def formator_locator(self, locator, values):
-        return literal_eval(str(locator) % values)
+        # 直接格式化 locator 元組（避免 str(tuple)%value 在 Windows 上損壞中文字元）
+        by, selector = locator
+        return (by, selector % values)
 
     def click(self, locator, retries=5, delay=1):
         for attempt in range(retries):
@@ -99,7 +101,7 @@ class BasePage:
             self.driver.implicitly_wait(2)
             self.driver.find_element(*locator)
             return True
-        except NoSuchElementException:
+        except (NoSuchElementException, StaleElementReferenceException):
             return False
         finally:
             self.driver.implicitly_wait(10)

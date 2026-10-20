@@ -1,4 +1,6 @@
 import os
+import time
+import threading
 import pytest
 import allure
 
@@ -8,6 +10,120 @@ from tools.driver_helper import DriverHelper
 # data fixtures here so every test module under tests/ can request them.
 from tests.fixtures.data_fixtures import *  # noqa: E402,F401,F403
 
+# Persistent Chrome profile directory (survives browser restarts)
+CHROME_PROFILE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".chrome-profile")
+
+
+# ============================================================================
+# Session-scoped fixtures
+# ============================================================================
+
+def _create_driver():
+    """Create Chrome with persistent profile (cookies survive restarts)"""
+    from selenium.webdriver.chrome.options import Options as ChromeOptions
+    from selenium.webdriver.chrome.service import Service
+    from selenium import webdriver
+
+    options = ChromeOptions()
+    options.add_argument("--start-maximized")
+    options.add_argument(f"--user-data-dir={CHROME_PROFILE_DIR}")
+    options.add_experimental_option(
+        "prefs",
+        {"profile.default_content_setting_values": {"notifications": 2}},
+    )
+
+    selenium_hub = os.getenv("SELENIUM_HUB")
+    if selenium_hub:
+        return webdriver.Remote(command_executor=selenium_hub, options=options)
+
+    return webdriver.Chrome(service=Service(), options=options)
+
+
+def _is_logged_in(driver):
+    """Check if the current session is still valid by visiting PMS"""
+    try:
+        pms_url = f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}/reservation/PMS0110010"
+        driver.get(pms_url)
+        time.sleep(5)
+        body = driver.find_element("tag name", "body").text
+        return "請重新登入" not in body  # "請重新登入" not in body
+    except Exception:
+        return False
+
+
+class SessionKeepAlive:
+    """Background thread that periodically touches EIP to prevent idle timeout"""
+
+    def __init__(self, driver, interval=180):
+        self.driver = driver
+        self.interval = interval
+        self._stop = threading.Event()
+        self._thread = None
+
+    def start(self):
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
+
+    def _run(self):
+        eip_url = f"{os.getenv('WEB_URL')}/eip/{os.getenv('ENV_NUM')}"
+        while not self._stop.is_set():
+            if self._stop.wait(self.interval):
+                break
+            try:
+                # Execute a lightweight JS call instead of full page navigation
+                self.driver.execute_script("fetch('/')")
+            except Exception:
+                pass
+
+    def stop(self):
+        self._stop.set()
+        if self._thread:
+            self._thread.join(timeout=5)
+
+
+@pytest.fixture(scope="session")
+def shared_driver():
+    """Session-scoped Chrome with persistent profile + keep-alive"""
+    driver = _create_driver()
+    driver.implicitly_wait(10)
+    DriverHelper.DRIVER = driver
+
+    keep_alive = SessionKeepAlive(driver, interval=180)
+    keep_alive.start()
+
+    yield driver
+
+    keep_alive.stop()
+    driver.quit()
+    DriverHelper.DRIVER = None
+
+
+@pytest.fixture(scope="session")
+def logged_in_driver(shared_driver):
+    """Login once (or reuse existing session from persistent profile)"""
+    from pages.login_page import LoginPage
+
+    # Try to reuse existing session from persistent profile
+    if _is_logged_in(shared_driver):
+        print("[session] Reusing existing login from persistent profile")
+    else:
+        print("[session] No valid session, performing login...")
+        shared_driver.get(DriverHelper.build_auth_url())
+        time.sleep(3)
+        login_page = LoginPage(shared_driver)
+        login_page.login(os.getenv("USERNAME"), os.getenv("PASSWORD"))
+
+    # Visit EIP to ensure hotel context (comp_cod etc.) is set
+    eip_url = f"{os.getenv('WEB_URL')}/eip/{os.getenv('ENV_NUM')}"
+    shared_driver.get(eip_url)
+    time.sleep(3)
+
+    yield shared_driver
+
+
+# ============================================================================
+# Hooks
+# ============================================================================
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):  # pylint: disable=unused-argument
@@ -17,17 +133,9 @@ def pytest_runtest_makereport(item, call):  # pylint: disable=unused-argument
         try:
             allure.attach(
                 DriverHelper.DRIVER.get_screenshot_as_png(),
-                name="異常截圖",
+                name="error_screenshot",
                 attachment_type=allure.attachment_type.PNG,
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught
-            print(e)
-
-    if rep.when == "teardown":
-        try:
-            if DriverHelper.DRIVER is not None:
-                DriverHelper.DRIVER.quit()
-                DriverHelper.DRIVER = None
         except Exception as e:  # pylint: disable=broad-exception-caught
             print(e)
 
