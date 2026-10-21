@@ -105,3 +105,4 @@ collect_captchas.py
 captcha_model.keras
 char_mappings.pkl
 debug_out/
+perf-reports/

@@ -1,211 +1,266 @@
-"""Automated performance test: reservation booking 150 rooms.
+"""Automated performance tests for PMS reservation module.
 
-Executes the full booking flow (select room -> enter 150 -> save)
-multiple times and collects API timing data for each round.
+Two test classes:
+1. TestPageLoadPerf — measures page load API timings (no user interaction)
+2. TestBookingFlowPerf — measures booking flow API timings (save, recalculate)
 
-Run: pytest -m perf src/tests/test_perf_reservation.py -v --alluredir=allure-results
+Both generate HTML reports + raw JSON data automatically.
+
+Run:
+    pytest -m perf src/tests/test_perf_reservation.py -v --alluredir=allure-results
+    PERF_ROUNDS=4 pytest -m perf ...  (default 2 rounds)
 """
 
+import json
 import os
 import time
+from datetime import datetime
+from pathlib import Path
 
 import allure
 import pytest
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-from pages.base_page import BasePage
-from pages.components.header_component import HeaderComponent
-from pages.components.tip_component import TipComponent
-from pages.login_page import LoginPage
-from pages.reservation_page import ReservationPage
-from tools.driver_helper import DriverHelper
-from tools.performance_monitor import PerformanceMonitor
 from tools.perf_analyzer import analyze_performance, format_duration
+from tools.perf_report import save_perf_report
 
 pytestmark = [pytest.mark.perf]
 
-# Test configuration
-ROOM_COUNT = 150
-ROUNDS = int(os.getenv("PERF_ROUNDS", "2"))  # Default 2 rounds (to save time)
-TEST_TAG = os.getenv("PERF_TAG", "PERF")
+ROUNDS = int(os.getenv("PERF_ROUNDS", "2"))
+ROOM_COUNT = int(os.getenv("PERF_ROOMS", "150"))
+REPORT_DIR = Path("perf-reports")
+REPORT_DIR.mkdir(exist_ok=True)
+ENV_LABEL = os.getenv("ENV", "qa").upper()
+TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M")
 
 
 @allure.feature("Performance")
-@allure.story("Reservation booking 150 rooms")
-class TestReservationBookingPerf:
-    """Measure API performance for 150-room booking on PMS0110010."""
+class TestPageLoadPerf:
+    """Measure PMS0110010 page load API performance."""
 
-    def test_booking_150_rooms(self, logged_in_driver, perf_monitor):
-        """Page load API performance test (multi-round)."""
+    @allure.story("PMS0110010 page load")
+    def test_page_load(self, logged_in_driver, perf_monitor):
+        """Navigate to page N times, collect API timings each round."""
         driver = logged_in_driver
+        all_apis = []
 
-        all_raw_data = []
-        for round_num in range(1, ROUNDS + 1):
-            # Navigate to page (triggers page-load APIs)
+        for rd in range(1, ROUNDS + 1):
             driver.get(
                 f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}"
                 "/reservation/PMS0110010?prg_id=PMS0110010&locale=zh_TW"
             )
             time.sleep(5)
+            apis = perf_monitor.collect_page_load()
+            all_apis.extend(apis)
+            print(f"  Round {rd}: {len(apis)} APIs")
 
-            # Collect page-load APIs directly (no hooks injection needed)
-            round_apis = perf_monitor.collect_page_load()
-            all_raw_data.append(round_apis)
-            print(f"  Round {round_num}: {len(round_apis)} API calls")
+        # Generate report
+        output = str(REPORT_DIR / f"page_load_{TIMESTAMP}.html")
+        meta = {
+            "test": f"PMS0110010 Page Load ({ROUNDS} rounds)",
+            "env": ENV_LABEL,
+            "date": TIMESTAMP,
+        }
+        save_perf_report(all_apis, output, meta, report_type="page_load")
 
-        # Aggregate analysis
-        merged_apis = []
-        for d in all_raw_data:
-            merged_apis.extend(d)
+        # Attach to Allure
+        slowest = sorted(all_apis, key=lambda x: x["duration"], reverse=True)
+        summary = [
+            f"Page Load Performance ({ROUNDS} rounds, {len(all_apis)} APIs)",
+            "",
+            "Top 10 Slowest:",
+        ] + [f"  {format_duration(a['duration'])} {a['name']}" for a in slowest[:10]]
+        allure.attach("\n".join(summary), name="perf_page_load")
+        allure.attach.file(
+            output, name="perf_report_html", attachment_type=allure.attachment_type.HTML
+        )
+
+        assert len(all_apis) > 0, "No APIs collected — page load may have failed"
+
+
+@allure.feature("Performance")
+class TestBookingFlowPerf:
+    """Measure PMS0110010 booking flow API performance (save, recalculate)."""
+
+    @allure.story("Booking 150 rooms flow")
+    def test_booking_flow(self, logged_in_driver, perf_monitor):
+        """Full booking flow: select STD -> open dialog -> 150 rooms -> save."""
+        driver = logged_in_driver
+
+        for rd in range(1, ROUNDS + 1):
+            print(f"  Round {rd}: starting booking flow...")
+            result = self._do_booking_round(driver, perf_monitor, rd)
+            print(f"  Round {rd}: {result}")
+
+        # Collect and analyze
+        perf_monitor.stop()
+        apis = perf_monitor.get_api_timings()
         analysis = analyze_performance(
-            {"ops": [], "apis": merged_apis},
+            {"ops": perf_monitor.get_click_log(), "apis": apis},
             thresholds={"booking": 30000, "recalculate": 10000},
         )
 
-        self._attach_results(analysis, [])
+        # Generate report
+        output = str(REPORT_DIR / f"booking_{TIMESTAMP}.html")
+        meta = {
+            "test": f"PMS0110010 Booking {ROOM_COUNT} Rooms ({ROUNDS} rounds)",
+            "env": ENV_LABEL,
+            "date": TIMESTAMP,
+        }
+        save_perf_report(analysis, output, meta, report_type="booking")
 
-        # Assertions
-        assert (
-            analysis["stats"]["total_api_count"] > 0
-        ), "No API calls recorded — page load may have failed"
+        # Attach to Allure
+        self._attach_allure(analysis, output)
+        assert analysis["stats"]["total_api_count"] > 0, "No APIs collected"
 
-    def _do_booking(self, driver, wait, round_num):
-        """Execute booking flow on the current page (already navigated)."""
-        # Step 1: Select a date cell
+    def _do_booking_round(self, driver, pm, rd):
+        """Execute one booking round: navigate -> select -> dialog -> save."""
+        # Step 1: Navigate
+        driver.get(
+            f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}"
+            "/reservation/PMS0110010?prg_id=PMS0110010&locale=zh_TW"
+        )
+        time.sleep(5)
+
+        # Step 2: Start monitoring AFTER page loads
+        pm.start()
+
+        # Step 3: Click STD row date cells via JS (more reliable than Selenium selectors)
+        clicked = driver.execute_script("""
+            var rows = document.querySelectorAll('tr');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].textContent.indexOf('STD(') !== -1) {
+                    var cells = rows[i].querySelectorAll('td.pointer');
+                    if (cells.length > 5) {
+                        cells[3].click();
+                        return 'clicked_start';
+                    }
+                }
+            }
+            return 'no_std_row';
+        """)
+        time.sleep(1)
+
+        if clicked == "no_std_row":
+            pm.stop()
+            return "ERROR: STD row not found"
+
+        # Step 4: Click next date cell (end date)
+        driver.execute_script("""
+            var rows = document.querySelectorAll('tr');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].textContent.indexOf('STD(') !== -1) {
+                    var cells = rows[i].querySelectorAll('td.pointer');
+                    if (cells.length > 5) {
+                        cells[4].click();
+                        return 'clicked_end';
+                    }
+                }
+            }
+            return 'no_cell';
+        """)
+        time.sleep(1)
+
+        # Step 5: Click booking button
         try:
-            std_cells = driver.find_elements(By.CSS_SELECTOR, "td.pointer:not(.name-color)")
-            if std_cells:
-                std_cells[0].click()
-                time.sleep(1)
+            btns = driver.find_elements(By.CSS_SELECTOR, "div.toolbar button.button")
+            if btns:
+                btns[0].click()
+                time.sleep(3)
+            else:
+                pm.stop()
+                return "ERROR: booking button not found"
         except Exception as e:
-            allure.attach(f"Date cell click: {e}", name=f"date_cell_error_r{round_num}")
+            pm.stop()
+            return f"ERROR: {e}"
 
-        # Step 2: Click 訂房 button
+        # Step 6: Set room count in dialog
         try:
-            booking_btn = driver.find_element(By.CSS_SELECTOR, "div.toolbar button.button")
-            booking_btn.click()
-            time.sleep(3)
-        except Exception as e:
-            allure.attach(f"Booking button: {e}", name=f"booking_btn_error_r{round_num}")
-            return {"round": round_num, "error": str(e)}
-
-        # Step 3: Set room count
-        try:
-            qty_input = driver.find_element(By.ID, "groupOrderQuantity")
-            qty_input.clear()
-            qty_input.send_keys(str(ROOM_COUNT))
+            qty = driver.find_element(By.ID, "groupOrderQuantity")
+            qty.clear()
+            qty.send_keys(str(ROOM_COUNT))
             time.sleep(2)
-        except Exception as e:
-            allure.attach(f"Room count: {e}", name=f"qty_error_r{round_num}")
+        except Exception:
+            pass  # Dialog may not have opened; continue
 
-        # Step 4: Fill required fields
+        # Step 7: Fill booking name
         try:
-            name_inputs = driver.find_elements(By.CSS_SELECTOR, ".e-control.e-textbox")
-            for inp in name_inputs[:2]:
+            inputs = driver.find_elements(By.CSS_SELECTOR, ".e-control.e-textbox")
+            for inp in inputs[:3]:
                 if not inp.get_attribute("value"):
-                    inp.send_keys(f"{TEST_TAG}_R{round_num}")
+                    inp.send_keys(f"PERF_R{rd}")
                     break
             time.sleep(1)
-        except Exception as e:
-            allure.attach(f"Name field: {e}", name=f"name_error_r{round_num}")
+        except Exception:
+            pass
 
-        # Step 5: Click save
+        # Step 8: Click save button
         try:
             save_btns = driver.find_elements(By.CSS_SELECTOR, ".e-control.e-btn")
             for btn in save_btns:
                 if btn.is_displayed():
                     btn.click()
                     break
-        except Exception as e:
-            allure.attach(f"Save button: {e}", name=f"save_error_r{round_num}")
+        except Exception:
+            pass
 
-        # Step 6: Wait for completion
-        start_time = time.time()
+        # Step 9: Wait for completion
+        start = time.time()
         try:
             WebDriverWait(driver, 60).until(
                 lambda d: "儲存成功" in d.find_element(By.TAG_NAME, "body").text
             )
-            elapsed = time.time() - start_time
+            elapsed = time.time() - start
         except TimeoutException:
-            elapsed = time.time() - start_time
-            allure.attach(f"Timeout after {elapsed:.1f}s", name=f"timeout_r{round_num}")
+            elapsed = time.time() - start
 
-        # Step 7: Dismiss toast and close dialog
+        # Step 10: Dismiss toast + close dialog
+        self._dismiss_and_close(driver)
+
+        return f"save_wait={elapsed:.1f}s"
+
+    def _dismiss_and_close(self, driver):
+        """Dismiss toast and close dialog."""
         try:
-            ok_btns = driver.find_elements(
-                By.CSS_SELECTOR, ".el-message-box__btns .el-button--primary"
-            )
-            if ok_btns:
-                ok_btns[0].click()
-                time.sleep(2)
+            ok = driver.find_elements(By.CSS_SELECTOR, ".el-message-box__btns .el-button--primary")
+            if ok:
+                ok[0].click()
+                time.sleep(1)
         except Exception:
             pass
         try:
-            close_btns = driver.find_elements(By.CSS_SELECTOR, ".e-dlg-closeicon-btn")
-            if close_btns:
-                close_btns[0].click()
-                time.sleep(2)
+            close = driver.find_elements(By.CSS_SELECTOR, ".e-dlg-closeicon-btn")
+            if close:
+                close[0].click()
+                time.sleep(1)
         except Exception:
             pass
 
-        return {"round": round_num, "save_elapsed_s": elapsed}
-
-    def _attach_results(self, analysis, round_data):
-        """Attach performance analysis to Allure report."""
-        # Summary
-        stats = analysis["stats"]
-        summary = [
-            f"Performance Test Summary",
-            f"=======================",
-            f"Rounds: {stats['round_count']}",
-            f"Total API calls: {stats['total_api_count']}",
+    def _attach_allure(self, analysis, report_path):
+        """Attach performance summary and report to Allure."""
+        stats = analysis.get("stats", {})
+        save = stats.get("save", {})
+        lines = [
+            f"Booking Flow Performance ({ROUNDS} rounds)",
+            f"Total APIs: {stats.get('total_api_count', 0)}",
             "",
-            f"Save API (restV3/booking):",
-            f"  Count: {stats['save']['count']}",
-            f"  Median: {format_duration(stats['save']['median'])}",
-            f"  Min: {format_duration(stats['save']['min'])}",
-            f"  Max: {format_duration(stats['save']['max'])}",
-            "",
-            f"Recalculate API:",
-            f"  Count: {stats['recalculate']['count']}",
+            f"Save API: count={save.get('count', 0)}, "
+            f"median={format_duration(save.get('median'))}",
         ]
-        if stats["recalculate"]["median"]:
-            summary.append(f"  Median: {format_duration(stats['recalculate']['median'])}")
-            summary.append(f"  Max: {format_duration(stats['recalculate']['max'])}")
-
-        # Violations
-        if analysis["violations"]:
-            summary.append("\nThreshold Violations:")
+        recalc = stats.get("recalculate", {})
+        if recalc.get("count"):
+            lines.append(
+                f"Recalculate: count={recalc['count']}, "
+                f"median={format_duration(recalc.get('median'))}"
+            )
+        if analysis.get("violations"):
+            lines.append(f"\nViolations: {len(analysis['violations'])}")
             for v in analysis["violations"]:
-                summary.append(
-                    f"  {v['api']}: {format_duration(v['duration_ms'])} "
-                    f"(threshold: {format_duration(v['threshold_ms'])})"
-                )
+                lines.append(f"  {v['api']}: {format_duration(v['duration_ms'])}")
 
-        # Top 10 slowest APIs
-        summary.append("\nTop 10 Slowest APIs:")
-        for api in analysis["slow_apis"]:
-            summary.append(f"  {format_duration(api['duration'])} {api['name']}")
-
-        allure.attach(
-            "\n".join(summary), name="perf_summary", attachment_type=allure.attachment_type.TEXT
-        )
-
-        # Raw data as JSON
-        import json
-
-        allure.attach(
-            json.dumps(
-                {
-                    "stats": {k: v for k, v in stats.items()},
-                    "slow_apis": analysis["slow_apis"],
-                    "violations": analysis["violations"],
-                },
-                indent=2,
-                default=str,
-            ),
-            name="perf_data",
-            attachment_type=allure.attachment_type.JSON,
+        allure.attach("\n".join(lines), name="perf_booking")
+        allure.attach.file(
+            report_path, name="perf_report_html", attachment_type=allure.attachment_type.HTML
         )
