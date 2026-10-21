@@ -104,3 +104,4 @@ train_captcha_model.py
 collect_captchas.py
 captcha_model.keras
 char_mappings.pkl
+debug_out/
