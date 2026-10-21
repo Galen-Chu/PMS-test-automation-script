@@ -1,6 +1,8 @@
 [pytest]
 disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
 pythonpath = src
+markers =
+    perf: Performance tests (with perf_monitor fixture)
 env =
     ENV = demo
     WEB_URL = https://demo.example.com

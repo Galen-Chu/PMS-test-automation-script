@@ -5,6 +5,7 @@ import pytest
 import allure
 
 from tools.driver_helper import DriverHelper
+from tools.performance_monitor import PerformanceMonitor
 
 # pytest registers fixtures from conftest modules only; re-export the
 # data fixtures here so every test module under tests/ can request them.
@@ -122,6 +123,19 @@ def logged_in_driver(shared_driver):
     time.sleep(3)
 
     yield shared_driver
+
+
+@pytest.fixture(scope="function")
+def perf_monitor(logged_in_driver):
+    """Per-test performance monitor (injects hooks, collects API timings).
+
+    Usage in test:
+        def test_xxx(self, logged_in_driver, perf_monitor):
+            perf_monitor.start()
+            # ... page operations ...
+            perf_monitor.attach_to_allure("test_xxx")
+    """
+    return PerformanceMonitor(logged_in_driver)
 
 
 # ============================================================================
