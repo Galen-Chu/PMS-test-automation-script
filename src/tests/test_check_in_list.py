@@ -14,12 +14,12 @@ class TestCheckInList:
     @allure.story("C/I 清單 - 單筆入住")
     @pytest.mark.xdist_group("test_ci_list_flow_a")
     @pytest.mark.dependency(name="test_single_check_in", scope="session")
-    def test_single_check_in(self):
+    def test_single_check_in(self, logged_in_driver):
         data = get_group_data("test_ci_list_flow_a")
         room = data["room"]
 
         pages = [CheckInListPage, HeaderComponent, TipComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「C/I清單」頁面"):
             web.header_component.expand_menu("接待").sleep(1)

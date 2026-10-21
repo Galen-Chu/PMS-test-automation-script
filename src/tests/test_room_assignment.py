@@ -14,9 +14,9 @@ class TestRoomAssignment:
     @allure.story("明細排房")
     @pytest.mark.xdist_group("room_assignment")
     @pytest.mark.dependency(name="test_room_assignment_detail", scope="session")
-    def test_room_assignment_detail(self):
+    def test_room_assignment_detail(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomAssignmentPage, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「排房作業」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -64,9 +64,9 @@ class TestRoomAssignment:
     @pytest.mark.dependency(
         name="test_lock_room_assignment", depends=["test_room_assignment_detail"], scope="session"
     )
-    def test_lock_room_assignment(self, action, is_lock, is_readonly):
+    def test_lock_room_assignment(self, logged_in_driver, action, is_lock, is_readonly):
         pages = [HeaderComponent, TipComponent, RoomAssignmentPage, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「排房作業」頁面"):
             web.header_component.expand_menu("接待").sleep(1)

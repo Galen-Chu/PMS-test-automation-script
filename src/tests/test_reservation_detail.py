@@ -21,7 +21,7 @@ class TestReservationDetail:
     @allure.story("新增櫃台備品-自動入帳")
     @pytest.mark.xdist_group("add_spare_parts_with_expense")
     @pytest.mark.dependency(name="test_add_spare_parts_with_expense", scope="session")
-    def test_add_spare_parts_with_expense(self):
+    def test_add_spare_parts_with_expense(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -30,7 +30,7 @@ class TestReservationDetail:
             BasePage,
             SparePartsComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -103,7 +103,7 @@ class TestReservationDetail:
         depends=["test_add_spare_parts_with_expense"],
         scope="session",
     )
-    def test_verify_data_of_add_spare_parts(self):
+    def test_verify_data_of_add_spare_parts(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -111,7 +111,7 @@ class TestReservationDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -184,7 +184,7 @@ class TestReservationDetail:
         depends=["test_verify_data_of_add_spare_parts"],
         scope="session",
     )
-    def test_shorten_spare_parts_end_date(self):
+    def test_shorten_spare_parts_end_date(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -193,7 +193,7 @@ class TestReservationDetail:
             BasePage,
             SparePartsComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -255,7 +255,7 @@ class TestReservationDetail:
         depends=["test_shorten_spare_parts_end_date"],
         scope="session",
     )
-    def test_verify_data_of_shorten_spare_parts(self):
+    def test_verify_data_of_shorten_spare_parts(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -263,7 +263,7 @@ class TestReservationDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -336,7 +336,7 @@ class TestReservationDetail:
         depends=["test_verify_data_of_shorten_spare_parts"],
         scope="session",
     )
-    def test_extend_spare_parts_end_date(self):
+    def test_extend_spare_parts_end_date(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -345,7 +345,7 @@ class TestReservationDetail:
             BasePage,
             SparePartsComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -412,7 +412,7 @@ class TestReservationDetail:
         depends=["test_extend_spare_parts_end_date"],
         scope="session",
     )
-    def test_verify_data_of_extend_spare_parts(self):
+    def test_verify_data_of_extend_spare_parts(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -420,7 +420,7 @@ class TestReservationDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -493,7 +493,7 @@ class TestReservationDetail:
         depends=["test_verify_data_of_extend_spare_parts"],
         scope="session",
     )
-    def test_edit_spare_parts_amount(self):
+    def test_edit_spare_parts_amount(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -502,7 +502,7 @@ class TestReservationDetail:
             BasePage,
             SparePartsComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -580,7 +580,7 @@ class TestReservationDetail:
         depends=["test_edit_spare_parts_amount"],
         scope="session",
     )
-    def test_verify_data_of_edit_spare_parts_amount(self):
+    def test_verify_data_of_edit_spare_parts_amount(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -588,7 +588,7 @@ class TestReservationDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -661,7 +661,7 @@ class TestReservationDetail:
         depends=["test_verify_data_of_edit_spare_parts_amount"],
         scope="session",
     )
-    def test_delete_spare_parts_with_expense(self):
+    def test_delete_spare_parts_with_expense(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -670,7 +670,7 @@ class TestReservationDetail:
             BasePage,
             SparePartsComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -745,7 +745,7 @@ class TestReservationDetail:
     @allure.story("新增櫃台備品-入交辦")
     @pytest.mark.xdist_group("add_spare_parts_with_todo")
     @pytest.mark.dependency(name="test_add_spare_parts_with_todo", scope="session")
-    def test_add_spare_parts_with_todo(self):
+    def test_add_spare_parts_with_todo(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             ReservationPage,
@@ -756,7 +756,7 @@ class TestReservationDetail:
             SparePartsComponent,
             TodolistEditComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -842,7 +842,7 @@ class TestReservationDetail:
         depends=["test_add_spare_parts_with_todo"],
         scope="session",
     )
-    def test_delete_spare_parts_with_todo(self):
+    def test_delete_spare_parts_with_todo(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -852,7 +852,7 @@ class TestReservationDetail:
             SparePartsComponent,
             TodolistEditComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -913,7 +913,7 @@ class TestReservationDetail:
         depends=["test_delete_spare_parts_with_todo"],
         scope="session",
     )
-    def test_batch_spare_add_with_todo(self):
+    def test_batch_spare_add_with_todo(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -922,7 +922,7 @@ class TestReservationDetail:
             BasePage,
             SparePartsBatchComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「備品批次」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -995,7 +995,7 @@ class TestReservationDetail:
         depends=["test_batch_spare_add_with_todo"],
         scope="session",
     )
-    def test_verify_data_of_batch_spare_add_with_todo(self):
+    def test_verify_data_of_batch_spare_add_with_todo(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -1005,7 +1005,7 @@ class TestReservationDetail:
             SparePartsComponent,
             TodolistEditComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -1059,7 +1059,7 @@ class TestReservationDetail:
     @pytest.mark.parametrize(
         "search_type, selected_count", [("單選", 1), ("複選", 3), ("全選", "all")]
     )
-    def test_search_spare_parts(self, search_type, selected_count):
+    def test_search_spare_parts(self, logged_in_driver, search_type, selected_count):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -1068,7 +1068,7 @@ class TestReservationDetail:
             BasePage,
             SparePartsComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -1106,7 +1106,7 @@ class TestReservationDetail:
     @allure.story("新增排房備註")
     @pytest.mark.xdist_group("add_assign_note")
     @pytest.mark.dependency(name="test_add_room_assign_note", scope="session")
-    def test_add_room_assign_note(self):
+    def test_add_room_assign_note(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -1115,7 +1115,7 @@ class TestReservationDetail:
             RoomAssignmentPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -1175,9 +1175,9 @@ class TestReservationDetail:
     @pytest.mark.dependency(
         name="test_edit_room_assign_note", depends=["test_add_room_assign_note"], scope="session"
     )
-    def test_edit_room_assign_note(self):
+    def test_edit_room_assign_note(self, logged_in_driver):
         pages = [ReservationCardDialog, HeaderComponent, TipComponent, RoomAssignmentPage, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(
@@ -1235,7 +1235,7 @@ class TestReservationDetail:
             )
 
     @allure.story("團體名單調整住客")
-    def test_group_list_edit_guest(self):
+    def test_group_list_edit_guest(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -1244,7 +1244,7 @@ class TestReservationDetail:
             RoomAssignmentPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.to_reservation_detail(

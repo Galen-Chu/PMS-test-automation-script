@@ -21,9 +21,11 @@ class TestReservationCard:
     @pytest.mark.parametrize(
         "guest_history_field", ["姓+名", "姓名", "證件號碼", "手機", "電子郵件"]
     )
-    def test_create_reservation_card_with_existing_guest_history(self, guest_history_field):
+    def test_create_reservation_card_with_existing_guest_history(
+        self, logged_in_driver, guest_history_field
+    ):
         pages = [BasePage, HeaderComponent, TipComponent, ReservationPage, ReservationCardDialog]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 開啟訂房卡頁面"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -77,7 +79,7 @@ class TestReservationCard:
     @pytest.mark.parametrize("invoice_type", ["X : 已開", "N : 後開"])
     @pytest.mark.xdist_group("reservation_card_add_deposit")
     @pytest.mark.dependency(name="test_add_deposit_to_reservation_card_no_invoice", scope="session")
-    def test_add_deposit_to_reservation_card_no_invoice(self, invoice_type):
+    def test_add_deposit_to_reservation_card_no_invoice(self, logged_in_driver, invoice_type):
         pages = [
             BasePage,
             HeaderComponent,
@@ -86,7 +88,7 @@ class TestReservationCard:
             ReservationPage,
             ReservationCardDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -180,7 +182,7 @@ class TestReservationCard:
         depends=["test_add_deposit_to_reservation_card_no_invoice"],
         scope="session",
     )
-    def test_add_deposit_to_reservation_card_has_invoice(self):
+    def test_add_deposit_to_reservation_card_has_invoice(self, logged_in_driver):
         pages = [
             BasePage,
             HeaderComponent,
@@ -189,7 +191,7 @@ class TestReservationCard:
             ReservationPage,
             ReservationCardDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -282,7 +284,7 @@ class TestReservationCard:
         depends=["test_add_deposit_to_reservation_card_has_invoice"],
         scope="session",
     )
-    def test_load_existing_deposit_to_reservation_card(self):
+    def test_load_existing_deposit_to_reservation_card(self, logged_in_driver):
         pages = [
             BasePage,
             HeaderComponent,
@@ -291,7 +293,7 @@ class TestReservationCard:
             ReservationCardDialog,
             SharePanelComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -333,7 +335,7 @@ class TestReservationCard:
     @allure.story("編輯訂房卡 - 新增關聯單號綁訂")
     @pytest.mark.xdist_group("test_edit_reservation_card")
     @pytest.mark.dependency(name="test_edit_reservation_card_add_link_nos", scope="session")
-    def test_edit_reservation_card_add_link_nos(self):
+    def test_edit_reservation_card_add_link_nos(self, logged_in_driver):
         pages = [
             BasePage,
             HeaderComponent,
@@ -342,7 +344,7 @@ class TestReservationCard:
             ReservationPage,
             ReservationCardDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房卡」頁面"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -400,7 +402,7 @@ class TestReservationCard:
         depends=["test_edit_reservation_card_add_link_nos"],
         scope="session",
     )
-    def test_edit_assign_room(self):
+    def test_edit_assign_room(self, logged_in_driver):
         pages = [
             BasePage,
             HeaderComponent,
@@ -410,7 +412,7 @@ class TestReservationCard:
             RoomAssignmentPage,
             SharePanelComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110040")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110040")
 
         with allure.step("Given 使用者進入「訂房卡」頁面"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -456,9 +458,9 @@ class TestReservationCard:
             )
 
     @allure.story("建立訂房卡 - 公帳號")
-    def test_create_reservation_card_with_folio(self):
+    def test_create_reservation_card_with_folio(self, logged_in_driver):
         pages = [BasePage, HeaderComponent, TipComponent, ReservationPage, ReservationCardDialog]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 開啟訂房卡頁面"):
             web.header_component.expand_menu("訂房").sleep(1)

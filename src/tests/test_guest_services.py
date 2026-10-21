@@ -34,7 +34,7 @@ class TestGuestServices:
     @allure.story("新增接送服務-接(自動入帳)")
     @pytest.mark.xdist_group("test_transport_service")
     @pytest.mark.dependency(name="test_add_transport_service_with_expense", scope="session")
-    def test_add_transport_service_with_expense(self, cache):
+    def test_add_transport_service_with_expense(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -44,7 +44,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step(
             "Given 使用者從「訂房」進入「訂房卡」頁面並進入「訂房明細」，然後點擊住客的黑色鉛筆"
@@ -184,7 +184,7 @@ class TestGuestServices:
         depends=["test_add_transport_service_with_expense"],
         scope="session",
     )
-    def test_verify_transport_service_expense(self, cache):
+    def test_verify_transport_service_expense(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -194,7 +194,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_transport", "")
 
         with allure.step("Given 使用者從「訂房」進入「訂房卡」頁面並進入「訂房明細」視窗"):
@@ -247,7 +247,7 @@ class TestGuestServices:
         depends=["test_verify_transport_service_expense"],
         scope="session",
     )
-    def test_add_transport_service_send_with_expense(self, cache):
+    def test_add_transport_service_send_with_expense(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -257,7 +257,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_transport", "")
 
         with allure.step(
@@ -389,7 +389,7 @@ class TestGuestServices:
         depends=["test_add_transport_service_send_with_expense"],
         scope="session",
     )
-    def test_verify_transport_service_send_expense(self, cache):
+    def test_verify_transport_service_send_expense(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -399,7 +399,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_transport", "")
 
         with allure.step("Given 使用者從「訂房」進入「訂房卡」頁面並進入「訂房明細」視窗"):
@@ -448,7 +448,7 @@ class TestGuestServices:
     @allure.story("新增接送服務-接(無入帳)")
     @pytest.mark.xdist_group("test_transport_service_no_charge")
     @pytest.mark.dependency(name="test_add_transport_service_without_charge", scope="session")
-    def test_add_transport_service_without_charge(self, cache):
+    def test_add_transport_service_without_charge(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -458,7 +458,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step(
             "Given 使用者從「訂房」進入「訂房卡」頁面並進入「訂房明細」，然後點擊住客的黑色鉛筆"
@@ -595,7 +595,7 @@ class TestGuestServices:
         depends=["test_add_transport_service_without_charge"],
         scope="session",
     )
-    def test_add_transport_service_send_without_charge(self, cache):
+    def test_add_transport_service_send_without_charge(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -605,7 +605,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_transport_no_charge", "")
 
         with allure.step(
@@ -731,7 +731,7 @@ class TestGuestServices:
     @allure.story("批次新增接送服務")
     @pytest.mark.xdist_group("test_transport_service")
     @pytest.mark.dependency(name="test_batch_add_transport_service", scope="session")
-    def test_batch_add_transport_service(self, cache):
+    def test_batch_add_transport_service(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -741,7 +741,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「訂房」進入「訂房卡」頁面並進入「訂房明細」"):
             first_name = names.get_first_name()
@@ -825,7 +825,7 @@ class TestGuestServices:
         depends=["test_batch_add_transport_service"],
         scope="session",
     )
-    def test_verify_batch_add_transport_service_data(self, cache):
+    def test_verify_batch_add_transport_service_data(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -835,7 +835,7 @@ class TestGuestServices:
             BasePage,
             TransportServicesComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_batch_transport", "")
         transport_data = cache.get("batch_transport_data", "")
 
@@ -944,7 +944,7 @@ class TestGuestServices:
     )
     @pytest.mark.xdist_group("test_service_item")
     @pytest.mark.dependency(name="test_add_service_item_editable_price", scope="session")
-    def test_add_service_item_editable_price(self, service_way):
+    def test_add_service_item_editable_price(self, logged_in_driver, service_way):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -954,7 +954,7 @@ class TestGuestServices:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         service_item_step = globals()[f"{service_way}ServiceItemStep"](web)
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -1017,7 +1017,7 @@ class TestGuestServices:
         depends=["test_add_service_item_editable_price"],
         scope="session",
     )
-    def test_add_service_item_non_editable_price(self, service_way):
+    def test_add_service_item_non_editable_price(self, logged_in_driver, service_way):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -1027,7 +1027,7 @@ class TestGuestServices:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         service_item_step = globals()[f"{service_way}ServiceItemStep"](web)
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):

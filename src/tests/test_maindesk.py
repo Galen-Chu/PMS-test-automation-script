@@ -19,7 +19,7 @@ from tools.random_helper import RandomHelper
 class TestMaindesk:
 
     @allure.story("綜合櫃檯 - 新增一筆Walk In")
-    def test_add_walkin(self):
+    def test_add_walkin(self, logged_in_driver):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -29,7 +29,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「綜合櫃檯」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -115,7 +115,7 @@ class TestMaindesk:
     @allure.story("綜合櫃檯 - 新增關聯單號")
     @pytest.mark.xdist_group("test_maindesk_flow_a")
     @pytest.mark.dependency(name="test_add_link_nos_at_maindesk", scope="session")
-    def test_add_link_nos_at_maindesk(self):
+    def test_add_link_nos_at_maindesk(self, logged_in_driver):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -124,7 +124,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「綜合櫃檯」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -192,7 +192,7 @@ class TestMaindesk:
         depends=["test_add_link_nos_at_maindesk"],
         scope="session",
     )
-    def test_change_room_type_at_maindesk(self):
+    def test_change_room_type_at_maindesk(self, logged_in_driver):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -201,7 +201,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -265,7 +265,9 @@ class TestMaindesk:
         depends=["test_change_room_type_at_maindesk"],
         scope="session",
     )
-    def test_change_checkout_date_at_maindesk(self, change_codate, date, codate, stay_period):
+    def test_change_checkout_date_at_maindesk(
+        self, logged_in_driver, change_codate, date, codate, stay_period
+    ):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -274,7 +276,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -342,7 +344,7 @@ class TestMaindesk:
         depends=["test_change_checkout_date_at_maindesk"],
         scope="session",
     )
-    def test_change_room_price_at_maindesk(self):
+    def test_change_room_price_at_maindesk(self, logged_in_driver):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -351,7 +353,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -394,7 +396,7 @@ class TestMaindesk:
     @pytest.mark.xdist_group("test_maindesk_flow_b")
     @pytest.mark.parametrize("set_dirty, is_check", [(True, "保持勾選"), (False, "取消勾選")])
     @pytest.mark.dependency(name="test_change_room_set_dirty_at_maindesk", scope="session")
-    def test_change_room_set_dirty_at_maindesk(self, set_dirty, is_check):
+    def test_change_room_set_dirty_at_maindesk(self, logged_in_driver, set_dirty, is_check):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -403,7 +405,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -466,7 +468,7 @@ class TestMaindesk:
         depends=["test_change_room_set_dirty_at_maindesk"],
         scope="session",
     )
-    def test_change_rate_code_at_maindesk(self):
+    def test_change_rate_code_at_maindesk(self, logged_in_driver):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -475,7 +477,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -524,7 +526,7 @@ class TestMaindesk:
         depends=["test_change_rate_code_at_maindesk"],
         scope="session",
     )
-    def test_assign_deposit_at_maindesk(self):
+    def test_assign_deposit_at_maindesk(self, logged_in_driver):
         pages = [
             MaindeskPage,
             ReservationCardDialog,
@@ -533,7 +535,7 @@ class TestMaindesk:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -596,7 +598,7 @@ class TestMaindesk:
         depends=["test_assign_deposit_at_maindesk"],
         scope="session",
     )
-    def test_add_spare_parts_at_maindesk(self):
+    def test_add_spare_parts_at_maindesk(self, logged_in_driver):
         pages = [
             MaindeskPage,
             BasePage,
@@ -606,7 +608,7 @@ class TestMaindesk:
             SharePanelComponent,
             TodolistEditComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -682,9 +684,9 @@ class TestMaindesk:
         depends=["test_add_spare_parts_at_maindesk"],
         scope="session",
     )
-    def test_assign_public_account_at_maindesk(self):
+    def test_assign_public_account_at_maindesk(self, logged_in_driver):
         pages = [MaindeskPage, BasePage, HeaderComponent, TipComponent, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -727,9 +729,9 @@ class TestMaindesk:
     @allure.story("綜合櫃檯 - 新增注意事項")
     @pytest.mark.xdist_group("test_maindesk_flow_c")
     @pytest.mark.dependency(name="test_add_note_at_maindesk", scope="session")
-    def test_add_note_at_maindesk(self):
+    def test_add_note_at_maindesk(self, logged_in_driver):
         pages = [MaindeskPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -777,9 +779,9 @@ class TestMaindesk:
     @pytest.mark.dependency(
         name="test_add_guest_at_maindesk", depends=["test_add_note_at_maindesk"], scope="session"
     )
-    def test_add_guest_at_maindesk(self):
+    def test_add_guest_at_maindesk(self, logged_in_driver):
         pages = [MaindeskPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「綜合櫃檯」頁面進入「房間細節」視窗"):
             web.header_component.expand_menu("接待").sleep(1)

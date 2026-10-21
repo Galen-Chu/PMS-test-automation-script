@@ -70,7 +70,7 @@ class TestRateCod:
             "Days",
         ],
     )
-    def test_create_new_rate_cod(self, rate_code_type):
+    def test_create_new_rate_cod(self, logged_in_driver, rate_code_type):
         pages = [
             HeaderComponent,
             TipComponent,
@@ -79,7 +79,7 @@ class TestRateCod:
             ServiceItemComponent,
             RateCodDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         rate_cod_step = globals()[f"{rate_code_type}RateCodStep"](web)
 
         with allure.step("開啟房價新增視窗"):
@@ -110,7 +110,7 @@ class TestRateCod:
     @allure.story("新增連動屬性房價")
     @pytest.mark.xdist_group("bs_rate_cod")
     @pytest.mark.parametrize("rate_code_type", ["BS", "DPRat", "DPAmt"])
-    def test_create_bs_rate_cod(self, rate_code_type):
+    def test_create_bs_rate_cod(self, logged_in_driver, rate_code_type):
         pages = [
             HeaderComponent,
             TipComponent,
@@ -119,7 +119,7 @@ class TestRateCod:
             ServiceItemComponent,
             RateCodDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         rate_cod_step = globals()[f"{rate_code_type}RateCodStep"](web)
 
         with allure.step("開啟房價新增視窗"):
@@ -148,9 +148,9 @@ class TestRateCod:
             rate_cod_step.valid_rate_cod_info(rate_cod_name)
 
     @allure.story("新增房價-無法使用功能")
-    def test_create_ratecod_not_use(self):
+    def test_create_ratecod_not_use(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, SharePanelComponent, BasePage, RateCodDialog]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("開啟房價新增視窗"):
             web.header_component.expand_menu("訂房")
@@ -180,9 +180,9 @@ class TestRateCod:
         "valid_type",
         ["DaysOverMax", "ServiceOverMax", "ComOverMax", "DpRatOverMax", "DpAmtOverMax", "IdOnly"],
     )
-    def test_rate_cod_columns_valid(self, valid_type):
+    def test_rate_cod_columns_valid(self, logged_in_driver, valid_type):
         pages = [HeaderComponent, TipComponent, SharePanelComponent, BasePage, RateCodDialog]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         step = globals()[f"{valid_type}RateCodColumnStep"](web)
 
@@ -201,9 +201,9 @@ class TestRateCod:
             web.base_page.screenshot("驗證提示訊息")
 
     @allure.story("搜尋房價-銷售中為必填")
-    def test_search_rate_cod_required(self):
+    def test_search_rate_cod_required(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("移除'銷售中'搜尋條件"):
             web.header_component.expand_menu("訂房")
@@ -219,9 +219,9 @@ class TestRateCod:
             web.base_page.screenshot("搜尋房價-銷售中為必填")
 
     @allure.story("搜尋房價-查無資料-重新查詢")
-    def test_search_rate_cod_not_found_retry(self):
+    def test_search_rate_cod_not_found_retry(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("搜尋房價-查無資料"):
             web.header_component.expand_menu("訂房")
@@ -241,9 +241,9 @@ class TestRateCod:
             web.base_page.screenshot("重新查詢房價")
 
     @allure.story("編輯房價-有特殊約會顯示列表-開啟特殊約")
-    def test_edit_rate_cod_special_contract(self):
+    def test_edit_rate_cod_special_contract(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, SharePanelComponent, BasePage, RateCodDialog]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("查詢房價列表"):
             web.header_component.expand_menu("訂房")
@@ -366,9 +366,9 @@ class TestRateCod:
             )
 
     @allure.story("刪除房價-未選擇任一筆")
-    def test_remove_rate_cod_not_select(self):
+    def test_remove_rate_cod_not_select(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("查詢房價列表"):
             web.header_component.expand_menu("訂房")
@@ -394,9 +394,9 @@ class TestRateCod:
             ("Normal", "此房價代號已於訂房卡使用，不可刪除"),
         ],
     )
-    def test_remove_rate_cod_limit(self, rate_code, tip_msg):
+    def test_remove_rate_cod_limit(self, logged_in_driver, rate_code, tip_msg):
         pages = [HeaderComponent, TipComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("查詢房價列表"):
             web.header_component.expand_menu("訂房")
@@ -421,7 +421,7 @@ class TestRateCod:
     @pytest.mark.xdist_group("nst_rate_cod")
     @pytest.mark.dependency(name="test_create_nst_rate_cod", scope="session")
     @pytest.mark.parametrize("rate_code_type", ["NST"])
-    def test_create_nst_rate_cod(self, cache, rate_code_type):
+    def test_create_nst_rate_cod(self, logged_in_driver, cache, rate_code_type):
         pages = [
             HeaderComponent,
             TipComponent,
@@ -430,7 +430,7 @@ class TestRateCod:
             ServiceItemComponent,
             RateCodDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         rate_cod_step = globals()[f"{rate_code_type}RateCodStep"](web)
 
         with allure.step("開啟房價新增視窗"):
@@ -464,9 +464,9 @@ class TestRateCod:
         name="test_remove_rate_cod", depends=["test_create_nst_rate_cod"], scope="session"
     )
     @allure.story("刪除房價-刪除一筆房價成功")
-    def test_remove_rate_cod(self, cache):
+    def test_remove_rate_cod(self, logged_in_driver, cache):
         pages = [HeaderComponent, TipComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         rate_cod = cache.get("rate_cod", "GR_9Ij")
 
         with allure.step("查詢房價列表"):
@@ -496,7 +496,7 @@ class TestRateCod:
     @pytest.mark.parametrize("rate_code_type", ["Con"])
     @pytest.mark.xdist_group("con_rate_cod")
     @pytest.mark.dependency(name="test_create_con_rate_cod", scope="session")
-    def test_create_con_rate_cod(self, cache, rate_code_type):
+    def test_create_con_rate_cod(self, logged_in_driver, cache, rate_code_type):
         pages = [
             HeaderComponent,
             TipComponent,
@@ -505,7 +505,7 @@ class TestRateCod:
             ServiceItemComponent,
             RateCodDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         rate_cod_step = globals()[f"{rate_code_type}RateCodStep"](web)
 
         with allure.step("開啟房價新增視窗"):
@@ -539,7 +539,7 @@ class TestRateCod:
     @pytest.mark.dependency(
         name="test_contract_bind_rate_cod", depends=["test_create_con_rate_cod"], scope="session"
     )
-    def test_contract_bind_rate_cod(self, cache):
+    def test_contract_bind_rate_cod(self, logged_in_driver, cache):
         pages = [
             HeaderComponent,
             TipComponent,
@@ -547,7 +547,7 @@ class TestRateCod:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         con_rate_cod = cache.get("con_rate_cod", "Con_YeM")
 
         with allure.step("查詢公司編號"):
@@ -636,7 +636,7 @@ class TestRateCod:
         depends=["test_contract_bind_rate_cod"],
         scope="session",
     )
-    def test_special_contract_bind_rate_cod(self, cache):
+    def test_special_contract_bind_rate_cod(self, logged_in_driver, cache):
         pages = [
             HeaderComponent,
             TipComponent,
@@ -645,7 +645,7 @@ class TestRateCod:
             BasePage,
             RateCodDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         con_rate_cod = cache.get("con_rate_cod", "Con_QdF")
 
         web.header_component.expand_menu("業務")

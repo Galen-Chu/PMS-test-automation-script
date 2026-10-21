@@ -97,3 +97,5 @@ allure-results/
 debug_*.py
 image*.png
 dom-dumps/
+.session_state.json
+migrate_fixtures.py

@@ -89,9 +89,9 @@ class TestRoomControl:
     @pytest.mark.dependency(
         name="test_room_control_clean_floor", depends=["test_room_control_check"], scope="session"
     )
-    def test_room_control_clean_floor(self):
+    def test_room_control_clean_floor(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
             web.header_component.to_func_page("房控管理").sleep(1)
@@ -101,7 +101,7 @@ class TestRoomControl:
             web.room_control_page.change_floor("2F")
             web.room_control_page.choose_room("221").sleep(1)
             web.room_control_page.screenshot(
-                "When 選擇點擊欲變更狀態之��間所在樓層畫面中任意房間圖示之[方框]"
+                "When 選擇點擊欲變更狀態之房間所在樓層畫面中任意房間圖示之[方框]"
             )
 
         with allure.step("And 點擊[清掃樓層]"):
@@ -172,7 +172,7 @@ class TestRoomControl:
         self, floor, room_no, category, start_date, end_date, reason, status_color
     ):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
             web.header_component.to_func_page("房控管理").sleep(1)
@@ -240,9 +240,9 @@ class TestRoomControl:
         depends=["test_room_control_repair_visit"],
         scope="session",
     )
-    def test_room_control_repair_floor(self):
+    def test_room_control_repair_floor(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
             web.header_component.to_func_page("房控管理").sleep(1)
@@ -317,9 +317,11 @@ class TestRoomControl:
             ("樓層", "2 : 2", ["226", "227", "228", "229"]),
         ],
     )
-    def test_room_control_search_repair_visit_floor(self, field, option, room_nos):
+    def test_room_control_search_repair_visit_floor(
+        self, logged_in_driver, field, option, room_nos
+    ):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -360,9 +362,9 @@ class TestRoomControl:
         depends=["test_room_control_repair_floor"],
         scope="session",
     )
-    def test_room_control_modify_repair_visit(self):
+    def test_room_control_modify_repair_visit(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -429,9 +431,9 @@ class TestRoomControl:
         depends=["test_room_control_repair_floor"],
         scope="session",
     )
-    def test_room_control_remove_repair_visit_floor(self):
+    def test_room_control_remove_repair_visit_floor(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -502,9 +504,9 @@ class TestRoomControl:
         depends=["test_room_control_remove_repair_visit_floor"],
         scope="session",
     )
-    def test_room_control_clean_repair_rooms(self):
+    def test_room_control_clean_repair_rooms(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -559,9 +561,9 @@ class TestRoomControl:
     @allure.story("設定房間-瑕疵房")
     @pytest.mark.xdist_group("room_oos")
     @pytest.mark.dependency(name="test_room_control_oos", scope="session")
-    def test_room_control_oos(self):
+    def test_room_control_oos(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -605,9 +607,9 @@ class TestRoomControl:
     @pytest.mark.dependency(
         name="test_room_control_clear_oos", depends=["test_room_control_oos"], scope="session"
     )
-    def test_room_control_clear_oos(self):
+    def test_room_control_clear_oos(self, logged_in_driver):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -648,9 +650,9 @@ class TestRoomControl:
         "floor, room_no, bed_setting",
         [("2F", "215", "拆床"), ("2F", "215", "併床"), ("2F", "215", "無設定")],
     )
-    def test_room_control_bed_setup(self, floor, room_no, bed_setting):
+    def test_room_control_bed_setup(self, logged_in_driver, floor, room_no, bed_setting):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -717,7 +719,7 @@ class TestRoomControl:
         toolbar_item="設定髒房",
     ):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
@@ -775,7 +777,7 @@ class TestRoomControl:
         filter_after="髒房",
     ):
         pages = [HeaderComponent, TipComponent, RoomControlPage, SharePanelComponent]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("Given 使用者進入「房控管理」頁面"):
             web.header_component.expand_menu("房務").sleep(1)
             web.header_component.to_func_page("房控管理").sleep(1)

@@ -23,7 +23,7 @@ class TestGuestDetail:
     @allure.story("新增一筆住客資料")
     @pytest.mark.xdist_group("add_and_edit_guest")
     @pytest.mark.dependency(name="test_add_one_guest", scope="session")
-    def test_add_one_guest(self):
+    def test_add_one_guest(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -32,7 +32,7 @@ class TestGuestDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -94,7 +94,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_add_several_guests", depends=["test_add_one_guest"], scope="session"
     )
-    def test_add_several_guests(self):
+    def test_add_several_guests(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -103,7 +103,7 @@ class TestGuestDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -156,7 +156,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_edit_guest", depends=["test_add_several_guests"], scope="session"
     )
-    def test_edit_guest(self):
+    def test_edit_guest(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -165,7 +165,7 @@ class TestGuestDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -211,7 +211,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_delete_one_guest", depends=["test_edit_guest"], scope="session"
     )
-    def test_delete_one_guest(self):
+    def test_delete_one_guest(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -220,7 +220,7 @@ class TestGuestDetail:
             SharePanelComponent,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -259,7 +259,7 @@ class TestGuestDetail:
         depends=["test_delete_one_guest"],
         scope="session",
     )
-    def test_add_todo_with_multi_department(self):
+    def test_add_todo_with_multi_department(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             TodolistEditComponent,
@@ -269,7 +269,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             ShareSteps.create_or_enter_reservation_detail(
@@ -310,7 +310,7 @@ class TestGuestDetail:
     @allure.story("新增Note")
     @pytest.mark.xdist_group("test_guest_funcion")
     @pytest.mark.dependency(name="test_add_guest_note", scope="session")
-    def test_add_guest_note(self, cache):
+    def test_add_guest_note(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -319,7 +319,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             first_name = names.get_first_name()
@@ -376,7 +376,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_add_guest_precredit", depends=["test_add_guest_note"], scope="session"
     )
-    def test_add_guest_precredit(self, cache):
+    def test_add_guest_precredit(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             PreCreditComponent,
@@ -386,7 +386,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_guest_function", "")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -462,7 +462,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_btn_del_precredit_disable", depends=["test_add_guest_precredit"], scope="session"
     )
-    def test_btn_del_precredit_disable(self, cache):
+    def test_btn_del_precredit_disable(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             PreCreditComponent,
@@ -472,7 +472,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_guest_function", "")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -502,7 +502,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_add_todo_item", depends=["test_btn_del_precredit_disable"], scope="session"
     )
-    def test_add_todo_item(self, cache):
+    def test_add_todo_item(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             TodolistEditComponent,
@@ -512,7 +512,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_guest_function", "")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -565,7 +565,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_edit_todo_to_completed", depends=["test_add_todo_item"], scope="session"
     )
-    def test_edit_todo_to_completed(self, cache):
+    def test_edit_todo_to_completed(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             TodolistEditComponent,
@@ -575,7 +575,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_guest_function", "")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -629,7 +629,7 @@ class TestGuestDetail:
         depends=["test_edit_todo_to_completed"],
         scope="session",
     )
-    def test_edit_todo_to_incompleted(self, cache):
+    def test_edit_todo_to_incompleted(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             TodolistEditComponent,
@@ -639,7 +639,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_guest_function", "")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -689,7 +689,7 @@ class TestGuestDetail:
     @allure.story("新增訂房提醒")
     @pytest.mark.xdist_group("test_guest_funcion_remind")
     @pytest.mark.dependency(name="test_add_reservation_alert", scope="session")
-    def test_add_reservation_alert(self):
+    def test_add_reservation_alert(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -698,7 +698,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             first_name = names.get_first_name()
@@ -755,7 +755,7 @@ class TestGuestDetail:
     @allure.story("新增入住提醒")
     @pytest.mark.xdist_group("test_guest_funcion_remind")
     @pytest.mark.dependency(name="test_add_checkin_alert", scope="session")
-    def test_add_checkin_alert(self, cache):
+    def test_add_checkin_alert(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -764,7 +764,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
             first_name = names.get_first_name()
@@ -820,7 +820,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_add_other_alert", depends=["test_add_checkin_alert"], scope="session"
     )
-    def test_add_other_alert(self, cache):
+    def test_add_other_alert(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -829,7 +829,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_remind", "")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -874,7 +874,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_add_checkout_alert", depends=["test_add_other_alert"], scope="session"
     )
-    def test_add_checkout_alert(self, cache):
+    def test_add_checkout_alert(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             TodolistEditComponent,
@@ -884,7 +884,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_remind", "")
 
         with allure.step("Given 使用者進入「訂房明細」視窗"):
@@ -929,7 +929,7 @@ class TestGuestDetail:
     @allure.story("新增留言")
     @pytest.mark.xdist_group("test_guest_message")
     @pytest.mark.dependency(name="test_add_guest_message", scope="session")
-    def test_add_guest_message(self, cache):
+    def test_add_guest_message(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             MessageEditComponent,
@@ -939,7 +939,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step(
             "Given 使用者從「訂房」進入「訂房卡」頁面並進入「訂房明細」視窗，然後點擊住客的黑色鉛筆"
@@ -1049,7 +1049,7 @@ class TestGuestDetail:
     @pytest.mark.dependency(
         name="test_edit_guest_message_informed", depends=["test_add_guest_message"], scope="session"
     )
-    def test_edit_guest_message_informed(self, cache):
+    def test_edit_guest_message_informed(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             MessageEditComponent,
@@ -1059,7 +1059,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         full_name = cache.get("full_name_message", "")
 
         with allure.step(
@@ -1163,7 +1163,7 @@ class TestGuestDetail:
     @allure.story("住客明細-No Info")
     @pytest.mark.xdist_group("test_guest_detail")
     @pytest.mark.dependency(name="test_guest_detail_no_info", scope="session")
-    def test_guest_detail_no_info(self, cache):
+    def test_guest_detail_no_info(self, logged_in_driver, cache):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -1172,7 +1172,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「訂房」進入「訂房卡」頁面"):
             first_name = names.get_first_name()
@@ -1214,7 +1214,7 @@ class TestGuestDetail:
             )
 
     @allure.story("住客明細 - 費用明細")
-    def test_expense_detail(self):
+    def test_expense_detail(self, logged_in_driver):
         pages = [
             ReservationCardDialog,
             HeaderComponent,
@@ -1223,7 +1223,7 @@ class TestGuestDetail:
             ReservationPage,
             BasePage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者從「訂房」進入「訂房卡」頁面並進入「訂房明細」視窗"):
             first_name = names.get_first_name()

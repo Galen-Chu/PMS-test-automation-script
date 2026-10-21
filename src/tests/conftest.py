@@ -6,6 +6,7 @@ import allure
 
 from tools.driver_helper import DriverHelper
 from tools.performance_monitor import PerformanceMonitor
+from tools.session_persistence import SessionPersistence
 
 # pytest registers fixtures from conftest modules only; re-export the
 # data fixtures here so every test module under tests/ can request them.
@@ -104,25 +105,47 @@ def shared_driver():
 
 @pytest.fixture(scope="session")
 def logged_in_driver(shared_driver):
-    """Login once (or reuse existing session from persistent profile)"""
+    """Login once; persist session for faster subsequent runs."""
     from pages.login_page import LoginPage
 
-    # Try to reuse existing session from persistent profile
-    if _is_logged_in(shared_driver):
-        print("[session] Reusing existing login from persistent profile")
+    # Strategy 1: Restore saved cookies + sessionStorage
+    if SessionPersistence.restore(shared_driver):
+        if SessionPersistence.check_alive(shared_driver):
+            print("[session] Restored from saved state (cookies + storage)")
+        else:
+            print("[session] Saved state expired, trying persistent profile...")
+            # Strategy 2: Persistent Chrome profile cookies
+            if _is_logged_in(shared_driver):
+                print("[session] Reused from persistent Chrome profile")
+            else:
+                _do_login(shared_driver, LoginPage)
     else:
-        print("[session] No valid session, performing login...")
-        shared_driver.get(DriverHelper.build_auth_url())
-        time.sleep(3)
-        login_page = LoginPage(shared_driver)
-        login_page.login(os.getenv("USERNAME"), os.getenv("PASSWORD"))
+        # Strategy 2: Persistent Chrome profile cookies
+        if _is_logged_in(shared_driver):
+            print("[session] Reused from persistent Chrome profile")
+        else:
+            _do_login(shared_driver, LoginPage)
 
     # Visit EIP to ensure hotel context (comp_cod etc.) is set
     eip_url = f"{os.getenv('WEB_URL')}/eip/{os.getenv('ENV_NUM')}"
     shared_driver.get(eip_url)
     time.sleep(3)
 
+    # Save session for next run
+    SessionPersistence.save(shared_driver)
+    print("[session] Session state saved for next run")
+
     yield shared_driver
+
+
+def _do_login(driver, login_page_class):
+    """Perform full login and save session."""
+    print("[session] Performing full login...")
+    driver.get(DriverHelper.build_auth_url())
+    time.sleep(3)
+    login_page = login_page_class(driver)
+    login_page.login(os.getenv("USERNAME"), os.getenv("PASSWORD"))
+    SessionPersistence.save(driver)
 
 
 @pytest.fixture(scope="function")

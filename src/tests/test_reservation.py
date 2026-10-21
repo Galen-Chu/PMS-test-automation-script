@@ -96,9 +96,9 @@ class TestReservation:
     @pytest.mark.dependency(
         name="test_add_deposit", depends=["test_roomno_reservation"], scope="session"
     )
-    def test_add_deposit(self, cache):
+    def test_add_deposit(self, logged_in_driver, cache):
         pages = [HeaderComponent, TipComponent, SharePanelComponent, GuestAccountPage, CheckinPage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         dialog_ikey = cache.get("dialog_ikey", "")
         room_no = cache.get("room_no", "")
@@ -160,7 +160,7 @@ class TestReservation:
     @pytest.mark.dependency(
         name="test_new_housekeeping_account", depends=["test_add_deposit"], scope="session"
     )
-    def test_new_housekeeping_account(self, cache):
+    def test_new_housekeeping_account(self, logged_in_driver, cache):
         pages = [
             HeaderComponent,
             TipComponent,
@@ -168,7 +168,7 @@ class TestReservation:
             HousekeepingAccountPage,
             GuestAccountPage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         dialog_ikey = cache.get("dialog_ikey", "")
         room_no = cache.get("room_no", "")
@@ -232,7 +232,7 @@ class TestReservation:
         depends=["test_new_housekeeping_account"],
         scope="session",
     )
-    def test_transfer_to_guest_account(self, cache):
+    def test_transfer_to_guest_account(self, logged_in_driver, cache):
         pages = [
             HeaderComponent,
             GuestAccountPage,
@@ -240,7 +240,7 @@ class TestReservation:
             SharePanelComponent,
             TipComponent,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         dialog_ikey = cache.get("dialog_ikey", "")
         room_no = cache.get("room_no", "")
@@ -299,9 +299,9 @@ class TestReservation:
             )
 
     @allure.story("依房型訂房")
-    def test_roomtype_reservation(self, cache):
+    def test_roomtype_reservation(self, logged_in_driver, cache):
         pages = [BasePage, HeaderComponent, TipComponent, SharePanelComponent, ReservationPage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("選擇房型"):
             web.header_component.expand_menu("訂房").sleep(1)
             web.header_component.to_func_page("依房型訂房")
@@ -355,7 +355,7 @@ class TestReservation:
             ReservationPage,
             ReservationCardDialog,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 進入依房型訂房並選擇房型"):
             web.header_component.expand_menu("訂房").sleep(1)

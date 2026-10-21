@@ -18,9 +18,9 @@ class TestLostManagement:
     @allure.story("新增一筆遺失")
     @pytest.mark.xdist_group("lost_item")
     @pytest.mark.dependency(name="test_add_lost_item", scope="session")
-    def test_add_lost_item(self):
+    def test_add_lost_item(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -87,9 +87,9 @@ class TestLostManagement:
         "status, date, date_field",
         [("遺失", "遺失日期", "lostDate"), ("拾獲", "拾獲日期", "foundDate")],
     )
-    def test_add_item_from_dialog(self, status, date, date_field):
+    def test_add_item_from_dialog(self, logged_in_driver, status, date, date_field):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -151,9 +151,9 @@ class TestLostManagement:
     @pytest.mark.dependency(
         name="test_change_to_lost_and_found", depends=["test_add_item_from_dialog"], scope="session"
     )
-    def test_change_to_lost_and_found(self):
+    def test_change_to_lost_and_found(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -221,9 +221,9 @@ class TestLostManagement:
         depends=["test_change_to_lost_and_found"],
         scope="session",
     )
-    def test_lost_and_found_change_to_claim(self):
+    def test_lost_and_found_change_to_claim(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -291,9 +291,9 @@ class TestLostManagement:
         depends=["test_lost_and_found_change_to_claim"],
         scope="session",
     )
-    def test_claim_change_to_found(self):
+    def test_claim_change_to_found(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -380,9 +380,9 @@ class TestLostManagement:
     @pytest.mark.dependency(
         name="test_change_to_picker_claim", depends=["test_claim_change_to_found"], scope="session"
     )
-    def test_change_to_picker_claim(self):
+    def test_change_to_picker_claim(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -459,9 +459,9 @@ class TestLostManagement:
     @allure.story("新增一筆拾獲")
     @pytest.mark.xdist_group("found_item")
     @pytest.mark.dependency(name="test_add_found_item", scope="session")
-    def test_add_found_item(self):
+    def test_add_found_item(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -527,9 +527,9 @@ class TestLostManagement:
     @pytest.mark.dependency(
         name="test_found_change_to_claim", depends=["test_add_found_item"], scope="session"
     )
-    def test_found_change_to_claim(self):
+    def test_found_change_to_claim(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -595,9 +595,9 @@ class TestLostManagement:
     @pytest.mark.dependency(
         name="test_delete_lost_item", depends=["test_found_change_to_claim"], scope="session"
     )
-    def test_delete_lost_item(self):
+    def test_delete_lost_item(self, logged_in_driver):
         pages = [LostManagementPage, HeaderComponent, TipComponent, SharePanelComponent, BasePage]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             web.header_component.expand_menu("接待").sleep(1)
@@ -651,7 +651,7 @@ class TestLostManagement:
             )
 
     @allure.story("查詢日期預設要帶滾房租日")
-    def test_rent_day_in_search(self):
+    def test_rent_day_in_search(self, logged_in_driver):
         pages = [
             LostManagementPage,
             HeaderComponent,
@@ -660,7 +660,7 @@ class TestLostManagement:
             BasePage,
             ReservationPage,
         ]
-        web = DriverHelper.create_web_browser(pages, "pms", "reservation/PMS0110010")
+        web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("Given 使用者進入「失物管理」頁面"):
             rent_day = web.reservation_page.get_rent_day()
