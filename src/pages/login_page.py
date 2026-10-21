@@ -14,6 +14,7 @@ class LoginPage(BasePage):
         captcha_model = None
         try:
             from tools.captcha.captcha_helper import CaptchaTrainer
+
             captcha_model = CaptchaTrainer()
             captcha_model.load_model()
         except Exception:
@@ -22,6 +23,7 @@ class LoginPage(BasePage):
 
         # 設定 tesseract 路徑（Windows 安裝位置）
         import shutil
+
         if not shutil.which("tesseract"):
             pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
@@ -65,7 +67,7 @@ class LoginPage(BasePage):
         processed_image = image.convert("L").resize((400, 128))
         captcha_text = pytesseract.image_to_string(
             processed_image,
-            config="-l eng -c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 13"
+            config="-l eng -c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 13",
         )
         return captcha_text
 

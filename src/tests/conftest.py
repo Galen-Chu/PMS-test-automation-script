@@ -11,12 +11,15 @@ from tools.driver_helper import DriverHelper
 from tests.fixtures.data_fixtures import *  # noqa: E402,F401,F403
 
 # Persistent Chrome profile directory (survives browser restarts)
-CHROME_PROFILE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".chrome-profile")
+CHROME_PROFILE_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".chrome-profile"
+)
 
 
 # ============================================================================
 # Session-scoped fixtures
 # ============================================================================
+
 
 def _create_driver():
     """Create Chrome with persistent profile (cookies survive restarts)"""
@@ -124,6 +127,7 @@ def logged_in_driver(shared_driver):
 # ============================================================================
 # Hooks
 # ============================================================================
+
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):  # pylint: disable=unused-argument
