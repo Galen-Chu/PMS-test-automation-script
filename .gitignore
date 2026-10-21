@@ -99,3 +99,8 @@ image*.png
 dom-dumps/
 .session_state.json
 migrate_fixtures.py
+captcha_data/
+train_captcha_model.py
+collect_captchas.py
+captcha_model.keras
+char_mappings.pkl
