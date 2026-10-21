@@ -268,15 +268,22 @@ jobs:
           merge-multiple: true
         continue-on-error: true
 
+      - name: Install Allure CLI
+        run: |
+          sudo apt-get update && sudo apt-get install -y allure
+        continue-on-error: true
+
       - name: Generate Allure Report
-        uses: simple-elf/allure-report-action@master
+        run: |
+          # Ensure allure-results directory exists even if tests were empty
+          mkdir -p allure-results allure-report
+          # Generate report (allure CLI, no Docker dependency)
+          allure generate allure-results/ -o allure-report/ --clean || true
+          # Create index.html fallback if report generation failed
+          if [ ! -f allure-report/index.html ]; then
+            echo "<html><body><h1>Allure Report</h1><p>No test results available.</p></body></html>" > allure-report/index.html
+          fi
         if: always()
-        with:
-          allure_results: allure-results/
-          allure_report: allure-report/
-          subfolder: allure-report
-          allure_history: allure-history
-          keep_reports: 20
 
       - name: Upload Allure Report
         uses: actions/upload-artifact@v7
