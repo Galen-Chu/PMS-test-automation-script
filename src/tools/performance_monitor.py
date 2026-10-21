@@ -80,16 +80,53 @@ class PerformanceMonitor:
         self._start_time = None
         self._results = {}
 
-    def start(self):
-        """Inject monitoring hooks and clear resource timing buffer."""
+    def start(self, clear_buffer: bool = True):
+        """Inject monitoring hooks.
+
+        Args:
+            clear_buffer: If True, clear resource timing buffer (for
+                         interaction-only measurement). If False, keep
+                         existing entries (for page load measurement).
+        """
         self.driver.execute_script(_HOOK_JS)
-        self.driver.execute_script(
-            "performance.clearResourceTimings(); "
-            "performance.setResourceTimingBufferSize(5000); "
-            "window.__perf_ops = [];"
+        clear_js = (
+            "performance.clearResourceTimings(); " "performance.setResourceTimingBufferSize(5000); "
+            if clear_buffer
+            else "performance.setResourceTimingBufferSize(5000); "
         )
+        self.driver.execute_script(clear_js + "window.__perf_ops = [];")
         self._active = True
         self._start_time = time.time()
+
+    def collect_page_load(self) -> list:
+        """Collect API timings from page load (call after page loads).
+
+        Does NOT require start() first — reads the existing resource
+        timing buffer directly. Use this for measuring page load APIs.
+        """
+        try:
+            raw = self.driver.execute_script("""
+                var resources = performance.getEntriesByType('resource')
+                    .filter(function(e) {
+                        return e.initiatorType === 'xmlhttprequest'
+                            || e.initiatorType === 'fetch';
+                    })
+                    .map(function(e) {
+                        return {
+                            name: e.name.split('?')[0].split('/').slice(-3).join('/'),
+                            start: Math.round(e.startTime),
+                            duration: Math.round(e.duration),
+                            size: e.transferSize
+                        };
+                    });
+                return JSON.stringify(resources);
+                """)
+            if not raw:
+                return []
+            return json.loads(raw)
+        except Exception as e:
+            print(f"  [perf_debug] collect_page_load error: {e}")
+            return []
 
     def stop(self):
         """Collect timing data from the browser."""
