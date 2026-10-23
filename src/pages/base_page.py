@@ -1,5 +1,4 @@
 from time import sleep
-from ast import literal_eval
 import allure
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
