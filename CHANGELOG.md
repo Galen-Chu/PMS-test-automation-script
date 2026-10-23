@@ -96,6 +96,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   typo)
 - `.gitignore` excludes `security-report.json` written by the bandit
   pre-commit hook
+- `faker` moved into requirements.txt: conftest's fixture chain imports
+  it, so CI jobs (which install only requirements.txt) have been
+  crashing at collection with zero tests - masked by the non-blocking
+  `|| RESULT=$?` pattern (same class as the 2026-08 layout bug)
 - Removed dead `DriverHelper.create_web_browser` (superseded by the
   fixture lifecycle; `session_storages.json` kept for selenium_cli)
 - Sanitized QA credentials/URLs out of `verify_a3_login.py` and moved
