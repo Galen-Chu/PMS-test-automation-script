@@ -57,6 +57,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the target element instead of fixed sleeps
 - Dependencies: selenium 4.49.0, scikit-learn 1.9.1, pytest-env 1.7.1,
   allure-pytest 2.16.1 (dependabot #56-59)
+- P4/P5/P6 remainders: `formator_locator` renamed to `format_locator`
+  (267 call sites); a typed `Browser` class replaces the Expando
+  attribute bag; `AppConfig` centralizes VERSION parsing (clear error
+  when unset instead of a bare TypeError); captcha screenshot goes to
+  the system temp dir; login retry cap named (`MAX_LOGIN_RETRIES`)
+- P3 batch 1 (page layer): ~45 fixed sleeps converted to explicit
+  waits — dropdown options, submenu expansion, dialog readiness,
+  filtered options; `wait_until` generic helper added
+- Performance-suite hardening (#68): duplicate-listener guard in the
+  injected hooks, json-quoted sessionStorage restore, HTML-escaped
+  report names, no import-time mkdir, CI regression excludes perf
+  tests (`-m "not perf"`)
 
 ### Removed
 - 14 stale root-level page objects (`src/pages/*_component.py`,

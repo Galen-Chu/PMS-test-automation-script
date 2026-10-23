@@ -1,13 +1,12 @@
 # Refactoring Roadmap
 
-Status: **Active.** Last re-baselined: 2026-10-23, after the A-series
-(session fixtures, A3 captcha model, performance suite) landed on main.
+Status: **Active.** Last re-baselined: 2026-10-23 (end of day), after
+the A-series and the P1–P7 delivery batches landed on main.
 
 This roadmap comes from a POM-architecture self-review (2026-09-08),
 re-verified against the code on 2026-10-23. Items are candidates for
-future work sessions, not commitments. Each item is self-contained so a
-session can pick one, decide, and deliver it independently. Line
-references drift — re-check before starting.
+future work sessions, not commitments. Line references drift —
+re-check before starting.
 
 ## Workflow (agreed 2026-09-08)
 
@@ -30,98 +29,73 @@ session is:
 - **Component pattern**: 11 components + 3 dialogs (canonical copies in
   `pages/components/` and `pages/dialogs/`; stale root-level duplicates
   removed 2026-10-07).
-- **Locator isolation**: locator classes mirror page objects; tests
-  contain zero selectors.
+- **Locator isolation**: every page binds its locator explicitly
+  (constructor injection since P1); tests contain zero selectors.
+- **Two-level base** (since P2): `BasePage` (generic Selenium layer) →
+  `AthenaBasePage` (PMS widgets) → pages/components/dialogs.
 - **Fluent interface**: `return self` chaining throughout the page layer.
 - **Allure integration at every layer**: steps, evidence-attaching asserts,
   automatic failure screenshots in `conftest.py`.
 - **Session-scoped browser lifecycle** (A2+A4, 2026-10): `shared_driver` /
   `logged_in_driver` fixtures, keep-alive thread, cross-run session
-  persistence, persistent Chrome profile. Login happens at most once per
-  session.
+  persistence, persistent Chrome profile, typed `Browser` bundle (P5).
 - **Performance suite** (2026-10): `performance_monitor` /
-  `perf_analyzer` / `perf_report` plus perf tests behind the `perf` marker.
+  `perf_analyzer` / `perf_report` plus perf tests behind the `perf`
+  marker, hardened 2026-10-23 (#68); CI regression excludes them
+  (`-m "not perf"`).
 - **ML captcha solver** with lazy import and OCR fallback (A3 retrained
-  model, 5.6x faster than pytesseract).
+  model, 5.6x faster than pytesseract); captcha image goes to the
+  system temp dir, VERSION config centralized in `AppConfig` (P6).
 
 ## Item Status (2026-10-23)
 
-| Item | Status | Remaining |
-|------|--------|-----------|
-| P1 explicit locator binding | **done** 2026-10-23 | #63 |
-| P2 split BasePage into generic + app layers | **done** 2026-10-23 | #64 |
-| P3 wait strategy | in progress | #62 — foundation landed; ~1,300 `sleep()` sites remain |
-| P4 `format_locator` | **done** via A-series | optional rename `formator_locator` → `format_locator` |
-| P5 fixture browser lifecycle | **mostly done** via A2+A4 | typed `Browser` class; per-test `pages=[...]` boilerplate |
-| P6 LoginPage captcha/VERSION | partial | `image.png` in CWD; 30-retry magic; VERSION branching |
-| P7 naming quick wins | **done** 2026-10-23 | — |
-| A1 follow-ups (below) | open | performance-suite review |
+| Item | Status | Issue |
+|------|--------|-------|
+| P1 explicit locator binding | **done** | #63 |
+| P2 split BasePage into generic + app layers | **done** | #64 |
+| P3 wait strategy | **in progress** — foundation + page-layer batch landed | #62 (open) |
+| P4 `format_locator` rename | **done** | #67 |
+| P5 fixture browser lifecycle + typed Browser | **done** | #65 |
+| P6 LoginPage captcha/VERSION hardening | **done** | #66 |
+| P7 naming quick wins | **done** | #61 |
+| A-series cleanup (dead code, docs, credentials) | **done** | #60 |
+| Performance-suite review | **done** | #68 |
 
 ## Open Items
 
-### P3. Wait strategy: replace sleeps, stop switching implicit waits
+### P3 campaign — replace sleeps with explicit waits (#62)
 
-**Foundation landed 2026-10-23 (#62 stays open):** `wait_present`
-helper added; `has_element` is now an explicit presence check with the
-implicit wait zeroed for its duration; `select()` / `select_date()`
-wait for their target element instead of fixed sleeps. Needs a QA-run
-smoke before the campaign scales.
+**Landed so far:**
 
-**Remaining campaign:** convert the ~1,300 `sleep()` call sites that
-mask real conditions, one page/suite at a time with QA-environment
-validation; remove the global `implicitly_wait(10)` (conftest) only
-after raw `find_element` calls are gone — that is the final, largest
-behavior change.
+- Foundation: `wait_present` / `wait_until` helpers; `has_element` is
+  an explicit presence check with the implicit wait zeroed for its
+  duration; `select()` / `select_date()` wait for their target.
+- Batch 1 (page layer): ~45 sleeps in pages/components/dialogs
+  converted — dropdown options, submenu expansion
+  (`expanded_menu_item` locator), dialog readiness, filtered-option
+  waits (transport waits on the combobox value). Deliberately kept:
+  maindesk dropdown-filter pads, `clear_deposit_nos` toggle pads,
+  login-page captcha refresh (no DOM condition), base click-retry
+  backoff.
 
-### P5 (remainder). Typed Browser + de-boilerplated tests
+**Remaining campaign:** share_steps + dynamic_steps layer (~250
+sites), then test suites one at a time (~1,000 sites), each batch
+validated on the QA environment before the next. Remove the global
+`implicitly_wait(10)` (conftest) only after raw `find_element` calls
+are gone — the final, largest behavior change.
 
-Delivered by A2+A4: session-scoped fixtures, one login per run,
-teardown owned by `shared_driver`. Still open:
+### A-series follow-up (user action, not code)
 
-- `get_logged_in_browser` builds the attribute bag via
-  `type("Expando", (object,), ...)` (`driver_helper.py`) — no IDE
-  completion, no type checking. Replace with a small typed `Browser`
-  class (dataclass holding named page attributes).
-- Every test still starts with `pages = [...]` +
-  `DriverHelper.get_logged_in_browser(pages, path)`. Consider a fixture
-  or factory that returns a standard page set so most tests stop
-  repeating the list.
+`verify_a3_login.py` was committed with real QA credentials (sanitized
+2026-10-23, moved to `src/tools/`). The old values remain in git
+history — **rotate the QA password**.
 
-### P6 (remainder). LoginPage captcha/VERSION hardening
+## Supplemental (Not Code, No Issue Yet)
 
-Delivered by A-series: `_solve_captcha` extracted (ML-first, OCR
-fallback), URL-based login-success detection. Still open:
-
-- `captcha_screenshot` writes `image.png` to the working directory
-  (`login_page.py`) — use `tempfile`.
-- The 30-attempt retry cap is a magic number embedded in the page;
-  move the retry policy next to the solving strategy.
-- `int(os.getenv("VERSION")) >= 130` branching (`login_page.py:33`)
-  should collapse into one config object with a sane failure mode when
-  VERSION is unset (currently a bare TypeError).
-
-### P4 (remainder). Optional rename
-
-`formator_locator` → `format_locator` while touching every call site,
-or alias first and migrate later. The `literal_eval` round-trip itself
-is already gone (A-series encoding fix, 2026-10).
-
-## A-series Follow-ups
-
-- **Performance-suite review**: `performance_monitor.py`,
-  `perf_analyzer.py`, `perf_report.py`, `session_persistence.py`
-  (~800 lines) and the two perf test files landed 2026-10-21 without an
-  architecture/quality pass. Review thread-safety of the injected JS
-  hooks, report generation determinism, and whether perf tests should
-  be excluded from default runs (`-m "not perf"`).
-- **QA credential exposure**: `verify_a3_login.py` was committed with
-  real QA credentials (sanitized 2026-10-23, moved to `src/tools/`).
-  The old values remain in git history — rotate the QA password.
-- Done on 2026-10-23: dead `create_web_browser` removed; docs synced to
-  the fixture lifecycle; P7 naming cleanups.
-
-## Supplemental (Documentation, Not Code)
-
+- **Standard page-set factory**: every test still starts with
+  `pages = [...]` + `DriverHelper.get_logged_in_browser(pages, path)`.
+  A fixture/factory returning a standard page set would remove the
+  repetition (leftover idea from P5).
 - **Navigation return types**: methods currently `return self` even when
   navigating away. Convention "cross-page action returns the new page
   object" (e.g. `login() → HomePage`) would catch flow errors at call
@@ -129,23 +103,25 @@ is already gone (A-series encoding fix, 2026-10).
 - **ARCHITECTURE.md "Design Trade-offs" section**: document *why not*
   Screenplay, why asserts live in BasePage (Allure evidence beats "pages
   don't assert" purism), and the pytest-dependency/cache trade-off (tests
-  are order-dependent by design; single-test runs need care). These are
-  the questions interviewers ask; answering them in the doc turns the
-  architecture guide into a narrative.
+  are order-dependent by design; single-test runs need care).
 
 ## Suggested Order
 
-P3 campaign (suite-by-suite, QA-validated) → P5 remainder → P6
-remainder → P4 rename → supplements, with the performance-suite review
-slotted whenever convenient. Each step lands green on CI before the
-next begins.
+1. P3 campaign batch 2 (steps layer) → batch 3+ (test suites), each
+   QA-validated before the next; removing the global implicit wait last.
+2. Supplemental docs section.
+3. Standard page-set factory if the `pages = [...]` repetition starts
+   to hurt.
 
 ## History
 
+- 2026-10-23 (third batch): P4 rename (#67), P5 typed Browser (#65),
+  P6 AppConfig/tempfile/retry (#66), P3 batch 1 page layer (#62 open),
+  performance-suite review fixes (#68), CI regression excludes perf.
 - 2026-10-23 (second batch): P1 and P2 delivered (#63, #64); P3
-  foundation landed (#62 open for the campaign); dependabot #56-59
-  merged; roadmap issues now track execution per the workflow.
-- 2026-10-23: re-baselined. P4 core + most of P5 + part of P6 landed via
-  the A-series; P7 delivered (commit ceb051e); A-series debt cleanup
-  (dead code, docs sync, credential sanitization) done.
+  foundation landed; dependabot #56-59 merged; roadmap issues now track
+  execution per the workflow.
+- 2026-10-23 (first batch): re-baselined after the A-series; P7
+  delivered (#61); A-series debt cleanup (#60) — dead code, docs sync,
+  credential sanitization.
 - 2026-09-08: original roadmap from the POM self-review.
