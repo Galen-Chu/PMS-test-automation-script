@@ -356,7 +356,8 @@ class TestGuestDetail:
 
         with allure.step("And 點擊儲存"):
             ShareSteps.click_btn_save(
-                web, save_method=lambda: web.base_page.click_toolbar_item_2("儲存").sleep(1)
+                web,
+                save_method=lambda: web.base_page.click_toolbar_item("儲存", toolbar=2).sleep(1),
             )
 
         with allure.step("Then 顯示'儲存成功'提示"):
@@ -1083,7 +1084,7 @@ class TestGuestDetail:
             web.base_page.screenshot("And 點擊上方表格中的留言紀錄")
 
         with allure.step("And 點擊左側[已告知]"):
-            web.base_page.click_toolbar_item_2("已告知").sleep(1)
+            web.base_page.click_toolbar_item("已告知", toolbar=2).sleep(1)
             initial_values = {
                 "inform_time": web.message_edit_component.get_message_field_value("告知時間"),
                 "guest_name": web.message_edit_component.get_message_field_value("住客姓名"),

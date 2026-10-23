@@ -638,7 +638,7 @@ class TestLostManagement:
             web.base_page.click_toolbar_with_icon("edit").sleep(2)
             web.base_page.screenshot("And 驗證失物資料")
 
-            web.base_page.click_toolbar_item_2("照片")
+            web.base_page.click_toolbar_item("照片", toolbar=2)
             web.base_page.assert_data(
                 "照片功能不可使用", web.tip_component.get_tip_text(), "領回和刪除不可執行照片上傳"
             )

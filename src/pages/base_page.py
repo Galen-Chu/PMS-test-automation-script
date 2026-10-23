@@ -187,23 +187,16 @@ class BasePage:
             locator_toolbar_item = self.formator_locator(self.locator.btn_toolbar_item, item)
         return self.driver.find_element(*locator_toolbar_item).is_enabled()
 
-    def click_toolbar_item(self, item, panel=None):
+    def click_toolbar_item(self, item, panel=None, toolbar=1):
+        """toolbar=1: 標準 toolbar-list；toolbar=2: 最後一顆符合文字的按鈕（對話框/面板內工具列）"""
         if panel:
             locator_toolbar_item = self.formator_locator(
                 self.locator.btn_toolbar_item_by_panel, (panel, item)
             )
+        elif toolbar == 2:
+            locator_toolbar_item = self.formator_locator(self.locator.btn_toolbar_item_2, item)
         else:
             locator_toolbar_item = self.formator_locator(self.locator.btn_toolbar_item, item)
-        self.click(locator_toolbar_item)
-        return self
-
-    def click_toolbar_item_2(self, item, panel=None):
-        if panel:
-            locator_toolbar_item = self.formator_locator(
-                self.locator.btn_toolbar_item_by_panel, (panel, item)
-            )
-        else:
-            locator_toolbar_item = self.formator_locator(self.locator.btn_toolbar_item_2, item)
         self.click(locator_toolbar_item)
         return self
 
@@ -241,18 +234,15 @@ class BasePage:
         self.input(self.locator.input_dropdown_filter, filter_text)
         return self
 
-    def click_target_ikey(self, ikey):
-        locator_ikey = self.formator_locator(self.locator.text_ikey, ikey)
-        self.click(locator_ikey)
-        return self
-
-    def click_target_ikey_2(self, ikey):
-        locator_ikey = self.formator_locator(self.locator.text_ikey_2, ikey)
-        self.click(locator_ikey)
-        return self
-
-    def click_target_ikey_3(self, ikey):
-        locator_ikey = self.formator_locator(self.locator.text_ikey_3, ikey)
+    def click_target_ikey(self, ikey, grid=1):
+        """grid=1/2: ikey 欄位的兩種 DOM 型態；grid=3: cust_mn_show_cod 欄位"""
+        if grid == 2:
+            ikey_locator = self.locator.text_ikey_2
+        elif grid == 3:
+            ikey_locator = self.locator.text_ikey_3
+        else:
+            ikey_locator = self.locator.text_ikey
+        locator_ikey = self.formator_locator(ikey_locator, ikey)
         self.click(locator_ikey)
         return self
 
@@ -263,8 +253,7 @@ class BasePage:
 
     def get_by_data_field(self, data_field_id):
         tmp_locator = self.formator_locator(self.locator.col_by_data_field_id, data_field_id)
-        self.click(tmp_locator)
-        return self
+        return self.driver.find_element(*tmp_locator).text
 
     def has_target_ikey(self, ikey):
         locator_ikey = self.formator_locator(self.locator.text_ikey, ikey)
@@ -283,7 +272,7 @@ class BasePage:
         locator_ikey = self.formator_locator(self.locator.text_rate_cod, ikey)
         return self.has_element(locator_ikey)
 
-    def get_diplaying_items_count(self):
+    def get_displaying_items_count(self):
         count = self.driver.find_element(*self.locator.text_table_items_count).text
         return count.split("of ")[1].split(" items")[0]
 

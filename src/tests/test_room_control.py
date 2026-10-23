@@ -105,7 +105,7 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[清掃樓層]"):
-            web.room_control_page.click_toolbar_item_2("清掃樓層").sleep(1)
+            web.room_control_page.click_toolbar_item("清掃樓層", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[清掃樓層]")
 
         with allure.step("And 依篩選出的Table勾選欲變更狀態之房間號"):
@@ -113,7 +113,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("And 依篩選出的Table勾選欲變更狀態之房間號")
 
         with allure.step("And 點擊選擇欲變更狀態之<清掃、待檢查、改髒房>"):
-            web.room_control_page.click_toolbar_item_2("清掃").sleep(1)
+            web.room_control_page.click_toolbar_item("清掃", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊選擇欲變更狀態之<清掃、待檢查、改髒房>")
 
         with allure.step("Then 顯示'修改成功'提示"):
@@ -184,7 +184,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("When 選擇點擊欲變更狀態(類別)之房間圖示之[方框]")
 
         with allure.step("And 點擊[修理/參觀]"):
-            web.room_control_page.click_toolbar_item_2("修理/參觀").sleep(1)
+            web.room_control_page.click_toolbar_item("修理/參觀", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[修理/參觀]")
 
         with allure.step(f"And [修理/參觀]選擇<{category}>"):
@@ -256,7 +256,7 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[修理樓層]"):
-            web.room_control_page.click_toolbar_item_2("修理樓層").sleep(1)
+            web.room_control_page.click_toolbar_item("修理樓層", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[修理樓層]")
 
         with allure.step("And 填寫必填欄位"):
@@ -271,7 +271,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("And 依篩選出的Table勾選欲變更狀態之房間號")
 
         with allure.step("And 點擊[修理]"):
-            web.room_control_page.click_toolbar_item_2("修理").sleep(1)
+            web.room_control_page.click_toolbar_item("修理", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[修理]")
 
         with allure.step("Then 顯示'error'房間提示"):
@@ -336,7 +336,7 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[查詢修理/參觀]"):
-            web.room_control_page.click_toolbar_item_2("查詢修理/參觀").sleep(1)
+            web.room_control_page.click_toolbar_item("查詢修理/參觀", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[查詢修理/參觀]")
 
         with allure.step("And 填寫欲查詢之<類別、樓層、房號>"):
@@ -379,7 +379,7 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[查詢修理/參觀]"):
-            web.room_control_page.click_toolbar_item_2("查詢修理/參觀").sleep(1)
+            web.room_control_page.click_toolbar_item("查詢修理/參觀", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[查詢修理/參觀]")
 
         with allure.step("And 點擊[藍色放大鏡]進行查詢"):
@@ -448,7 +448,7 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[查詢修理/參觀]"):
-            web.room_control_page.click_toolbar_item_2("查詢修理/參觀").sleep(1)
+            web.room_control_page.click_toolbar_item("查詢修理/參觀", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[查詢修理/參觀]")
 
         with allure.step("And 填寫欲查詢之<類別、樓層、房號>"):
@@ -521,7 +521,7 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[清掃樓層]"):
-            web.room_control_page.click_toolbar_item_2("清掃樓層").sleep(1)
+            web.room_control_page.click_toolbar_item("清掃樓層", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[清掃樓層]")
 
         with allure.step("And 依篩選出的Table勾選欲變更狀態之房間號"):
@@ -529,7 +529,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("And 依篩選出的Table勾選欲變更狀態之房間號")
 
         with allure.step("And 點擊選擇欲變更狀態之<清掃、待檢查、改髒房>"):
-            web.room_control_page.click_toolbar_item_2("清掃").sleep(1)
+            web.room_control_page.click_toolbar_item("清掃", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊選擇欲變更狀態之<清掃、待檢查、改髒房>")
 
         with allure.step("Then 顯示'修改成功'提示"):
@@ -576,7 +576,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("When 選擇點擊欲設定為瑕疵房之房間")
 
         with allure.step("And 點擊[瑕疵房]"):
-            web.room_control_page.click_toolbar_item_2("瑕疵房").sleep(1)
+            web.room_control_page.click_toolbar_item("瑕疵房", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[瑕疵房]")
 
         with allure.step("And 輸入瑕疵房設定之理由敘述"):
@@ -584,7 +584,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("And 輸入瑕疵房設定之理由敘述")
 
         with allure.step("And 點擊[設定]"):
-            web.room_control_page.click_toolbar_item_2("設定").sleep(1)
+            web.room_control_page.click_toolbar_item("設定", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[設定]")
 
         with allure.step("Then 顯示'設定成功'提示"):
@@ -622,11 +622,11 @@ class TestRoomControl:
             web.room_control_page.screenshot("When 選擇點擊欲刪除設定為瑕疵房之房間")
 
         with allure.step("And 點擊[瑕疵房]"):
-            web.room_control_page.click_toolbar_item_2("瑕疵房").sleep(1)
+            web.room_control_page.click_toolbar_item("瑕疵房", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[瑕疵房]")
 
         with allure.step("And 點擊[清除]"):
-            web.room_control_page.click_toolbar_item_2("清除").sleep(1)
+            web.room_control_page.click_toolbar_item("清除", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[清除]")
 
         with allure.step("Then 顯示'清除成功'提示"):
@@ -665,7 +665,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("When 選擇點擊欲變更拆併床設定之房間")
 
         with allure.step("And 點擊[拆併床]"):
-            web.room_control_page.click_toolbar_item_2("拆併床").sleep(1)
+            web.room_control_page.click_toolbar_item("拆併床", toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊[拆併床]")
 
         with allure.step("And 點擊Table勾選該樓層欲變更拆併床設定之房型房號"):
@@ -734,11 +734,11 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[清掃]"):
-            web.room_control_page.click_toolbar_item_2("清掃")
+            web.room_control_page.click_toolbar_item("清掃", toolbar=2)
             web.room_control_page.screenshot("And 點擊[清掃]")
 
         with allure.step("And 選擇欲變更狀態之<清掃、待檢查、改髒房>"):
-            web.room_control_page.click_toolbar_item_2(toolbar_item).sleep(1)
+            web.room_control_page.click_toolbar_item(toolbar_item, toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 選擇欲變更狀態之<清掃、待檢查、改髒房>")
 
         with allure.step("Then 顯示'儲存成功'提示"):
@@ -791,7 +791,7 @@ class TestRoomControl:
             )
 
         with allure.step("And 點擊[清掃樓層]"):
-            web.room_control_page.click_toolbar_item_2("清掃樓層").sleep(1)
+            web.room_control_page.click_toolbar_item("清掃樓層", toolbar=2).sleep(1)
             web.room_control_page.screenshot("點擊[清掃樓層]")
             web.room_control_page.assert_data_in_list(
                 "髒房有一筆222房間資料", web.room_control_page.get_room_status_list(), "222"
@@ -804,7 +804,7 @@ class TestRoomControl:
             web.room_control_page.screenshot("And 依篩選出的Table勾選欲變更狀態之房間號")
 
         with allure.step("And 點擊選擇欲變更狀態之<清掃、待檢查、改髒房>"):
-            web.room_control_page.click_toolbar_item_2(toolbar_item).sleep(1)
+            web.room_control_page.click_toolbar_item(toolbar_item, toolbar=2).sleep(1)
             web.room_control_page.screenshot("And 點擊選擇欲變更狀態之<清掃、待檢查、改髒房>")
 
         with allure.step("Then 顯示'修改成功'提示"):

@@ -236,7 +236,7 @@ class TestRateCod:
             web.base_page.clear().sleep(2)
             web.base_page.search().sleep(2)
             web.base_page.assert_data_has_count(
-                "重新查詢房價-有資料", web.base_page.get_diplaying_items_count()
+                "重新查詢房價-有資料", web.base_page.get_displaying_items_count()
             )
             web.base_page.screenshot("重新查詢房價")
 
@@ -558,7 +558,7 @@ class TestRateCod:
             web.base_page.screenshot("查詢公司編號")
 
         with allure.step("商務公司刪除舊綁定"):
-            web.base_page.click_target_ikey_3("0000173701")
+            web.base_page.click_target_ikey("0000173701", grid=3)
             web.base_page.click_toolbar_with_icon("edit").sleep(1)
             web.share_panel_component.click_detail_tab("contract").sleep(1)
             web.company_panel_component.click_target_contract()
@@ -566,7 +566,7 @@ class TestRateCod:
             web.tip_component.click_btn_by_text("確定").sleep(1)
             web.company_panel_component.click_save().sleep(2)
             web.tip_component.click_ok().sleep(1)
-            web.base_page.click_target_ikey_3("0000173701")
+            web.base_page.click_target_ikey("0000173701", grid=3)
             web.base_page.click_toolbar_with_icon("edit").sleep(1)
             web.share_panel_component.click_detail_tab("contract").sleep(1)
             web.share_panel_component.screenshot("商務公司刪除舊綁定")
@@ -588,7 +588,7 @@ class TestRateCod:
             web.tip_component.click_ok().sleep(1)
 
         with allure.step("驗證商務公司綁定資料"):
-            web.base_page.click_target_ikey_3("0000173701")
+            web.base_page.click_target_ikey("0000173701", grid=3)
             web.base_page.click_toolbar_with_icon("edit").sleep(1)
             web.share_panel_component.click_detail_tab("contract").sleep(1)
             web.share_panel_component.screenshot("驗證商務公司綁定資料")
@@ -652,7 +652,7 @@ class TestRateCod:
         web.header_component.to_func_page("商務公司").sleep(2)
         web.base_page.set_value_by_label("公司編號", "0000173701")
         web.base_page.search().sleep(2)
-        web.base_page.click_target_ikey_3("0000173701")
+        web.base_page.click_target_ikey("0000173701", grid=3)
         web.base_page.click_toolbar_with_icon("edit").sleep(1)
         web.share_panel_component.click_detail_tab("specialContract").sleep(1)
 

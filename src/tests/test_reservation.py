@@ -106,8 +106,8 @@ class TestReservation:
         with allure.step("確認入住資料"):
             web.header_component.expand_menu("接待").sleep(1)
             web.header_component.to_func_page("C/I清單")
-            web.checkin_page.click_target_ikey_2(dialog_ikey)
-            web.checkin_page.click_toolbar_item_2("入住").sleep(3)
+            web.checkin_page.click_target_ikey(dialog_ikey, grid=2)
+            web.checkin_page.click_toolbar_item("入住", toolbar=2).sleep(3)
             web.checkin_page.click_dialog_checkin()
             web.tip_component.click_ok().sleep(3)
             web.checkin_page.screenshot("確認入住資料")

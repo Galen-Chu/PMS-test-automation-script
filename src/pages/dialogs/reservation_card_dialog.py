@@ -62,7 +62,7 @@ class ReservationCardDialog(BasePage):
             self.locator.select_rate_code, (rate_cod_name, room_type)
         )
         self.click(rate_cod_locator)
-        self.click_toolbar_item_2("確定")
+        self.click_toolbar_item("確定", toolbar=2)
         return self
 
     def set_rate_code_by_search_name(self, rate_cod_name, room_type):
@@ -74,7 +74,7 @@ class ReservationCardDialog(BasePage):
             self.locator.select_rate_code, (rate_cod_name, room_type)
         )
         self.click(rate_cod_locator)
-        self.click_toolbar_item_2("確定")
+        self.click_toolbar_item("確定", toolbar=2)
         return self
 
     def get_link_nos(self):

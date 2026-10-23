@@ -251,7 +251,8 @@ class TestMaindeskHeaderToolbar:
 
         with allure.step("And 點擊儲存"):
             ShareSteps.click_btn_save(
-                web, save_method=lambda: web.base_page.click_toolbar_item_2("儲存").sleep(1)
+                web,
+                save_method=lambda: web.base_page.click_toolbar_item("儲存", toolbar=2).sleep(1),
             )
 
         with allure.step("Then 顯示'儲存成功'提示"):

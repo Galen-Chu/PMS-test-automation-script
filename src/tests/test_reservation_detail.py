@@ -1144,7 +1144,7 @@ class TestReservationDetail:
             web.base_page.screenshot("And 點擊下方表格中的項目或自行輸入備註內容")
 
         with allure.step("And 點擊「確認」，離開該視窗"):
-            web.base_page.click_toolbar_item_2("確認").sleep(1)
+            web.base_page.click_toolbar_item("確認", toolbar=2).sleep(1)
             web.base_page.screenshot("And 點擊「確認」，離開該視窗")
 
         with allure.step("And 點擊左方的[黑色磁碟片]或頁面空白處，並點擊[橘色磁碟片]儲存"):
@@ -1199,7 +1199,7 @@ class TestReservationDetail:
             web.base_page.screenshot("And 點擊下方表格中的項目或自行輸入備註內容")
 
         with allure.step("And 點擊「確認」，離開該視窗"):
-            web.base_page.click_toolbar_item_2("確認").sleep(1)
+            web.base_page.click_toolbar_item("確認", toolbar=2).sleep(1)
             web.base_page.screenshot("And 點擊「確認」，離開該視窗")
 
         with allure.step("And 點擊左方的[黑色磁碟片]或頁面空白處"):
