@@ -30,8 +30,7 @@ pytestmark = [pytest.mark.perf]
 
 ROUNDS = int(os.getenv("PERF_ROUNDS", "2"))
 ROOM_COUNT = int(os.getenv("PERF_ROOMS", "150"))
-REPORT_DIR = Path("perf-reports")
-REPORT_DIR.mkdir(exist_ok=True)
+REPORT_DIR = Path("perf-reports")  # 由 save_perf_report 負責建立，不在 import 時副作用
 ENV_LABEL = os.getenv("ENV", "qa").upper()
 TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M")
 

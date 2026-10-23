@@ -68,10 +68,14 @@ class SessionPersistence:
             except Exception:
                 pass  # Skip invalid cookies
 
-        # Restore sessionStorage
+        # Restore sessionStorage（以 json.dumps 安插值，避免值內含引號時中斷腳本）
         storage = state.get("session_storage", {})
         if storage:
-            pairs = "; ".join(f"sessionStorage.setItem('{k}', '{v}')" for k, v in storage.items())
+            pairs = ", ".join(
+                f"sessionStorage.setItem({json.dumps(k, ensure_ascii=False)}, "
+                f"{json.dumps(v, ensure_ascii=False)})"
+                for k, v in storage.items()
+            )
             try:
                 driver.execute_script(pairs)
             except Exception:

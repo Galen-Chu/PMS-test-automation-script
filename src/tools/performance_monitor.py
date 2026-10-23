@@ -23,6 +23,8 @@ from pathlib import Path
 
 # JavaScript injected into the page for click/input tracking + resource timing
 _HOOK_JS = """
+if (!window.__perf_hook_installed) {
+window.__perf_hook_installed = true;
 window.__perf_ops = [];
 window.addEventListener('click', function(e) {
     var t = e.target;
@@ -49,6 +51,7 @@ window.addEventListener('input', function(e) {
         });
     }
 }, true);
+}
 """
 
 _DUMP_JS = """
@@ -156,8 +159,11 @@ class PerformanceMonitor:
 
     def mark(self, tag):
         """Insert a named marker at the current time."""
+        import json as _json
+
         self.driver.execute_script(
-            f"window.__perf_ops.push({{t: performance.now(), type: 'mark', tag: '{tag}'}})"
+            "var m = " + _json.dumps({"t": "performance.now()", "type": "mark", "tag": tag}) + ";"
+            "m.t = performance.now(); window.__perf_ops.push(m);"
         )
 
     def attach_to_allure(self, test_name="perf"):

@@ -5,11 +5,18 @@ Called directly by perf tests — no manual post-processing needed.
 Adapts display based on measurement type (page load vs booking flow).
 """
 
+import html
 import json
 from datetime import datetime
 from pathlib import Path
 
 from tools.perf_analyzer import format_duration
+
+
+def _esc(text: str) -> str:
+    """跳脫 API 名稱等動態字串，避免破壞 HTML 結構"""
+    return html.escape(str(text))
+
 
 _STYLE = """
 <style>
@@ -54,7 +61,6 @@ def generate_page_load_report(apis: list, metadata: dict) -> str:
     parts.append(_card("Total API Calls", str(total)))
     parts.append(_card("Slowest API", format_duration(max_dur)))
     parts.append(_card("Avg Duration", format_duration(sum(durations) / total if total else 0)))
-    parts.append(_card("Result", "PASS", "pass"))
     parts.append("</div>")
 
     # API bar chart (top 15)
@@ -67,7 +73,7 @@ def generate_page_load_report(apis: list, metadata: dict) -> str:
             parts.append(
                 f"<div class='bars'>"
                 f"<span class='bar' style='width:{pct:.0f}%;background:{color}'></span>"
-                f"<span class='bar-label'>{format_duration(api['duration'])} — {api['name']}</span>"
+                f"<span class='bar-label'>{format_duration(api['duration'])} — {_esc(api['name'])}</span>"
                 f"</div>"
             )
         parts.append("</div>")
@@ -77,7 +83,7 @@ def generate_page_load_report(apis: list, metadata: dict) -> str:
         parts.append("<div class='card'><h2>All API Calls</h2>")
         parts.append("<table><tr><th>#</th><th>API</th><th>Duration</th></tr>")
         for i, api in enumerate(slowest, 1):
-            parts.append(f"<tr><td>{i}</td><td>{api['name']}</td>")
+            parts.append(f"<tr><td>{i}</td><td>{_esc(api['name'])}</td>")
             dur_str = format_duration(api["duration"])
             color = " style='color:#d03b3b'" if api["duration"] > 10000 else ""
             parts.append(f"<td{color}>{dur_str}</td></tr>")
@@ -148,7 +154,7 @@ def generate_booking_report(analysis: dict, metadata: dict) -> str:
             parts.append(
                 f"<div class='bars'>"
                 f"<span class='bar' style='width:{pct:.0f}%;background:{color}'></span>"
-                f"<span class='bar-label'>{format_duration(api['duration'])} — {api['name']}</span>"
+                f"<span class='bar-label'>{format_duration(api['duration'])} — {_esc(api['name'])}</span>"
                 f"</div>"
             )
         parts.append("</div>")
@@ -162,7 +168,7 @@ def generate_booking_report(analysis: dict, metadata: dict) -> str:
         )
         for v in violations:
             parts.append(
-                f"<tr class='violation'><td>{v['api']}</td>"
+                f"<tr class='violation'><td>{_esc(v['api'])}</td>"
                 f"<td>{format_duration(v['duration_ms'])}</td>"
                 f"<td>{format_duration(v['threshold_ms'])}</td>"
                 f"<td>{format_duration(v['exceeded_by_ms'])}</td></tr>"

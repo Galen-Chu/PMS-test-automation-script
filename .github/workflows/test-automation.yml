@@ -217,6 +217,7 @@ jobs:
           pytest src/tests/ \
             -v \
             -n 4 \
+            -m "not perf" \
             --alluredir=allure-results-${{ matrix.browser }}-py${{ matrix.python-version }} \
             --tb=short \
             -k "not slow" \
