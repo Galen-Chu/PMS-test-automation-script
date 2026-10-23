@@ -9,9 +9,7 @@ import os, sys, time
 
 os.environ.setdefault("VERSION", "133")
 os.environ.setdefault("WEB_URL", "https://demo.example.com")
-os.environ.setdefault(
-    "BASE_URL", "https://auth.example.com/protocol/openid-connect/auth"
-)
+os.environ.setdefault("BASE_URL", "https://auth.example.com/protocol/openid-connect/auth")
 os.environ.setdefault("REDIRECT_URL", "https://demo.example.com/callback")
 os.environ.setdefault("CLIENT_ID", "internal")
 os.environ.setdefault("LANGUAGE", "zh-TW")
