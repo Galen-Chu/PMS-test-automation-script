@@ -92,6 +92,7 @@ dmypy.json
 
 # Local test configuration (copy from pytest.ini.example)
 pytest.ini
+issue-drafts.md
 .chrome-profile/
 allure-results/
 debug_*.py
