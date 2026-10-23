@@ -1,21 +1,27 @@
 # -*- coding: utf-8 -*-
-"""A3 驗收：ML 驗證碼模型登入效率測試"""
+"""A3 驗收：ML 驗證碼模型登入效率測試
+
+本腳本不內建任何真實帳密或網址；請以環境變數提供設定後執行：
+    python src/tools/verify_a3_login.py   (需先 export/set USERNAME/PASSWORD 等)
+"""
 
 import os, sys, time
 
 os.environ.setdefault("VERSION", "133")
-os.environ.setdefault("WEB_URL", "https://qa-cloud.athena.com.tw")
+os.environ.setdefault("WEB_URL", "https://demo.example.com")
 os.environ.setdefault(
-    "BASE_URL", "https://auth.athena.com.tw/realms/16/protocol/openid-connect/auth"
+    "BASE_URL", "https://auth.example.com/protocol/openid-connect/auth"
 )
-os.environ.setdefault("REDIRECT_URL", "https://qa-cloud.athena.com.tw/pms/node/api/callback/pms/16")
+os.environ.setdefault("REDIRECT_URL", "https://demo.example.com/callback")
 os.environ.setdefault("CLIENT_ID", "internal")
 os.environ.setdefault("LANGUAGE", "zh-TW")
-os.environ.setdefault("ENV_NUM", "16")
-os.environ.setdefault("USERNAME", "cio")
-os.environ.setdefault("PASSWORD", "mis")
+os.environ.setdefault("ENV_NUM", "1")
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+for _required in ("USERNAME", "PASSWORD"):
+    if not os.environ.get(_required):
+        sys.exit(f"[!] 請先設定 {_required} 環境變數（本腳本不內建帳密）")
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from tools.driver_helper import DriverHelper
 from pages.login_page import LoginPage
