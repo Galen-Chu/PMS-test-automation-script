@@ -2,7 +2,9 @@ import json
 import os
 from pathlib import Path
 import urllib
+from time import sleep
 import humps
+from selenium.common.exceptions import UnexpectedAlertPresentException
 
 
 class Browser:
@@ -44,7 +46,29 @@ class DriverHelper:
         if path == "login":
             web_driver.get(DriverHelper.build_auth_url())
         elif path:
-            web_driver.get(f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}/{path}")
+            from selenium.webdriver.support.ui import WebDriverWait
+
+            target = f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}/{path}"
+            web_driver.get(target)
+
+            def booted(d):
+                """PMS SPA 完成啟動＝body 有實質內容。
+
+                啟動期間可能短暫拋出 JS alert（boot 錯誤訊息，關掉後 App
+                會繼續完成載入）；在等待條件內順手掃掉，避免阻斷後續操作。"""
+                try:
+                    text = d.execute_script(
+                        "return (document.body && document.body.innerText || '').trim()"
+                    )
+                    return len(text) > 30
+                except UnexpectedAlertPresentException:
+                    try:
+                        d.switch_to.alert.accept()
+                    except Exception:
+                        pass
+                    return False
+
+            WebDriverWait(web_driver, 20).until(booted)
 
         return Browser(web_driver, pages)
 

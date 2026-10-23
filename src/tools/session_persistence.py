@@ -96,13 +96,24 @@ class SessionPersistence:
         Returns True if session appears valid.
         """
         try:
+            from selenium.common.exceptions import UnexpectedAlertPresentException
+
             web_url = os.getenv("WEB_URL", "")
             env_num = os.getenv("ENV_NUM", "")
             driver.get(f"{web_url}/pms/{env_num}/reservation/PMS0110010")
             time.sleep(3)
-            body = driver.find_element("tag name", "body").text
+            body = ""
+            for _ in range(3):
+                try:
+                    body = driver.find_element("tag name", "body").text
+                    break
+                except UnexpectedAlertPresentException:
+                    try:
+                        driver.switch_to.alert.accept()
+                    except Exception:
+                        pass
             # Check for the session expired dialog
-            expired_markers = ["請重新登入"]  # ["請重新登入"]
+            expired_markers = ["請重新登入"]
             return not any(m in body for m in expired_markers)
         except Exception:
             return False

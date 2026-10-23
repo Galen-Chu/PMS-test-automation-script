@@ -31,6 +31,10 @@ class BasePage:
         for attempt in range(retries):
             try:
                 element = self.driver.find_element(*locator)
+                if element is None:
+                    # chromedriver 在頁面轉跳期間可能回傳 null 而非丟例外；
+                    # 視同找不到，交給重試迴圈等頁面穩定
+                    raise NoSuchElementException("find_element returned null (page transitioning)")
                 element.click()
                 return  # 點擊成功就結束
             except (

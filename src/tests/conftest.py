@@ -3,6 +3,7 @@ import time
 import threading
 import pytest
 import allure
+from selenium.common.exceptions import UnexpectedAlertPresentException
 
 from tools.driver_helper import DriverHelper
 from tools.performance_monitor import PerformanceMonitor
@@ -44,14 +45,42 @@ def _create_driver():
     return webdriver.Chrome(service=Service(), options=options)
 
 
+def _accept_js_alert(driver):
+    """關閉未處理的 JS alert（如 context 未建立時 PMS 前端的 comp_cod 錯誤���窗）"""
+    try:
+        driver.switch_to.alert.accept()
+        return True
+    except Exception:
+        return False
+
+
+def _ensure_hotel_context(driver):
+    """登入後走 EIP 建立飯店 context（comp_cod 等）。
+
+    實測（2026-10-23, env 16）：PMS session cookie 由登入 callback 設定；
+    EIP 頁面會由前端 JS 轉跳 auth，且本環境不自動返回，因此不能以
+    URL 條件等待——固定等待即可，過程中的 JS alert 需關閉。"""
+    web_url = os.getenv("WEB_URL", "")
+    eip_url = f"{web_url}/eip/{os.getenv('ENV_NUM')}"
+    driver.get(eip_url)
+    time.sleep(8)  # 覆蓋 EIP→auth 轉跳與 context 寫入（實測 5 秒即足夠）
+    _accept_js_alert(driver)
+
+
 def _is_logged_in(driver):
     """Check if the current session is still valid by visiting PMS"""
     try:
         pms_url = f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}/reservation/PMS0110010"
         driver.get(pms_url)
         time.sleep(5)
-        body = driver.find_element("tag name", "body").text
-        return "請重新登入" not in body  # "請重新登入" not in body
+        body = ""
+        for _ in range(3):
+            try:
+                body = driver.find_element("tag name", "body").text
+                break
+            except UnexpectedAlertPresentException:
+                _accept_js_alert(driver)
+        return "請重新登入" not in body
     except Exception:
         return False
 
@@ -126,10 +155,8 @@ def logged_in_driver(shared_driver):
         else:
             _do_login(shared_driver, LoginPage)
 
-    # Visit EIP to ensure hotel context (comp_cod etc.) is set
-    eip_url = f"{os.getenv('WEB_URL')}/eip/{os.getenv('ENV_NUM')}"
-    shared_driver.get(eip_url)
-    time.sleep(3)
+    # 經 EIP 建立飯店 context（comp_cod 等），完成前 PMS 無法使用
+    _ensure_hotel_context(shared_driver)
 
     # Save session for next run
     SessionPersistence.save(shared_driver)
@@ -145,6 +172,10 @@ def _do_login(driver, login_page_class):
     time.sleep(3)
     login_page = login_page_class(driver)
     login_page.login(os.getenv("USERNAME"), os.getenv("PASSWORD"))
+    _accept_js_alert(driver)
+    # 登入迴圈離開 auth 後仍停留在 callback URL：session cookie 的交換
+    # 是非同步的，太早導航會腰斬它（PMS 之後讀不到 context → comp_cod 崩潰）
+    time.sleep(3)
     SessionPersistence.save(driver)
 
 
