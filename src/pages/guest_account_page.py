@@ -9,7 +9,7 @@ class GuestAccountPage(AthenaBasePage):
         super().__init__(driver, GuestAccountLocator())
 
     def set_condition_value(self, field, value):
-        locator_input = self.formator_locator(self.locator.input_condition, field)
+        locator_input = self.format_locator(self.locator.input_condition, field)
         self.input(locator_input, value)
         return self
 
@@ -23,7 +23,7 @@ class GuestAccountPage(AthenaBasePage):
 
     def select_consumption_code(self, value):
         self.click(self.locator.select_consumption)
-        locator_select_option = self.formator_locator(self.locator.select_option, value)
+        locator_select_option = self.format_locator(self.locator.select_option, value)
         self.wait_visible(locator_select_option)
         self.click(locator_select_option)
         return self
@@ -33,11 +33,11 @@ class GuestAccountPage(AthenaBasePage):
         return self
 
     def get_guest_maintain_info(self, field):
-        locator_guest_info = self.formator_locator(self.locator.label_deposit, field)
+        locator_guest_info = self.format_locator(self.locator.label_deposit, field)
         return self.driver.find_element(*locator_guest_info).get_attribute("value")
 
     def get_deposit_info(self, field):
-        locator_deposit_info = self.formator_locator(self.locator.td_deposit_info, field)
+        locator_deposit_info = self.format_locator(self.locator.td_deposit_info, field)
         return self.driver.find_element(*locator_deposit_info).text
 
     def click_item_detail(self):
@@ -45,17 +45,17 @@ class GuestAccountPage(AthenaBasePage):
         return self
 
     def get_input_values(self, label):
-        text_input_values = self.formator_locator(self.locator.text_input_values, label)
+        text_input_values = self.format_locator(self.locator.text_input_values, label)
         elements = self.driver.find_elements(*text_input_values)
         input_value = "".join([str(element.text) for element in elements])
         return input_value
 
     def get_input_value(self, label):
-        text_input_value = self.formator_locator(self.locator.text_input_value, label)
+        text_input_value = self.format_locator(self.locator.text_input_value, label)
         return self.driver.find_element(*text_input_value).text
 
     def get_row_item(self, row, label):
-        row_item = self.formator_locator(self.locator.row_item, (row, label))
+        row_item = self.format_locator(self.locator.row_item, (row, label))
         return self.driver.find_element(*row_item).text
 
     def add_pay_type(self):
@@ -67,8 +67,8 @@ class GuestAccountPage(AthenaBasePage):
         return self
 
     def get_table_column_values(self, th_name):
-        row_in_table = self.formator_locator(self.locator.row_in_table, th_name)
-        th_position = self.formator_locator(self.locator.th_position, th_name)
+        row_in_table = self.format_locator(self.locator.row_in_table, th_name)
+        th_position = self.format_locator(self.locator.th_position, th_name)
 
         rows = self.driver.find_elements(*row_in_table)
         position = len(self.driver.find_elements(*th_position))

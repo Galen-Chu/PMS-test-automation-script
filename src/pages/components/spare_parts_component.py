@@ -16,7 +16,7 @@ class SparePartsComponent(AthenaBasePage):
         return True
 
     def click_spare_parts_toolbar(self, toolbar):
-        toolbar_locator = self.formator_locator(self.locator.spare_parts_toolbar, toolbar)
+        toolbar_locator = self.format_locator(self.locator.spare_parts_toolbar, toolbar)
         self.click(toolbar_locator)
         return self
 
@@ -33,39 +33,39 @@ class SparePartsComponent(AthenaBasePage):
         return self
 
     def create_spare_parts(self, spare_parts_option):
-        spare_parts_dropdown = self.formator_locator(
+        spare_parts_dropdown = self.format_locator(
             self.locator.spare_parts_row_dropdown, "itemCode"
         )
         self.click(spare_parts_dropdown)
-        spare_parts = self.formator_locator(self.locator.spare_parts_options, spare_parts_option)
+        spare_parts = self.format_locator(self.locator.spare_parts_options, spare_parts_option)
         self.click(spare_parts)
         return self
 
     def edit_spare_parts_end_date(self, field, month, day):
-        date_dropdown = self.formator_locator(self.locator.spare_parts_row_dropdown, field)
+        date_dropdown = self.format_locator(self.locator.spare_parts_row_dropdown, field)
         self.click(date_dropdown)
         self.click(self.locator.calendar_title)
         self.input_with_clear(self.locator.input_year, "2024")
-        month_locator = self.formator_locator(self.locator.select_date, month)
+        month_locator = self.format_locator(self.locator.select_date, month)
         self.click(month_locator)
-        day_locator = self.formator_locator(self.locator.select_date, day)
+        day_locator = self.format_locator(self.locator.select_date, day)
         self.click(day_locator)
         return self
 
     def edit_spare_parts_amount(self, field, value):
-        amount_locator = self.formator_locator(self.locator.spare_parts_label, field)
+        amount_locator = self.format_locator(self.locator.spare_parts_label, field)
         self.input_clear(amount_locator)
         self.input(amount_locator, value)
         return self
 
     def get_spare_parts_info(self, field):
-        spare_parts_info = self.formator_locator(self.locator.spare_parts_label, field)
+        spare_parts_info = self.format_locator(self.locator.spare_parts_label, field)
         spare_parts_info = self.driver.find_element(*spare_parts_info).get_attribute("value")
         return spare_parts_info
 
     def get_spare_parts_table_info_by_date(self, date):
         table_info_list = []
-        table_info_locator = self.formator_locator(self.locator.spare_parts_table_by_date, date)
+        table_info_locator = self.format_locator(self.locator.spare_parts_table_by_date, date)
         table_info = self.driver.find_elements(*table_info_locator)
         for info in table_info:
             table_info_list.append(info.text)

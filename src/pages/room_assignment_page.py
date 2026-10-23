@@ -12,12 +12,12 @@ class RoomAssignmentPage(AthenaBasePage):
         return len(assign_remark) > 0
 
     def select_room_no(self, room_no):
-        tmp_locator = self.formator_locator(self.locator.select_room_no, room_no)
+        tmp_locator = self.format_locator(self.locator.select_room_no, room_no)
         self.click(tmp_locator)
         return self
 
     def get_text_in_detail_tab(self, field):
-        tmp_locator = self.formator_locator(self.locator.text_in_detail_tab, field)
+        tmp_locator = self.format_locator(self.locator.text_in_detail_tab, field)
         return self.driver.find_element(*tmp_locator).get_attribute("value")
 
     def click_room_sta_checkbox(self):
@@ -33,11 +33,11 @@ class RoomAssignmentPage(AthenaBasePage):
         return self
 
     def get_biggraph_room_type(self, room_no):
-        tmp_locator = self.formator_locator(self.locator.big_room_type, room_no)
+        tmp_locator = self.format_locator(self.locator.big_room_type, room_no)
         return self.driver.find_element(*tmp_locator).text
 
     def get_biggraph_date_range(self, room_no):
-        tmp_locator = self.formator_locator(self.locator.big_room_date_range, room_no)
+        tmp_locator = self.format_locator(self.locator.big_room_date_range, room_no)
         return self.driver.find_element(*tmp_locator).text
 
     def is_room_nos_readonly(self):
@@ -48,7 +48,7 @@ class RoomAssignmentPage(AthenaBasePage):
         return self.driver.find_element(*self.locator.checked_lock_assign_checkbox).is_selected()
 
     def search_ikey(self, ikey):
-        tmp_locator = self.formator_locator(self.locator.input_condition, "訂房卡號")
+        tmp_locator = self.format_locator(self.locator.input_condition, "訂房卡號")
         self.input(tmp_locator, ikey)
         self.search()
         return self

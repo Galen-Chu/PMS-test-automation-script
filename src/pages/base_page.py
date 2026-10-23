@@ -22,7 +22,7 @@ class BasePage:
         self.locator = locator if locator is not None else BaseLocator()
         self.driver = driver
 
-    def formator_locator(self, locator, values):
+    def format_locator(self, locator, values):
         # 直接格式化 locator 元組（避免 str(tuple)%value 在 Windows 上損壞中文字元）
         by, selector = locator
         return (by, selector % values)

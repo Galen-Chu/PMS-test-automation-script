@@ -12,7 +12,7 @@ class TipComponent(AthenaBasePage):
         return self
 
     def click_btn_by_text(self, text):
-        locator = self.formator_locator(self.locator.btn_by_text, text)
+        locator = self.format_locator(self.locator.btn_by_text, text)
         self.click(locator)
         return self
 

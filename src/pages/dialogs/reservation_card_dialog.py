@@ -19,7 +19,7 @@ class ReservationCardDialog(AthenaBasePage):
         return self
 
     def get_row_text(self, field):
-        tmp_locator = self.formator_locator(self.locator.text_by_td_field, field)
+        tmp_locator = self.format_locator(self.locator.text_by_td_field, field)
         self.click(tmp_locator)
         return self.driver.find_element(*tmp_locator).text
 
@@ -31,11 +31,11 @@ class ReservationCardDialog(AthenaBasePage):
         return self
 
     def search_reservation_card(self, condition, value):
-        btn_clear = self.formator_locator(self.locator.btn_search_toolbar, "clear")
+        btn_clear = self.format_locator(self.locator.btn_search_toolbar, "clear")
         self.click(btn_clear)
-        search_contdtion = self.formator_locator(self.locator.input_by_condition, condition)
+        search_contdtion = self.format_locator(self.locator.input_by_condition, condition)
         self.input(search_contdtion, value)
-        btn_search = self.formator_locator(self.locator.btn_search_toolbar, "search")
+        btn_search = self.format_locator(self.locator.btn_search_toolbar, "search")
         self.click(btn_search)
         return self
 
@@ -49,7 +49,7 @@ class ReservationCardDialog(AthenaBasePage):
 
     # ----- 訂房卡 單筆視窗 -----
     def click_card_toolbar(self, toolbar):
-        btn_reservation_detail = self.formator_locator(self.locator.btn_card_toolbar, toolbar)
+        btn_reservation_detail = self.format_locator(self.locator.btn_card_toolbar, toolbar)
         self.click(btn_reservation_detail)
         return self
 
@@ -62,7 +62,7 @@ class ReservationCardDialog(AthenaBasePage):
         return self
 
     def set_rate_code(self, rate_cod_name, room_type):
-        rate_cod_locator = self.formator_locator(
+        rate_cod_locator = self.format_locator(
             self.locator.select_rate_code, (rate_cod_name, room_type)
         )
         self.click(rate_cod_locator)
@@ -72,7 +72,7 @@ class ReservationCardDialog(AthenaBasePage):
     def set_rate_code_by_search_name(self, rate_cod_name, room_type):
         self.click(self.locator.btn_select_rate_code)
         self.input(self.locator.input_rate_cod_name, rate_cod_name)
-        rate_cod_locator = self.formator_locator(
+        rate_cod_locator = self.format_locator(
             self.locator.select_rate_code, (rate_cod_name, room_type)
         )
         # 等待過濾結果出現再按 ENTER 選取
@@ -86,29 +86,29 @@ class ReservationCardDialog(AthenaBasePage):
         return self.driver.find_element(*self.locator.text_link_nos).text
 
     def get_text_in_tab(self, field):
-        tmp_locator = self.formator_locator(self.locator.text_by_td_field, field)
+        tmp_locator = self.format_locator(self.locator.text_by_td_field, field)
         return self.driver.find_element(*tmp_locator).text
 
     # ----- 訂房卡 單筆視窗 End -----
 
     # ----- 訂房明細 視窗 -----
     def click_detail_toolbar(self, toolbar):
-        btn_spare_spart = self.formator_locator(self.locator.btn_tool, toolbar)
+        btn_spare_spart = self.format_locator(self.locator.btn_tool, toolbar)
         self.click(btn_spare_spart)
         return self
 
     def click_tab(self, tab_name):
-        tab_locator = self.formator_locator(self.locator.tab_list, tab_name)
+        tab_locator = self.format_locator(self.locator.tab_list, tab_name)
         self.click(tab_locator)
         return self
 
     def click_tab_toolbar(self, tab, toolbar):
-        toolbar_locator = self.formator_locator(self.locator.toolbar_by_tab, (tab, toolbar))
+        toolbar_locator = self.format_locator(self.locator.toolbar_by_tab, (tab, toolbar))
         self.click(toolbar_locator)
         return self
 
     def click_tab_guest_function(self, function):
-        function_locator = self.formator_locator(self.locator.tab_guest_function, function)
+        function_locator = self.format_locator(self.locator.tab_guest_function, function)
         self.click(function_locator)
         return self
 
@@ -125,7 +125,7 @@ class ReservationCardDialog(AthenaBasePage):
         return self
 
     def click_tab_add_btn(self, tab):
-        tab_add_btn_locator = self.formator_locator(self.locator.btn_add_by_tab, tab)
+        tab_add_btn_locator = self.format_locator(self.locator.btn_add_by_tab, tab)
         self.click(tab_add_btn_locator)
         return self
 
@@ -138,7 +138,7 @@ class ReservationCardDialog(AthenaBasePage):
         return self
 
     def select_guest_no_info(self, option):
-        option_locator = self.formator_locator(self.locator.guest_no_info_option, option)
+        option_locator = self.format_locator(self.locator.guest_no_info_option, option)
         self.click(option_locator)
         return self
 
@@ -175,31 +175,29 @@ class ReservationCardDialog(AthenaBasePage):
         return todo_status_list
 
     def get_tab_service_info(self, field):
-        tab_service_info = self.formator_locator(self.locator.tab_service_table, field)
+        tab_service_info = self.format_locator(self.locator.tab_service_table, field)
         tab_service_info = self.driver.find_element(*tab_service_info).text
         return tab_service_info
 
     def get_tab_empty_msg(self, tab):
-        empty_msg_locator = self.formator_locator(self.locator.empty_msg_by_tab, tab)
+        empty_msg_locator = self.format_locator(self.locator.empty_msg_by_tab, tab)
         return self.driver.find_element(*empty_msg_locator).text
 
     def get_tab_expense_info_in_row(self, date, field):
-        tab_expense_info = self.formator_locator(self.locator.tab_expense_table, (date, field))
+        tab_expense_info = self.format_locator(self.locator.tab_expense_table, (date, field))
         tab_expense_info = self.driver.find_element(*tab_expense_info).text
         return tab_expense_info
 
     def get_tab_expense_info_by_date(self, date):
         expense_list = []
-        expense_list_by_date = self.formator_locator(self.locator.tab_expense_list_by_date, date)
+        expense_list_by_date = self.format_locator(self.locator.tab_expense_list_by_date, date)
         expense_list_by_date = self.driver.find_elements(*expense_list_by_date)
         for item in expense_list_by_date:
             expense_list.append(item.text)
         return expense_list
 
     def get_expense_summary_info(self, field):
-        expense_summary_info = self.formator_locator(
-            self.locator.tab_expense_summary_section, field
-        )
+        expense_summary_info = self.format_locator(self.locator.tab_expense_summary_section, field)
         expense_summary_info = self.driver.find_element(*expense_summary_info).get_attribute(
             "value"
         )
@@ -215,7 +213,7 @@ class ReservationCardDialog(AthenaBasePage):
     # ----- 房間特色選單 視窗 -----
     def click_room_features(self, features):
         for feature in features:
-            feature_locator = self.formator_locator(self.locator.select_room_features, feature)
+            feature_locator = self.format_locator(self.locator.select_room_features, feature)
             self.click(feature_locator)
         return self
 
@@ -271,7 +269,7 @@ class ReservationCardDialog(AthenaBasePage):
 
     # ----- 團體名單 視窗 -----
     def click_move_guest(self, move_type):
-        move_guest_locator = self.formator_locator(self.locator.btn_move_guest, move_type)
+        move_guest_locator = self.format_locator(self.locator.btn_move_guest, move_type)
         self.click(move_guest_locator)
         return self
 
@@ -280,12 +278,12 @@ class ReservationCardDialog(AthenaBasePage):
         return self
 
     def click_group_list_row(self, row_num):
-        group_list_row_locator = self.formator_locator(self.locator.group_list_row_by_num, row_num)
+        group_list_row_locator = self.format_locator(self.locator.group_list_row_by_num, row_num)
         self.click(group_list_row_locator)
         return self
 
     def get_group_list_row_info(self, row, field):
-        group_list_row_locator = self.formator_locator(
+        group_list_row_locator = self.format_locator(
             self.locator.group_list_row_by_field, (row, field)
         )
         group_list_row_info = self.driver.find_element(*group_list_row_locator).text
@@ -295,12 +293,12 @@ class ReservationCardDialog(AthenaBasePage):
 
     # ----- 備品資訊 視窗 -----
     def click_spare_parts_info_toolbar(self, toolbar):
-        toolbar_locator = self.formator_locator(self.locator.btn_card_toolbar, toolbar)
+        toolbar_locator = self.format_locator(self.locator.btn_card_toolbar, toolbar)
         self.click(toolbar_locator)
         return self
 
     def get_info_in_spare_parts_info(self, field):
-        info_locator = self.formator_locator(self.locator.text_batch_spare_by_label, field)
+        info_locator = self.format_locator(self.locator.text_batch_spare_by_label, field)
         info = self.driver.find_element(*info_locator).text
         return info
 
@@ -324,7 +322,7 @@ class ReservationCardDialog(AthenaBasePage):
     # ----- 提醒事項 視窗 -----
     def input_reservation_remind_by_field(self, field_name, text):
         # 在指定提醒欄位輸入內容（支援：訂房提醒、入住提醒、其他提醒、退房提醒）
-        remind_input_locator = self.formator_locator(
+        remind_input_locator = self.format_locator(
             self.locator.input_reservation_remind, field_name
         )
         self.input_with_clear(remind_input_locator, text)
@@ -332,7 +330,7 @@ class ReservationCardDialog(AthenaBasePage):
 
     def get_reservation_remind_by_field(self, field_name):
         # 取得指定提醒欄位的內容（支援：訂房提醒、入住提醒、其他提醒、退房提醒）
-        remind_input_locator = self.formator_locator(
+        remind_input_locator = self.format_locator(
             self.locator.input_reservation_remind, field_name
         )
         remind_content = self.driver.find_element(*remind_input_locator).get_attribute("value")
@@ -343,7 +341,7 @@ class ReservationCardDialog(AthenaBasePage):
     # ----- 房租細項 視窗 -----
     def get_expense_detail_data(self, row):
         data_list = []
-        detail_locator = self.formator_locator(
+        detail_locator = self.format_locator(
             self.locator.expense_detail_colume_by_row_and_index, row
         )
         for data in self.driver.find_elements(*detail_locator):
@@ -354,7 +352,7 @@ class ReservationCardDialog(AthenaBasePage):
 
     # ----- 訂金單筆新增 視窗 -----
     def clear_deposit_nos(self):
-        tmp_locator = self.formator_locator(self.locator.col_by_data_field_id, "depositNos")
+        tmp_locator = self.format_locator(self.locator.col_by_data_field_id, "depositNos")
         self.click(tmp_locator)
         self.sleep(1)
         self.click(tmp_locator)
@@ -364,19 +362,19 @@ class ReservationCardDialog(AthenaBasePage):
 
     def select_deposit_no(self, deposit_no):
         """選擇已存在的訂金編號（下拉選單）"""
-        tmp_locator = self.formator_locator(self.locator.col_by_data_field_id, "depositNos")
+        tmp_locator = self.format_locator(self.locator.col_by_data_field_id, "depositNos")
         self.click(tmp_locator)
         self.set_dropdown_filter(deposit_no)
-        deposit_option = self.formator_locator(self.locator.select_option_dropdownbase, deposit_no)
+        deposit_option = self.format_locator(self.locator.select_option_dropdownbase, deposit_no)
         self.wait_visible(deposit_option)
         self.click(deposit_option)
         return self
 
     def select_invoice_method(self, field, invoice_method):
         """選擇發票開立方式（下拉選單）"""
-        tmp_locator = self.formator_locator(self.locator.select_dropdown_by_span, field)
+        tmp_locator = self.format_locator(self.locator.select_dropdown_by_span, field)
         self.click(tmp_locator)
-        tmp_locator = self.formator_locator(
+        tmp_locator = self.format_locator(
             self.locator.select_option_by_combobox_item, invoice_method
         )
         self.click(tmp_locator)
@@ -385,7 +383,7 @@ class ReservationCardDialog(AthenaBasePage):
     def select_payment_method(self, payment_method):
         """選擇付款方式（下拉選單）"""
         self.click(self.locator.table_payment_method)
-        payment_option = self.formator_locator(self.locator.select_option, payment_method)
+        payment_option = self.format_locator(self.locator.select_option, payment_method)
         self.click(payment_option)
         return self
 
@@ -420,14 +418,14 @@ class ReservationCardDialog(AthenaBasePage):
 
     def search_link_nos(self, ikey):
         """輸入訂房卡號進行查詢"""
-        tmp_locator = self.formator_locator(self.locator.input_condition, "訂房卡號")
+        tmp_locator = self.format_locator(self.locator.input_condition, "訂房卡號")
         self.input_with_clear(tmp_locator, ikey)
         self.click(self.locator.btn_search)
         return self
 
     def check_link_nos(self):
         """勾選查詢結果"""
-        tmp_locator = self.formator_locator(self.locator.text_by_td_field, "ck")
+        tmp_locator = self.format_locator(self.locator.text_by_td_field, "ck")
         self.click(tmp_locator)
         return self
 
@@ -443,7 +441,7 @@ class ReservationCardDialog(AthenaBasePage):
 
     def get_link_nos_row_data(self, row):
         row_data = []
-        tmp_locator = self.formator_locator(self.locator.link_nos_row_data, row)
+        tmp_locator = self.format_locator(self.locator.link_nos_row_data, row)
         row_data_elements = self.driver.find_elements(*tmp_locator)
         for data_element in row_data_elements:
             row_data.append(data_element.text)

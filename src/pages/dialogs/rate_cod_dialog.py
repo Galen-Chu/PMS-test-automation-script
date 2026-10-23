@@ -16,14 +16,14 @@ class RateCodDialog(AthenaBasePage):
         return self
 
     def click_date_icon(self, date_icon):
-        date_icon = self.formator_locator(self.locator.btn_date_icon, date_icon)
+        date_icon = self.format_locator(self.locator.btn_date_icon, date_icon)
         self.click(date_icon)
         return self
 
     def select_date(self, year, month, day):
-        year_locator = self.formator_locator(self.locator.date_cell_item, year)
-        month_locator = self.formator_locator(self.locator.date_cell_item, month)
-        dd_locator = self.formator_locator(self.locator.date_cell_item, day)
+        year_locator = self.format_locator(self.locator.date_cell_item, year)
+        month_locator = self.format_locator(self.locator.date_cell_item, month)
+        dd_locator = self.format_locator(self.locator.date_cell_item, day)
         self.click(self.locator.date_year_title)
         self.click(self.locator.date_year_title)
         self.wait_visible(year_locator)
@@ -35,29 +35,29 @@ class RateCodDialog(AthenaBasePage):
         return self
 
     def click_data_field_id(self, data_id):
-        select = self.formator_locator(self.locator.btn_by_id, data_id)
+        select = self.format_locator(self.locator.btn_by_id, data_id)
         self.click(select)
         return self
 
     def click_data_field_id_down(self, data_id):
-        select = self.formator_locator(self.locator.btn_by_id_down, data_id)
+        select = self.format_locator(self.locator.btn_by_id_down, data_id)
         self.click(select)
         return self
 
     def select_multiple_item(self, items: list[str]):
         for item in items:
-            locator_item = self.formator_locator(self.locator.select_item, item)
+            locator_item = self.format_locator(self.locator.select_item, item)
             self.click(locator_item)
         return self
 
     def click_tab(self, name):
-        locator_tab = self.formator_locator(self.locator.tab_name, name)
+        locator_tab = self.format_locator(self.locator.tab_name, name)
         self.click(locator_tab)
         return self
 
     def input_values_by_row(self, tab_name, row, values):
-        td_locators = self.formator_locator(self.locator.td_price, (tab_name, row))
-        input_locators = self.formator_locator(self.locator.input_price, (tab_name, row))
+        td_locators = self.format_locator(self.locator.td_price, (tab_name, row))
+        input_locators = self.format_locator(self.locator.input_price, (tab_name, row))
         for index in range(1, 3):
             elements = self.driver.find_elements(*td_locators)
             elements[index].click()
@@ -75,9 +75,9 @@ class RateCodDialog(AthenaBasePage):
         return self
 
     def input_name_by_lang(self, lang, value):
-        btn_edit = self.formator_locator(self.locator.btn_edit_lang, lang)
-        input_lang = self.formator_locator(self.locator.input_lang_col, lang)
-        btn_save_lang = self.formator_locator(self.locator.btn_save_lang, lang)
+        btn_edit = self.format_locator(self.locator.btn_edit_lang, lang)
+        input_lang = self.format_locator(self.locator.input_lang_col, lang)
+        btn_save_lang = self.format_locator(self.locator.btn_save_lang, lang)
         self.click(btn_edit)
         self.input_with_clear(input_lang, value)
         self.click(btn_save_lang)
@@ -104,14 +104,14 @@ class RateCodDialog(AthenaBasePage):
         index = 0
         for date in duration:
             range_type = "left" if index == 0 else "right"
-            date_title = self.formator_locator(self.locator.date_range_year_title, range_type)
-            year_locator = self.formator_locator(
+            date_title = self.format_locator(self.locator.date_range_year_title, range_type)
+            year_locator = self.format_locator(
                 self.locator.date_range_cell_item, (range_type, date.split("/")[0])
             )
-            month_locator = self.formator_locator(
+            month_locator = self.format_locator(
                 self.locator.date_range_cell_item, (range_type, date.split("/")[1])
             )
-            dd_locator = self.formator_locator(
+            dd_locator = self.format_locator(
                 self.locator.date_range_cell_item, (range_type, date.split("/")[2])
             )
             self.click(date_title)
@@ -126,11 +126,11 @@ class RateCodDialog(AthenaBasePage):
         return self
 
     def has_cratecod_mn(self, name):
-        locator_cratecod_mn = self.formator_locator(self.locator.text_cratecod_mn, name)
+        locator_cratecod_mn = self.format_locator(self.locator.text_cratecod_mn, name)
         return self.has_element(locator_cratecod_mn)
 
     def click_cratecod_mn(self, name):
-        locator_cratecod = self.formator_locator(self.locator.text_cratecod_mn, name)
+        locator_cratecod = self.format_locator(self.locator.text_cratecod_mn, name)
         self.click(locator_cratecod)
         return self
 
@@ -143,7 +143,7 @@ class RateCodDialog(AthenaBasePage):
         return self
 
     def select_dropdown_list(self, item_name):
-        item = self.formator_locator(self.locator.label_span_select_item, item_name)
+        item = self.format_locator(self.locator.label_span_select_item, item_name)
         self.click(item)
         return self
 
@@ -151,5 +151,5 @@ class RateCodDialog(AthenaBasePage):
         return self.has_element(self.locator.grid_disabled)
 
     def item_enabled(self, item):
-        locator_toolbar_item = self.formator_locator(self.locator.btn_toolbar_item_by_panel, item)
+        locator_toolbar_item = self.format_locator(self.locator.btn_toolbar_item_by_panel, item)
         return self.driver.find_element(*locator_toolbar_item).is_enabled()

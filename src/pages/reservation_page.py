@@ -8,7 +8,7 @@ class ReservationPage(AthenaBasePage):
         super().__init__(driver, ReservationLocator())
 
     def set_condition_value(self, field, value):
-        locator_input = self.formator_locator(self.locator.input_condition, field)
+        locator_input = self.format_locator(self.locator.input_condition, field)
         self.input(locator_input, value)
         return self
 
@@ -28,7 +28,7 @@ class ReservationPage(AthenaBasePage):
         return self
 
     def select_company(self, company):
-        tmp_locator = self.formator_locator(self.locator.company_selection, company)
+        tmp_locator = self.format_locator(self.locator.company_selection, company)
         self.click(tmp_locator)
         return self
 
@@ -41,7 +41,7 @@ class ReservationPage(AthenaBasePage):
         self.input(self.locator.input_last_name, last_name)
         self.click(self.locator.input_first_name)
         self.input(self.locator.input_salute, ".")
-        locator_option_salute = self.formator_locator(self.locator.option_salute, salute)
+        locator_option_salute = self.format_locator(self.locator.option_salute, salute)
         self.click(locator_option_salute)
         self.input(self.locator.input_mobile, mobile)
         self.click(self.locator.btn_save_guest)
@@ -63,7 +63,7 @@ class ReservationPage(AthenaBasePage):
         return self.driver.find_element(*self.locator.text_salute_code).text
 
     def get_guest_info(self, field):
-        locator_guest_info = self.formator_locator(self.locator.td_guest_info, field)
+        locator_guest_info = self.format_locator(self.locator.td_guest_info, field)
         return self.driver.find_element(*locator_guest_info).text
 
     def get_deposit_amo(self):
@@ -84,7 +84,7 @@ class ReservationPage(AthenaBasePage):
         return self
 
     def select_room_type_pointer(self, room_type):
-        locator_room_type = self.formator_locator(self.locator.select_room_type, room_type)
+        locator_room_type = self.format_locator(self.locator.select_room_type, room_type)
         self.click(locator_room_type)
         return self
 
@@ -110,7 +110,7 @@ class ReservationPage(AthenaBasePage):
         return sum(amounts)
 
     def close_panel_by_title(self, title):
-        locator_panel_close = self.formator_locator(self.locator.btn_panel_close, title)
+        locator_panel_close = self.format_locator(self.locator.btn_panel_close, title)
         self.click(locator_panel_close)
         return self
 

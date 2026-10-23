@@ -8,7 +8,7 @@ class CompanyPanelComponent(AthenaBasePage):
         super().__init__(driver, CompanyPanelLocator())
 
     def get_td_input_value(self, field):
-        tmp_locator = self.formator_locator(self.locator.td_input_value, field)
+        tmp_locator = self.format_locator(self.locator.td_input_value, field)
         return self.driver.find_element(*tmp_locator).text
 
     def click_add_contract(self):
@@ -25,7 +25,7 @@ class CompanyPanelComponent(AthenaBasePage):
 
     def select_special_rate_cod(self, rate_cod):
         self.click(self.locator.select_special_rate_cod)
-        tmp_rate_locator = self.formator_locator(self.locator.item_special_rate_cod, rate_cod)
+        tmp_rate_locator = self.format_locator(self.locator.item_special_rate_cod, rate_cod)
         self.wait_visible(tmp_rate_locator)
         self.click(tmp_rate_locator)
         self.click(self.locator.confirm_button)
@@ -45,12 +45,12 @@ class CompanyPanelComponent(AthenaBasePage):
         self.select_start_day(start_date.split("/")[-1], "Jan")
         self.select_end_day(end_date.split("/")[-1], "Jan")
         self.click(self.locator.select_hotel_cod)
-        tmp_hotel_locator = self.formator_locator(self.locator.item_cod, hotel_cod)
+        tmp_hotel_locator = self.format_locator(self.locator.item_cod, hotel_cod)
         self.wait_visible(tmp_hotel_locator)
         self.click(tmp_hotel_locator)
         self.wait_clickable(self.locator.select_rate_cod)
         self.click(self.locator.select_rate_cod)
-        tmp_rate_locator = self.formator_locator(self.locator.item_cod, con_rate_cod)
+        tmp_rate_locator = self.format_locator(self.locator.item_cod, con_rate_cod)
         self.wait_visible(tmp_rate_locator)
         self.click(tmp_rate_locator)
         return self
@@ -63,9 +63,9 @@ class CompanyPanelComponent(AthenaBasePage):
         self.click(self.locator.input_contract_start_date)
         self.click(self.locator.calendar_title)
         self.input_with_clear(self.locator.calendar_year, "2024")
-        locator_month = self.formator_locator(self.locator.calendar_mon, month)
+        locator_month = self.format_locator(self.locator.calendar_mon, month)
         self.click(locator_month)
-        locator_day = self.formator_locator(self.locator.calendar_day, day)
+        locator_day = self.format_locator(self.locator.calendar_day, day)
         self.click(locator_day)
         return self
 
@@ -73,8 +73,8 @@ class CompanyPanelComponent(AthenaBasePage):
         self.click(self.locator.input_contract_end_date)
         self.click(self.locator.calendar_title)
         self.input_with_clear(self.locator.calendar_year, "2024")
-        locator_month = self.formator_locator(self.locator.calendar_mon, month)
+        locator_month = self.format_locator(self.locator.calendar_mon, month)
         self.click(locator_month)
-        locator_day = self.formator_locator(self.locator.calendar_day, day)
+        locator_day = self.format_locator(self.locator.calendar_day, day)
         self.click(locator_day)
         return self

@@ -11,12 +11,12 @@ class TodolistEditComponent(AthenaBasePage):
     def create_todo(self, departments):
         self.click(self.locator.department_dropdown)
         for department in departments:
-            department_locator = self.formator_locator(self.locator.department_options, department)
+            department_locator = self.format_locator(self.locator.department_options, department)
             self.click(department_locator)
         return self
 
     def get_todolist_info(self, field):
-        todolist_info = self.formator_locator(self.locator.todolist_table, field)
+        todolist_info = self.format_locator(self.locator.todolist_table, field)
         WebDriverWait(self.driver, 2).until(
             lambda d: d.find_element(*todolist_info).text.strip() != ""
         )

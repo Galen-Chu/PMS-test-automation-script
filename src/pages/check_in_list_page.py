@@ -16,7 +16,7 @@ class CheckInListPage(AthenaBasePage):
     def select_checkin_status(self, status):
         """選擇住客狀態篩選（如 'N:未入住'、'Y:已入住'、'all:全部'）"""
         self.click(self.locator.col_checkin_status)
-        locator = self.formator_locator(self.locator.option_checkin_status, status)
+        locator = self.format_locator(self.locator.option_checkin_status, status)
         self.wait_visible(locator)
         self.click(locator)
         return self
@@ -29,7 +29,7 @@ class CheckInListPage(AthenaBasePage):
 
     def click_room_row(self, room_no):
         """點選 Grid 中指定房號的資料列"""
-        locator = self.formator_locator(self.locator.cell_room_nos, room_no)
+        locator = self.format_locator(self.locator.cell_room_nos, room_no)
         self.click(locator)
         return self
 
@@ -70,7 +70,7 @@ class CheckInListPage(AthenaBasePage):
 
     def get_order_status(self, room_no):
         """取得指定房號的 orderStatus 欄位文字"""
-        locator = self.formator_locator(self.locator.text_order_status_by_room, room_no)
+        locator = self.format_locator(self.locator.text_order_status_by_room, room_no)
         return self.driver.find_element(*locator).text
 
     # ----- 取消入住流程 -----

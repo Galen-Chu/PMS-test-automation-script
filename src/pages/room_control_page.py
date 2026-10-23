@@ -8,12 +8,12 @@ class RoomControlPage(AthenaBasePage):
         super().__init__(driver, RoomControlLocator())
 
     def change_floor(self, floor):
-        tmp_locator = self.formator_locator(self.locator.btn_change_floor, floor)
+        tmp_locator = self.format_locator(self.locator.btn_change_floor, floor)
         self.click(tmp_locator)
         return self
 
     def choose_room(self, room_no):
-        locator_room = self.formator_locator(self.locator.btn_room_no, room_no)
+        locator_room = self.format_locator(self.locator.btn_room_no, room_no)
         self.click(locator_room)
         return self
 
@@ -22,11 +22,11 @@ class RoomControlPage(AthenaBasePage):
         return element.get_attribute("value")
 
     def get_room_color(self, room_no):
-        element = self.formator_locator(self.locator.room_block, room_no)
+        element = self.format_locator(self.locator.room_block, room_no)
         return self.driver.find_element(*element).get_attribute("style")
 
     def get_room_icon(self, room_no, icon_index):
-        element = self.formator_locator(self.locator.room_icon, (room_no, icon_index))
+        element = self.format_locator(self.locator.room_icon, (room_no, icon_index))
         return self.driver.find_element(*element).get_attribute("class")
 
     def get_room_status_list(self):
@@ -34,7 +34,7 @@ class RoomControlPage(AthenaBasePage):
         return [element.text for element in elements]
 
     def check_room(self, room_no):
-        locator_room = self.formator_locator(self.locator.room_checkbox, room_no)
+        locator_room = self.format_locator(self.locator.room_checkbox, room_no)
         self.click(locator_room)
         return self
 
@@ -44,7 +44,7 @@ class RoomControlPage(AthenaBasePage):
 
     def filter_room_status(self, status):
         self.click(self.locator.select_room_status)
-        locator_status = self.formator_locator(self.locator.select_room_status_item, status)
+        locator_status = self.format_locator(self.locator.select_room_status_item, status)
         self.wait_visible(locator_status)
         self.click(locator_status)
         return self
@@ -55,21 +55,21 @@ class RoomControlPage(AthenaBasePage):
 
     def select_category(self, category):
         self.click(self.locator.select_category)
-        locator_category = self.formator_locator(self.locator.select_category_item, category)
+        locator_category = self.format_locator(self.locator.select_category_item, category)
         self.wait_visible(locator_category)
         self.click(locator_category)
         return self
 
     def select_date_by_label(self, label, year, month, day):
-        locator_date = self.formator_locator(self.locator.date_by_label, label)
+        locator_date = self.format_locator(self.locator.date_by_label, label)
         self.click(locator_date)
         self.wait_visible(self.locator.date_title_year)
         self.click(self.locator.date_title_year)
-        locator_year = self.formator_locator(self.locator.date_year, year)
+        locator_year = self.format_locator(self.locator.date_year, year)
         self.click(locator_year)
-        locator_month = self.formator_locator(self.locator.date_month, month)
+        locator_month = self.format_locator(self.locator.date_month, month)
         self.click(locator_month)
-        locator_day = self.formator_locator(self.locator.date_day, day)
+        locator_day = self.format_locator(self.locator.date_day, day)
         self.click(locator_day)
         return self
 
@@ -82,11 +82,11 @@ class RoomControlPage(AthenaBasePage):
         return self
 
     def has_use_date(self, room, date):
-        locator_date = self.formator_locator(self.locator.date_by_room, (room, date))
+        locator_date = self.format_locator(self.locator.date_by_room, (room, date))
         return self.has_element(locator_date)
 
     def has_use_reason(self, room, reason):
-        locator_reason = self.formator_locator(self.locator.reason_by_room, (room, reason))
+        locator_reason = self.format_locator(self.locator.reason_by_room, (room, reason))
         return self.has_element(locator_reason)
 
     def set_reason_floor(self, reason):
@@ -94,7 +94,7 @@ class RoomControlPage(AthenaBasePage):
         return self
 
     def check_room_floor(self, room_no):
-        locator_room = self.formator_locator(self.locator.checkbox_room_floor, room_no)
+        locator_room = self.format_locator(self.locator.checkbox_room_floor, room_no)
         self.click(locator_room)
         return self
 
@@ -107,14 +107,14 @@ class RoomControlPage(AthenaBasePage):
         return [element.text for element in elements if element.text.strip() != ""]
 
     def check_room_repair_item(self, room_no):
-        locator_room = self.formator_locator(self.locator.room_repair_list_item, room_no)
+        locator_room = self.format_locator(self.locator.room_repair_list_item, room_no)
         self.click(locator_room)
         return self
 
     def change_room_repair_day(self, label, day):
-        locator_date = self.formator_locator(self.locator.room_repair_datepicker, label)
+        locator_date = self.format_locator(self.locator.room_repair_datepicker, label)
         self.click(locator_date)
-        locator_day = self.formator_locator(self.locator.room_repair_day, day)
+        locator_day = self.format_locator(self.locator.room_repair_day, day)
         self.wait_visible(locator_day)
         self.click(locator_day)
         return self
@@ -138,14 +138,14 @@ class RoomControlPage(AthenaBasePage):
     # 拆併床相關方法
     def check_bed_setup_room(self, room_no):
         """勾選拆併床設定Table中的房間"""
-        locator_room = self.formator_locator(self.locator.checkbox_bed_setup_room, room_no)
+        locator_room = self.format_locator(self.locator.checkbox_bed_setup_room, room_no)
         self.click(locator_room)
         return self
 
     def select_bed_setting(self, bed_setting):
         """選擇拆床、併床或無設定"""
         self.click(self.locator.select_bed_setting)
-        locator_setting = self.formator_locator(self.locator.select_bed_setting_item, bed_setting)
+        locator_setting = self.format_locator(self.locator.select_bed_setting_item, bed_setting)
         self.wait_visible(locator_setting)
         self.click(locator_setting)
         return self
@@ -157,7 +157,7 @@ class RoomControlPage(AthenaBasePage):
 
     def get_bed_setup_status(self, room_no):
         """取得房間的拆併床設定狀態"""
-        locator_status = self.formator_locator(self.locator.bed_setup_status, room_no)
+        locator_status = self.format_locator(self.locator.bed_setup_status, room_no)
         element = self.driver.find_element(*locator_status)
         return element.text
 
