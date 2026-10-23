@@ -5,6 +5,25 @@ import urllib
 import humps
 
 
+class Browser:
+    """以共用 driver 建立的 page-object 組合（取代動態 type('Expando') 屬性袋）
+
+    屬性名稱維持 decamelize(類別名稱)，測試端使用方式不變（web.maindesk_page、
+    web.driver 等），但有了明確型別、可讀的 repr 與 IDE 支援。
+    """
+
+    def __init__(self, driver, pages):
+        self.driver = driver
+        for page in pages:
+            setattr(self, humps.decamelize(page.__name__), page(driver))
+
+    def page_names(self):
+        return sorted(name for name in vars(self) if name != "driver")
+
+    def __repr__(self):
+        return f"Browser(pages={', '.join(self.page_names())})"
+
+
 class DriverHelper:
 
     DRIVER = None
@@ -27,12 +46,7 @@ class DriverHelper:
         elif path:
             web_driver.get(f"{os.getenv('WEB_URL')}/pms/{os.getenv('ENV_NUM')}/{path}")
 
-        tmp_pages = {}
-        for page in pages:
-            tmp_pages[humps.decamelize(page.__name__)] = page(web_driver)
-        web = type("Expando", (object,), tmp_pages)()
-        web.driver = web_driver
-        return web
+        return Browser(web_driver, pages)
 
     @staticmethod
     def save_session_storages():
