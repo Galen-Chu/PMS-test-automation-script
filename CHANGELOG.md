@@ -44,6 +44,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   longer drift from CI
 - CI: Allure report generated via CLI instead of the Docker-based
   action (Ubuntu 26 runner compatibility)
+- P1: every page binds its locator explicitly via constructor
+  injection; BasePage no longer resolves locators through `globals()`
+  reflection backed by ~25 bulk imports — page/locator renames now
+  fail at import time
+- P2: BasePage split into a generic Selenium layer and
+  `AthenaBasePage` (PMS widgets: toolbar/ikey/dropdowns/calendar);
+  tests use `web.athena_base_page`
+- P3 foundation: `wait_present` helper; `has_element` performs an
+  explicit presence check (implicit wait zeroed for its duration)
+  instead of toggling implicit waits; `select`/`select_date` wait for
+  the target element instead of fixed sleeps
+- Dependencies: selenium 4.49.0, scikit-learn 1.9.1, pytest-env 1.7.1,
+  allure-pytest 2.16.1 (dependabot #56-59)
 
 ### Removed
 - 14 stale root-level page objects (`src/pages/*_component.py`,

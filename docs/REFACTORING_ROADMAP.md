@@ -48,9 +48,9 @@ session is:
 
 | Item | Status | Remaining |
 |------|--------|-----------|
-| P1 explicit locator binding | open | everything |
-| P2 split BasePage into generic + app layers | open | everything |
-| P3 wait strategy | open | everything — 1,324 `sleep()` in src/ |
+| P1 explicit locator binding | **done** 2026-10-23 | #63 |
+| P2 split BasePage into generic + app layers | **done** 2026-10-23 | #64 |
+| P3 wait strategy | in progress | #62 — foundation landed; ~1,300 `sleep()` sites remain |
 | P4 `format_locator` | **done** via A-series | optional rename `formator_locator` → `format_locator` |
 | P5 fixture browser lifecycle | **mostly done** via A2+A4 | typed `Browser` class; per-test `pages=[...]` boilerplate |
 | P6 LoginPage captcha/VERSION | partial | `image.png` in CWD; 30-retry magic; VERSION branching |
@@ -59,45 +59,19 @@ session is:
 
 ## Open Items
 
-### P1. Explicit locator binding (replace `globals()` reflection)
-
-- **Problem**: `BasePage.__init__` (`src/pages/base_page.py:49-52`)
-  resolves the locator class via `globals()[f"{prefix}Locator"]`, which
-  forces `base_page.py:16-41` to import all locator modules. BasePage
-  becomes a god module; a page/locator rename fails at **runtime**, not
-  import time.
-- **Approach**: each page declares its own locator explicitly — constructor
-  injection (`super().__init__(driver, LoginLocator())`) or a class
-  attribute. Delete the bulk imports and the reflection.
-- **Effort**: M (mechanical, ~27 files + base, low risk).
-- **Value**: removes the largest coupling smell; best single refactor story.
-
-### P2. Split BasePage into generic + application layers
-
-- **Problem**: `base_page.py` (307 lines) mixes generic Selenium wrappers
-  (click/input/waits) with PMS-specific widgets. The `# ----- Athena Base
-  -----` comment (`base_page.py:151`) already marks the split line:
-  toolbar/ikey/select/calendar helpers below it are app-specific.
-- **Approach**: two-level base — `BasePage` (generic) → `AthenaBasePage`
-  (app widgets: toolbar/ikey/date) → concrete pages. Components and
-  dialogs inherit from the app level.
-- **Effort**: M. Best done after P1.
-
 ### P3. Wait strategy: replace sleeps, stop switching implicit waits
 
-- **Problem**: fixed `sleep()` in base methods (`select()` at
-  `base_page.py:160-166`, `select_date()` at `:293-307`) and 1,324 call
-  sites across src/; `has_element` (`base_page.py:98-106`) toggles
-  `implicitly_wait` 2↔10 — mixing implicit and explicit waits is a
-  documented Selenium anti-pattern that makes `WebDriverWait` timing
-  unpredictable.
-- **Approach**: standardize on explicit waits (`wait_visible` /
-  `wait_clickable` already exist but are underused); replace `has_element`'s
-  implicit-wait switching with a short explicit presence check; convert
-  `sleep()` call sites that mask real conditions, one page/suite at a
-  time.
-- **Effort**: M, incremental (one page/suite at a time, CI-verifiable).
-- **Value**: stability + the most-asked interview topic on this codebase.
+**Foundation landed 2026-10-23 (#62 stays open):** `wait_present`
+helper added; `has_element` is now an explicit presence check with the
+implicit wait zeroed for its duration; `select()` / `select_date()`
+wait for their target element instead of fixed sleeps. Needs a QA-run
+smoke before the campaign scales.
+
+**Remaining campaign:** convert the ~1,300 `sleep()` call sites that
+mask real conditions, one page/suite at a time with QA-environment
+validation; remove the global `implicitly_wait(10)` (conftest) only
+after raw `find_element` calls are gone — that is the final, largest
+behavior change.
 
 ### P5 (remainder). Typed Browser + de-boilerplated tests
 
@@ -161,12 +135,16 @@ is already gone (A-series encoding fix, 2026-10).
 
 ## Suggested Order
 
-P3 → P1 → P2 → P5 remainder → P6 remainder → P4 rename → supplements,
-with the performance-suite review slotted whenever convenient.
-Each step lands green on CI before the next begins.
+P3 campaign (suite-by-suite, QA-validated) → P5 remainder → P6
+remainder → P4 rename → supplements, with the performance-suite review
+slotted whenever convenient. Each step lands green on CI before the
+next begins.
 
 ## History
 
+- 2026-10-23 (second batch): P1 and P2 delivered (#63, #64); P3
+  foundation landed (#62 open for the campaign); dependabot #56-59
+  merged; roadmap issues now track execution per the workflow.
 - 2026-10-23: re-baselined. P4 core + most of P5 + part of P6 landed via
   the A-series; P7 delivered (commit ceb051e); A-series debt cleanup
   (dead code, docs sync, credential sanitization) done.
