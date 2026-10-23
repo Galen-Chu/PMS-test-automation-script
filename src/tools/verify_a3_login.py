@@ -74,11 +74,16 @@ print(f"    耗時: {elapsed:.1f} 秒")
 print(f"    最終 URL: {driver.current_url[:60]}")
 
 # Step 4: 驗證登入成功
+# 判定依據：URL 必須已離開 auth 主機（停留在 auth 頁 = 30 次重試用盡＝失敗；
+# 僅檢查 body 沒有「請��新登入」會在 auth 頁產生假陽性）
 body = driver.find_element("tag name", "body").text
-if "請重新登入" in body:
-    print("    [X] 登入失敗（重新登入提示）")
-else:
+left_auth = "auth.athena.com.tw" not in driver.current_url
+if left_auth and "請重新登入" not in body:
     print("    [OK] 登入成功 ✓")
+else:
+    print("    [X] 登入失敗（尚未離開��入頁或 session 無效）")
+    driver.quit()
+    sys.exit(1)
 
 # 比較
 print("\n" + "=" * 60)
