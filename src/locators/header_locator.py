@@ -8,3 +8,4 @@ class HeaderLocator:
         By.XPATH,
         "//*[contains(@class, 'sub-menu-item') and normalize-space()='%s']",
     )
+    expanded_menu_item = (By.XPATH, "//*[contains(@class, 'sub-menu-item')]")

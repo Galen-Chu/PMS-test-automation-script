@@ -1,4 +1,3 @@
-from time import sleep
 from selenium.webdriver.common.by import By
 from pages.athena_base_page import AthenaBasePage
 from locators.check_in_list_locator import CheckInListLocator
@@ -17,8 +16,8 @@ class CheckInListPage(AthenaBasePage):
     def select_checkin_status(self, status):
         """選擇住客狀態篩選（如 'N:未入住'、'Y:已入住'、'all:全部'）"""
         self.click(self.locator.col_checkin_status)
-        sleep(0.5)
         locator = self.formator_locator(self.locator.option_checkin_status, status)
+        self.wait_visible(locator)
         self.click(locator)
         return self
 
@@ -89,7 +88,8 @@ class CheckInListPage(AthenaBasePage):
             self.click(self.locator.checkbox_cancel_ci)
         # 點擊取消入住按鈕
         self.click(self.locator.btn_do_cancel_check_in)
-        sleep(0.5)
+        # 等待對話框渲染完成（「一併取消排房」label 出現）
+        self.wait_visible(self.locator.label_cancel_assign)
         # 取消勾選「一併取消排房」（預設 checked，需取消）
         self._uncheck_label(self.locator.label_cancel_assign)
         # 取消勾選「房間改成髒房」（預設 checked，需取消）

@@ -1,4 +1,3 @@
-from time import sleep
 from pages.athena_base_page import AthenaBasePage
 from locators.rate_cod_locator import RateCodLocator
 
@@ -26,15 +25,13 @@ class RateCodDialog(AthenaBasePage):
         month_locator = self.formator_locator(self.locator.date_cell_item, month)
         dd_locator = self.formator_locator(self.locator.date_cell_item, day)
         self.click(self.locator.date_year_title)
-        sleep(1)
         self.click(self.locator.date_year_title)
-        sleep(1)
+        self.wait_visible(year_locator)
         self.click(year_locator)
-        sleep(1)
+        self.wait_visible(month_locator)
         self.click(month_locator)
-        sleep(1)
+        self.wait_visible(dd_locator)
         self.click(dd_locator)
-        sleep(1)
         return self
 
     def click_data_field_id(self, data_id):
@@ -64,7 +61,7 @@ class RateCodDialog(AthenaBasePage):
         for index in range(1, 3):
             elements = self.driver.find_elements(*td_locators)
             elements[index].click()
-            sleep(1)
+            self.wait_visible(input_locators)
             input_element = self.driver.find_element(*input_locators)
             input_element.send_keys(values[index - 1])
         return self
@@ -118,15 +115,13 @@ class RateCodDialog(AthenaBasePage):
                 self.locator.date_range_cell_item, (range_type, date.split("/")[2])
             )
             self.click(date_title)
-            sleep(1)
             self.click(date_title)
-            sleep(1)
+            self.wait_visible(year_locator)
             self.click(year_locator)
-            sleep(1)
+            self.wait_visible(month_locator)
             self.click(month_locator)
-            sleep(1)
+            self.wait_visible(dd_locator)
             self.click(dd_locator)
-            sleep(1)
             index += 1
         return self
 

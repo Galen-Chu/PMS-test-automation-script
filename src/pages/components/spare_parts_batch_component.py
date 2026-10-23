@@ -9,10 +9,10 @@ class SparePartsBatchComponent(AthenaBasePage):
 
     def create_batch_spare(self, batch_spare_option):
         self.click(self.locator.batch_spare_dropdown)
-        self.sleep(1)
         batch_spare_option_locator = self.formator_locator(
             self.locator.batch_spare_options, batch_spare_option
         )
+        self.wait_visible(batch_spare_option_locator)
         self.click(batch_spare_option_locator)
         input_batch_spare_locator = self.formator_locator(
             self.locator.input_batch_spare_by_label, "amount"

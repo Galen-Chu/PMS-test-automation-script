@@ -1,4 +1,3 @@
-from time import sleep
 from selenium.webdriver.common.by import By
 from pages.athena_base_page import AthenaBasePage
 from locators.guest_account_locator import GuestAccountLocator
@@ -24,8 +23,8 @@ class GuestAccountPage(AthenaBasePage):
 
     def select_consumption_code(self, value):
         self.click(self.locator.select_consumption)
-        sleep(3)
         locator_select_option = self.formator_locator(self.locator.select_option, value)
+        self.wait_visible(locator_select_option)
         self.click(locator_select_option)
         return self
 

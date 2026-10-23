@@ -1,4 +1,3 @@
-from time import sleep
 from pages.athena_base_page import AthenaBasePage
 from locators.housekeeping_account_locator import HousekeepingAccountLocator
 
@@ -15,14 +14,14 @@ class HousekeepingAccountPage(AthenaBasePage):
     def select_class(self, rspt_type, shift_code):
         dropdown_options = self.formator_locator(self.locator.dropdown_options, "rsptCode")
         self.click(dropdown_options)
-        sleep(2)
         item_option = self.formator_locator(self.locator.item_option, rspt_type)
+        self.wait_visible(item_option)
         self.click(item_option)
 
         dropdown_options = self.formator_locator(self.locator.dropdown_options, "shiftCode")
         self.click(dropdown_options)
-        sleep(2)
         item_option = self.formator_locator(self.locator.item_option, shift_code)
+        self.wait_visible(item_option)
         self.click(item_option)
 
         self.click(self.locator.confirm_button)
@@ -30,7 +29,7 @@ class HousekeepingAccountPage(AthenaBasePage):
 
     def select_room_nos(self, room_no):
         self.click(self.locator.dropdown_room_nos)
-        sleep(2)
+        self.wait_visible(self.locator.input_room_nos)
         self.input(self.locator.input_room_nos, room_no)
         item_room_nos = self.formator_locator(self.locator.item_room_nos, room_no)
         self.click(item_room_nos)
@@ -38,16 +37,16 @@ class HousekeepingAccountPage(AthenaBasePage):
 
     def add_housekeeping(self, small_type, product_nos):
         self.click(self.locator.btn_add_housekeeping)
-        sleep(1)
         dropdown_type = self.formator_locator(self.locator.dropdown_type, "smallType")
+        self.wait_visible(dropdown_type)
         self.click(dropdown_type)
-        sleep(1)
         item_type_option = self.formator_locator(self.locator.item_type_option, small_type)
+        self.wait_visible(item_type_option)
         self.click(item_type_option)
         dropdown_type = self.formator_locator(self.locator.dropdown_type, "productNos")
         self.click(dropdown_type)
-        sleep(1)
         item_type_option = self.formator_locator(self.locator.item_type_option, product_nos)
+        self.wait_visible(item_type_option)
         self.click(item_type_option)
         self.click(self.locator.btn_save_setting)
         return self

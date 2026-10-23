@@ -17,7 +17,11 @@ class TransportServicesComponent(AthenaBasePage):
                 self.locator.transport_type_option, transport_type
             )
             self.click(transport_option_locator)
-            self.sleep(1)
+            # 等待 combobox 顯示所選的接送方式（選項註冊完成的實際條件）
+            self.wait_until(
+                lambda d: transport_type
+                in (d.find_element(*transport_status_locator).get_attribute("value") or "")
+            )
 
         if fee is not None:
             self.click(self.locator.transport_auto_charge_checkbox)

@@ -1,4 +1,3 @@
-from time import sleep
 from selenium.webdriver.common.keys import Keys
 from pages.athena_base_page import AthenaBasePage
 from locators.lost_item_locator import LostItemLocator
@@ -10,9 +9,10 @@ class LostItemDialog(AthenaBasePage):
         super().__init__(driver, LostItemLocator())
 
     def select_status_in_dialog(self, status):
-        sleep(2)
+        self.wait_clickable(self.locator.status_dropdown)
         self.click(self.locator.status_dropdown)
         status_locator = self.formator_locator(self.locator.status_options, status)
+        self.wait_visible(status_locator)
         self.click(status_locator)
         return self
 
@@ -35,7 +35,7 @@ class LostItemDialog(AthenaBasePage):
     def input_loser_name(self):
         self.click(self.locator.loser_name_dropdown)
         self.input(self.locator.loser_name_field, Keys.ENTER)
-        sleep(1)
+        self.wait_visible(self.locator.loser_name_options)
         self.click(self.locator.loser_name_options)
         return self
 

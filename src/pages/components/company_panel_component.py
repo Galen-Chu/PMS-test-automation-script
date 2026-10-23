@@ -1,4 +1,3 @@
-from time import sleep
 from pages.athena_base_page import AthenaBasePage
 from locators.company_panel_locator import CompanyPanelLocator
 
@@ -26,8 +25,8 @@ class CompanyPanelComponent(AthenaBasePage):
 
     def select_special_rate_cod(self, rate_cod):
         self.click(self.locator.select_special_rate_cod)
-        sleep(2)
         tmp_rate_locator = self.formator_locator(self.locator.item_special_rate_cod, rate_cod)
+        self.wait_visible(tmp_rate_locator)
         self.click(tmp_rate_locator)
         self.click(self.locator.confirm_button)
         return self
@@ -46,13 +45,13 @@ class CompanyPanelComponent(AthenaBasePage):
         self.select_start_day(start_date.split("/")[-1], "Jan")
         self.select_end_day(end_date.split("/")[-1], "Jan")
         self.click(self.locator.select_hotel_cod)
-        sleep(2)
         tmp_hotel_locator = self.formator_locator(self.locator.item_cod, hotel_cod)
+        self.wait_visible(tmp_hotel_locator)
         self.click(tmp_hotel_locator)
-        sleep(2)
+        self.wait_clickable(self.locator.select_rate_cod)
         self.click(self.locator.select_rate_cod)
-        sleep(2)
         tmp_rate_locator = self.formator_locator(self.locator.item_cod, con_rate_cod)
+        self.wait_visible(tmp_rate_locator)
         self.click(tmp_rate_locator)
         return self
 

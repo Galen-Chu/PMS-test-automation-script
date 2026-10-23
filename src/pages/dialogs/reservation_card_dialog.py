@@ -72,11 +72,12 @@ class ReservationCardDialog(AthenaBasePage):
     def set_rate_code_by_search_name(self, rate_cod_name, room_type):
         self.click(self.locator.btn_select_rate_code)
         self.input(self.locator.input_rate_cod_name, rate_cod_name)
-        self.sleep(1)
-        self.input(self.locator.input_rate_cod_name, Keys.ENTER)
         rate_cod_locator = self.formator_locator(
             self.locator.select_rate_code, (rate_cod_name, room_type)
         )
+        # 等待過濾結果出現再按 ENTER 選取
+        self.wait_visible(rate_cod_locator)
+        self.input(self.locator.input_rate_cod_name, Keys.ENTER)
         self.click(rate_cod_locator)
         self.click_toolbar_item("確定", toolbar=2)
         return self
@@ -365,9 +366,9 @@ class ReservationCardDialog(AthenaBasePage):
         """選擇已存在的訂金編號（下拉選單）"""
         tmp_locator = self.formator_locator(self.locator.col_by_data_field_id, "depositNos")
         self.click(tmp_locator)
-        self.sleep(1)
-        self.set_dropdown_filter(deposit_no).sleep(1)
+        self.set_dropdown_filter(deposit_no)
         deposit_option = self.formator_locator(self.locator.select_option_dropdownbase, deposit_no)
+        self.wait_visible(deposit_option)
         self.click(deposit_option)
         return self
 

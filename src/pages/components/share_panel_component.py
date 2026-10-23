@@ -1,4 +1,3 @@
-from time import sleep
 from pages.athena_base_page import AthenaBasePage
 from locators.share_panel_locator import SharePanelLocator
 
@@ -23,8 +22,8 @@ class SharePanelComponent(AthenaBasePage):
     def select_by_panel(self, title, value):
         locator_panel_select = self.formator_locator(self.locator.panel_select, title)
         self.click(locator_panel_select)
-        sleep(1)
         locator_select_option = self.formator_locator(self.locator.select_option, value)
+        self.wait_visible(locator_select_option)
         self.click(locator_select_option)
         return self
 
@@ -54,24 +53,24 @@ class SharePanelComponent(AthenaBasePage):
     def select_by_label(self, label, value):
         locator_label_select = self.formator_locator(self.locator.label_select, label)
         self.click(locator_label_select)
-        sleep(1)
         locator_select_option = self.formator_locator(self.locator.select_option, value)
+        self.wait_visible(locator_select_option)
         self.click(locator_select_option)
         return self
 
     def select_by_label_span(self, label, value):
         locator_label_select = self.formator_locator(self.locator.label_span_select, label)
         self.click(locator_label_select)
-        sleep(1)
         locator_select_option = self.formator_locator(self.locator.label_span_select_item, value)
+        self.wait_visible(locator_select_option)
         self.click(locator_select_option)
         return self
 
     def select_by_label_span_3(self, label, value):
         locator_label_select = self.formator_locator(self.locator.label_span_select_3, label)
         self.click(locator_label_select)
-        sleep(3)
         locator_select_option = self.formator_locator(self.locator.label_span_select_item_3, value)
+        self.wait_visible(locator_select_option)
         self.click(locator_select_option)
         return self
 

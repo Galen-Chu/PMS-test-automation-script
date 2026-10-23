@@ -1,4 +1,3 @@
-from time import sleep
 from pages.athena_base_page import AthenaBasePage
 from locators.room_control_locator import RoomControlLocator
 
@@ -45,8 +44,8 @@ class RoomControlPage(AthenaBasePage):
 
     def filter_room_status(self, status):
         self.click(self.locator.select_room_status)
-        sleep(1)
         locator_status = self.formator_locator(self.locator.select_room_status_item, status)
+        self.wait_visible(locator_status)
         self.click(locator_status)
         return self
 
@@ -56,15 +55,15 @@ class RoomControlPage(AthenaBasePage):
 
     def select_category(self, category):
         self.click(self.locator.select_category)
-        sleep(1)
         locator_category = self.formator_locator(self.locator.select_category_item, category)
+        self.wait_visible(locator_category)
         self.click(locator_category)
         return self
 
     def select_date_by_label(self, label, year, month, day):
         locator_date = self.formator_locator(self.locator.date_by_label, label)
         self.click(locator_date)
-        sleep(1)
+        self.wait_visible(self.locator.date_title_year)
         self.click(self.locator.date_title_year)
         locator_year = self.formator_locator(self.locator.date_year, year)
         self.click(locator_year)
@@ -115,8 +114,8 @@ class RoomControlPage(AthenaBasePage):
     def change_room_repair_day(self, label, day):
         locator_date = self.formator_locator(self.locator.room_repair_datepicker, label)
         self.click(locator_date)
-        sleep(1)
         locator_day = self.formator_locator(self.locator.room_repair_day, day)
+        self.wait_visible(locator_day)
         self.click(locator_day)
         return self
 
@@ -146,8 +145,8 @@ class RoomControlPage(AthenaBasePage):
     def select_bed_setting(self, bed_setting):
         """選擇拆床、併床或無設定"""
         self.click(self.locator.select_bed_setting)
-        sleep(1)
         locator_setting = self.formator_locator(self.locator.select_bed_setting_item, bed_setting)
+        self.wait_visible(locator_setting)
         self.click(locator_setting)
         return self
 

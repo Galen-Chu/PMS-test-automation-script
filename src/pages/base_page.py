@@ -95,6 +95,11 @@ class BasePage:
         WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
         return self
 
+    def wait_until(self, condition, timeout=10):
+        """等待自訂條件（condition 為接受 driver 的 callable，回傳 Truthy 即完成）"""
+        WebDriverWait(self.driver, timeout).until(condition)
+        return self
+
     def screenshot(self, file_name):
         if hasattr(self.driver, "get_screenshot_as_png"):
             allure.attach(

@@ -1,4 +1,3 @@
-from time import sleep
 from pages.athena_base_page import AthenaBasePage
 from locators.reservation_locator import ReservationLocator
 
@@ -91,7 +90,7 @@ class ReservationPage(AthenaBasePage):
 
     def change_co_date(self, date):
         self.input_with_clear(self.locator.input_co_date, date)
-        sleep(1)
+        self.wait_clickable(self.locator.btn_save_setting)
         self.click(self.locator.btn_save_setting)
         return self
 
@@ -105,7 +104,7 @@ class ReservationPage(AthenaBasePage):
 
     def get_rent_total_detail(self):
         self.click(self.locator.btn_rent_total_detail)
-        sleep(2)
+        self.wait_present(self.locator.text_rent_amounts)
         items = self.driver.find_elements(*self.locator.text_rent_amounts)
         amounts = [int(item.text.replace(",", "")) for item in items]
         return sum(amounts)
