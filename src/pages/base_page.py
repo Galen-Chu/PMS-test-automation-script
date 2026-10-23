@@ -7,6 +7,7 @@ from selenium.common.exceptions import (
     ElementNotInteractableException,
     NoSuchElementException,
     StaleElementReferenceException,
+    TimeoutException,
 )
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -95,12 +96,16 @@ class BasePage:
         actions = ActionChains(self.driver)
         actions.move_to_element(target_element).perform()
 
-    def has_element(self, locator):
+    def has_element(self, locator, timeout=2):
+        """顯式 presence 檢查。檢查期間將 implicit wait 歸零，
+        避免與 WebDriverWait 混用造成逾時時間不可預期（Selenium 反模式）。"""
+        self.driver.implicitly_wait(0)
         try:
-            self.driver.implicitly_wait(2)
-            self.driver.find_element(*locator)
+            WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located(locator)
+            )
             return True
-        except (NoSuchElementException, StaleElementReferenceException):
+        except TimeoutException:
             return False
         finally:
             self.driver.implicitly_wait(10)
@@ -115,6 +120,10 @@ class BasePage:
 
     def wait_gone(self, locator, timeout=10):
         WebDriverWait(self.driver, timeout).until(EC.invisibility_of_element_located(locator))
+        return self
+
+    def wait_present(self, locator, timeout=10):
+        WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
         return self
 
     def screenshot(self, file_name):
@@ -160,8 +169,8 @@ class BasePage:
     def select(self, field, value):
         locator_select_dropdown = self.formator_locator(self.locator.select_dropdown, field)
         self.click(locator_select_dropdown)
-        sleep(1)
         locator_select_option = self.formator_locator(self.locator.select_option, value)
+        self.wait_visible(locator_select_option)
         self.click(locator_select_option)
         return self
 
@@ -295,13 +304,11 @@ class BasePage:
         month_locator = self.formator_locator(self.locator.date_cell_item, month)
         dd_locator = self.formator_locator(self.locator.date_cell_item, day)
         self.click(self.locator.date_year_title)
-        sleep(1)
         self.click(self.locator.date_year_title)
-        sleep(1)
+        self.wait_visible(year_locator)
         self.click(year_locator)
-        sleep(1)
+        self.wait_visible(month_locator)
         self.click(month_locator)
-        sleep(1)
+        self.wait_visible(dd_locator)
         self.click(dd_locator)
-        sleep(1)
         return self
