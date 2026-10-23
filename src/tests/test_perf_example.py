@@ -7,7 +7,7 @@ Run with: pytest -m perf -v --alluredir=allure-results
 import allure
 import pytest
 
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from pages.components.header_component import HeaderComponent
 from pages.components.tip_component import TipComponent
 from pages.reservation_page import ReservationPage
@@ -25,7 +25,7 @@ class TestReservationPerformance:
         Reports API timings to Allure; slow APIs are informational
         (threshold assertions can be added per-project).
         """
-        pages = [BasePage, HeaderComponent, TipComponent, ReservationPage]
+        pages = [AthenaBasePage, HeaderComponent, TipComponent, ReservationPage]
         perf_monitor.start()
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         perf_monitor.mark("page_loaded")

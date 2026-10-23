@@ -1,7 +1,7 @@
 import allure
 import pytest
 from selenium.common.exceptions import NoSuchElementException
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from pages.components.company_panel_component import CompanyPanelComponent
 from pages.components.header_component import HeaderComponent
 from pages.components.service_item_component import ServiceItemComponent
@@ -75,7 +75,7 @@ class TestRateCod:
             HeaderComponent,
             TipComponent,
             SharePanelComponent,
-            BasePage,
+            AthenaBasePage,
             ServiceItemComponent,
             RateCodDialog,
         ]
@@ -85,8 +85,8 @@ class TestRateCod:
         with allure.step("開啟房價新增視窗"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.click_toolbar_with_icon("add").sleep(2)
-            web.base_page.screenshot("開啟房價新增視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(2)
+            web.athena_base_page.screenshot("開啟房價新增視窗")
 
         with allure.step("填入房價資訊並儲存成功"):
             rate_cod_name = f"{rate_code_type}{RandomHelper.random_string(3)}"
@@ -94,17 +94,17 @@ class TestRateCod:
             rate_cod_step.set_use_duration()
             rate_cod_step.set_rate_cod_price()
             web.rate_cod_dialog.click_data_field_id("save").sleep(2)
-            web.base_page.screenshot("填入房價資訊並儲存成功")
+            web.athena_base_page.screenshot("填入房價資訊並儲存成功")
             web.tip_component.click_ok().sleep(2)
             rate_cod_step.set_service_items()
             web.rate_cod_dialog.close_panel()
 
         with allure.step("驗證新增房價資料"):
-            web.base_page.set_value_by_label("房價代號", rate_cod_name[:8])
-            web.base_page.search().sleep(2)
-            web.base_page.click_target_rate_cod(rate_cod_name[:8])
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
-            web.base_page.screenshot("驗證新增房價資料")
+            web.athena_base_page.set_value_by_label("房價代號", rate_cod_name[:8])
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.click_target_rate_cod(rate_cod_name[:8])
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.screenshot("驗證新增房價資料")
             rate_cod_step.valid_rate_cod_info(rate_cod_name)
 
     @allure.story("新增連動屬性房價")
@@ -115,7 +115,7 @@ class TestRateCod:
             HeaderComponent,
             TipComponent,
             SharePanelComponent,
-            BasePage,
+            AthenaBasePage,
             ServiceItemComponent,
             RateCodDialog,
         ]
@@ -125,8 +125,8 @@ class TestRateCod:
         with allure.step("開啟房價新增視窗"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.click_toolbar_with_icon("add").sleep(2)
-            web.base_page.screenshot("開啟房價新增視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(2)
+            web.athena_base_page.screenshot("開啟房價新增視窗")
 
         with allure.step("填入房價資訊並儲存成功"):
             rate_cod_name = f"{rate_code_type}{RandomHelper.random_string(3)}"
@@ -134,31 +134,31 @@ class TestRateCod:
             rate_cod_step.set_use_duration()
             rate_cod_step.set_rate_cod_price()
             web.rate_cod_dialog.click_data_field_id("save").sleep(2)
-            web.base_page.screenshot("填入房價資訊並儲存成功")
+            web.athena_base_page.screenshot("填入房價資訊並儲存成功")
             web.tip_component.click_ok().sleep(2)
             rate_cod_step.set_service_items()
             web.rate_cod_dialog.close_panel()
 
         with allure.step("驗證新增房價資料"):
-            web.base_page.set_value_by_label("房價代號", rate_cod_name[:8])
-            web.base_page.search().sleep(2)
-            web.base_page.click_target_rate_cod(rate_cod_name[:8])
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
-            web.base_page.screenshot("驗證新增房價資料")
+            web.athena_base_page.set_value_by_label("房價代號", rate_cod_name[:8])
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.click_target_rate_cod(rate_cod_name[:8])
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.screenshot("驗證新增房價資料")
             rate_cod_step.valid_rate_cod_info(rate_cod_name)
 
     @allure.story("新增房價-無法使用功能")
     def test_create_ratecod_not_use(self, logged_in_driver):
-        pages = [HeaderComponent, TipComponent, SharePanelComponent, BasePage, RateCodDialog]
+        pages = [HeaderComponent, TipComponent, SharePanelComponent, AthenaBasePage, RateCodDialog]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("開啟房價新增視窗"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.click_toolbar_with_icon("add").sleep(2)
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(2)
 
         with allure.step("驗證功能按鈕無法使用"):
-            web.base_page.screenshot("驗證功能按鈕無法使用")
+            web.athena_base_page.screenshot("驗證功能按鈕無法使用")
             web.share_panel_component.assert_data(
                 "無法使用浮動房價", web.rate_cod_dialog.item_enabled("浮動房價"), False
             )
@@ -181,7 +181,7 @@ class TestRateCod:
         ["DaysOverMax", "ServiceOverMax", "ComOverMax", "DpRatOverMax", "DpAmtOverMax", "IdOnly"],
     )
     def test_rate_cod_columns_valid(self, logged_in_driver, valid_type):
-        pages = [HeaderComponent, TipComponent, SharePanelComponent, BasePage, RateCodDialog]
+        pages = [HeaderComponent, TipComponent, SharePanelComponent, AthenaBasePage, RateCodDialog]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         step = globals()[f"{valid_type}RateCodColumnStep"](web)
@@ -189,72 +189,74 @@ class TestRateCod:
         with allure.step("開啟房價新增視窗"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.click_toolbar_with_icon("add").sleep(2)
-            web.base_page.screenshot("開啟房價新增視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(2)
+            web.athena_base_page.screenshot("開啟房價新增視窗")
 
         with allure.step("新增房價-輸入欄位驗證"):
             step.input_data()
-            web.base_page.screenshot("新增房價-輸入欄位驗證")
+            web.athena_base_page.screenshot("新增房價-輸入欄位驗證")
 
         with allure.step("驗證提示訊息"):
             step.assert_result()
-            web.base_page.screenshot("驗證提示訊息")
+            web.athena_base_page.screenshot("驗證提示訊息")
 
     @allure.story("搜尋房價-銷售中為必填")
     def test_search_rate_cod_required(self, logged_in_driver):
-        pages = [HeaderComponent, TipComponent, BasePage]
+        pages = [HeaderComponent, TipComponent, AthenaBasePage]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("移除'銷售中'搜尋條件"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.select("銷售中", "Y : 是")
-            web.base_page.screenshot("移除銷售中搜尋條件")
+            web.athena_base_page.select("銷售中", "Y : 是")
+            web.athena_base_page.screenshot("移除銷售中搜尋條件")
 
         with allure.step("搜尋房價-銷售中為必填"):
-            web.base_page.search().sleep(2)
-            web.base_page.assert_data(
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.assert_data(
                 "銷售中 為必填", web.tip_component.get_tip_text(), "銷售中 為必填"
             )
-            web.base_page.screenshot("搜尋房價-銷售中為必填")
+            web.athena_base_page.screenshot("搜尋房價-銷售中為必填")
 
     @allure.story("搜尋房價-查無資料-重新查詢")
     def test_search_rate_cod_not_found_retry(self, logged_in_driver):
-        pages = [HeaderComponent, TipComponent, BasePage]
+        pages = [HeaderComponent, TipComponent, AthenaBasePage]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("搜尋房價-查無資料"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.set_value_by_label("房價代號", "查無資料")
-            web.base_page.search().sleep(2)
-            web.base_page.assert_data("無符合資料", web.tip_component.get_tip_text(), "無符合資料")
-            web.base_page.screenshot("搜尋房價-查無資料")
+            web.athena_base_page.set_value_by_label("房價代號", "查無資料")
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.assert_data(
+                "無符合資料", web.tip_component.get_tip_text(), "無符合資料"
+            )
+            web.athena_base_page.screenshot("搜尋房價-查無資料")
             web.tip_component.click_ok().sleep(2)
 
         with allure.step("重新查詢房價-有資料"):
-            web.base_page.clear().sleep(2)
-            web.base_page.search().sleep(2)
-            web.base_page.assert_data_has_count(
-                "重新查詢房價-有資料", web.base_page.get_displaying_items_count()
+            web.athena_base_page.clear().sleep(2)
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.assert_data_has_count(
+                "重新查詢房價-有資料", web.athena_base_page.get_displaying_items_count()
             )
-            web.base_page.screenshot("重新查詢房價")
+            web.athena_base_page.screenshot("重新查詢房價")
 
     @allure.story("編輯房價-有特殊約會顯示列表-開啟特殊約")
     def test_edit_rate_cod_special_contract(self, logged_in_driver):
-        pages = [HeaderComponent, TipComponent, SharePanelComponent, BasePage, RateCodDialog]
+        pages = [HeaderComponent, TipComponent, SharePanelComponent, AthenaBasePage, RateCodDialog]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("查詢房價列表"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.set_value_by_label("房價代號", "comcon2")
-            web.base_page.search().sleep(2)
-            web.base_page.screenshot("查詢房價列表")
+            web.athena_base_page.set_value_by_label("房價代號", "comcon2")
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.screenshot("查詢房價列表")
 
         with allure.step("編輯房價-有特殊約會顯示列表"):
-            web.base_page.click_target_rate_cod("comcon2")
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.click_target_rate_cod("comcon2")
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
             web.rate_cod_dialog.click_tab("specialContract").sleep(1)
             web.rate_cod_dialog.screenshot("編輯房價-有特殊約會顯示列表")
             web.rate_cod_dialog.assert_data(
@@ -367,21 +369,21 @@ class TestRateCod:
 
     @allure.story("刪除房價-未選擇任一筆")
     def test_remove_rate_cod_not_select(self, logged_in_driver):
-        pages = [HeaderComponent, TipComponent, BasePage]
+        pages = [HeaderComponent, TipComponent, AthenaBasePage]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("查詢房價列表"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.search().sleep(2)
-            web.base_page.screenshot("查詢房價列表")
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.screenshot("查詢房價列表")
 
         with allure.step("未選擇任一筆房價點擊刪除"):
-            web.base_page.click_toolbar_with_icon("remove").sleep(1)
-            web.base_page.screenshot("未選擇任一筆房價點擊刪除")
+            web.athena_base_page.click_toolbar_with_icon("remove").sleep(1)
+            web.athena_base_page.screenshot("未選擇任一筆房價點擊刪除")
 
         with allure.step("驗證提示訊息"):
-            web.base_page.assert_data(
+            web.athena_base_page.assert_data(
                 "請選擇一筆資料", web.tip_component.get_tip_text(), "請選擇一筆資料"
             )
 
@@ -395,25 +397,27 @@ class TestRateCod:
         ],
     )
     def test_remove_rate_cod_limit(self, logged_in_driver, rate_code, tip_msg):
-        pages = [HeaderComponent, TipComponent, BasePage]
+        pages = [HeaderComponent, TipComponent, AthenaBasePage]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
         with allure.step("查詢房價列表"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.set_value_by_label("房價代號", rate_code)
-            web.base_page.search().sleep(2)
-            web.base_page.screenshot("查詢房價列表")
+            web.athena_base_page.set_value_by_label("房價代號", rate_code)
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.screenshot("查詢房價列表")
 
         with allure.step("選擇無法被刪除的房價點擊刪除"):
-            web.base_page.click_target_rate_cod(rate_code)
-            web.base_page.click_toolbar_with_icon("remove").sleep(1)
+            web.athena_base_page.click_target_rate_cod(rate_code)
+            web.athena_base_page.click_toolbar_with_icon("remove").sleep(1)
             if rate_code != "comcon2":
                 web.tip_component.click_ok().sleep(1)
-            web.base_page.screenshot("選擇無法被刪除的房價點擊刪除").sleep(2)
+            web.athena_base_page.screenshot("選擇無法被刪除的房價點擊刪除").sleep(2)
 
         with allure.step("驗證提示訊息"):
-            web.base_page.assert_data("驗證提示訊息", web.tip_component.get_tip_text(), tip_msg)
+            web.athena_base_page.assert_data(
+                "驗證提示訊息", web.tip_component.get_tip_text(), tip_msg
+            )
 
     # ------ 新增不統計房價 ------
 
@@ -426,7 +430,7 @@ class TestRateCod:
             HeaderComponent,
             TipComponent,
             SharePanelComponent,
-            BasePage,
+            AthenaBasePage,
             ServiceItemComponent,
             RateCodDialog,
         ]
@@ -436,8 +440,8 @@ class TestRateCod:
         with allure.step("開啟房價新增視窗"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.click_toolbar_with_icon("add").sleep(2)
-            web.base_page.screenshot("開啟房價新增視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(2)
+            web.athena_base_page.screenshot("開啟房價新增視窗")
 
         with allure.step("填入房價資訊並儲存成功"):
             rate_cod_name = f"{rate_code_type}{RandomHelper.random_string(3)}"
@@ -445,18 +449,18 @@ class TestRateCod:
             rate_cod_step.set_use_duration()
             rate_cod_step.set_rate_cod_price()
             web.rate_cod_dialog.click_data_field_id("save").sleep(2)
-            web.base_page.screenshot("填入房價資訊並儲存成功")
+            web.athena_base_page.screenshot("填入房價資訊並儲存成功")
             web.tip_component.click_ok().sleep(2)
             rate_cod_step.set_service_items()
             web.rate_cod_dialog.close_panel()
 
         with allure.step("驗證新增房價資料"):
             cache.set("rate_cod", rate_cod_name[:8])
-            web.base_page.set_value_by_label("房價代號", rate_cod_name[:8])
-            web.base_page.search().sleep(2)
-            web.base_page.click_target_rate_cod(rate_cod_name[:8])
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
-            web.base_page.screenshot("驗證新增房價資料")
+            web.athena_base_page.set_value_by_label("房價代號", rate_cod_name[:8])
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.click_target_rate_cod(rate_cod_name[:8])
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.screenshot("驗證新增房價資料")
             rate_cod_step.valid_rate_cod_info(rate_cod_name)
 
     @pytest.mark.xdist_group("nst_rate_cod")
@@ -465,29 +469,31 @@ class TestRateCod:
     )
     @allure.story("刪除房價-刪除一筆房價成功")
     def test_remove_rate_cod(self, logged_in_driver, cache):
-        pages = [HeaderComponent, TipComponent, BasePage]
+        pages = [HeaderComponent, TipComponent, AthenaBasePage]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         rate_cod = cache.get("rate_cod", "GR_9Ij")
 
         with allure.step("查詢房價列表"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.set_value_by_label("房價代號", rate_cod)
-            web.base_page.search().sleep(2)
-            web.base_page.screenshot("查詢房價列表")
+            web.athena_base_page.set_value_by_label("房價代號", rate_cod)
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.screenshot("查詢房價列表")
 
         with allure.step("刪除房價成功"):
-            web.base_page.click_target_rate_cod(rate_cod)
-            web.base_page.click_toolbar_with_icon("remove").sleep(1)
+            web.athena_base_page.click_target_rate_cod(rate_cod)
+            web.athena_base_page.click_toolbar_with_icon("remove").sleep(1)
             web.tip_component.click_ok().sleep(1)
-            web.base_page.screenshot("刪除房價成功")
+            web.athena_base_page.screenshot("刪除房價成功")
             web.tip_component.click_ok().sleep(1)
             web.tip_component.click_ok().sleep(1)
 
         with allure.step("驗證房價已刪除"):
-            web.base_page.search().sleep(2)
-            web.base_page.screenshot("驗證房價已刪除")
-            web.base_page.assert_data("查無資料", web.tip_component.get_tip_text(), "無符合資料")
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.screenshot("驗證房價已刪除")
+            web.athena_base_page.assert_data(
+                "查無資料", web.tip_component.get_tip_text(), "無符合資料"
+            )
 
     # ------ 新增不統計房價 END ------
 
@@ -501,7 +507,7 @@ class TestRateCod:
             HeaderComponent,
             TipComponent,
             SharePanelComponent,
-            BasePage,
+            AthenaBasePage,
             ServiceItemComponent,
             RateCodDialog,
         ]
@@ -511,8 +517,8 @@ class TestRateCod:
         with allure.step("開啟房價新增視窗"):
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.click_toolbar_with_icon("add").sleep(2)
-            web.base_page.screenshot("開啟房價新增視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(2)
+            web.athena_base_page.screenshot("開啟房價新增視窗")
 
         with allure.step("填入房價資訊並儲存成功"):
             rate_cod_name = f"{rate_code_type}{RandomHelper.random_string(3)}"
@@ -520,18 +526,18 @@ class TestRateCod:
             rate_cod_step.set_use_duration()
             rate_cod_step.set_rate_cod_price()
             web.rate_cod_dialog.click_data_field_id("save").sleep(2)
-            web.base_page.screenshot("填入房價資訊並儲存成功")
+            web.athena_base_page.screenshot("填入房價資訊並儲存成功")
             web.tip_component.click_ok().sleep(2)
             rate_cod_step.set_service_items()
             web.rate_cod_dialog.close_panel()
 
         with allure.step("驗證新增房價資料"):
             cache.set("con_rate_cod", rate_cod_name)
-            web.base_page.set_value_by_label("房價代號", rate_cod_name[:8])
-            web.base_page.search().sleep(2)
-            web.base_page.click_target_rate_cod(rate_cod_name[:8])
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
-            web.base_page.screenshot("驗證新增房價資料")
+            web.athena_base_page.set_value_by_label("房價代號", rate_cod_name[:8])
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.click_target_rate_cod(rate_cod_name[:8])
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.screenshot("驗證新增房價資料")
             rate_cod_step.valid_rate_cod_info(rate_cod_name)
 
     @allure.story("商務公司綁定公司約")
@@ -545,7 +551,7 @@ class TestRateCod:
             TipComponent,
             CompanyPanelComponent,
             SharePanelComponent,
-            BasePage,
+            AthenaBasePage,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         con_rate_cod = cache.get("con_rate_cod", "Con_YeM")
@@ -553,21 +559,21 @@ class TestRateCod:
         with allure.step("查詢公司編號"):
             web.header_component.expand_menu("業務")
             web.header_component.to_func_page("商務公司").sleep(2)
-            web.base_page.set_value_by_label("公司編號", "0000173701")
-            web.base_page.search().sleep(2)
-            web.base_page.screenshot("查詢公司編號")
+            web.athena_base_page.set_value_by_label("公司編號", "0000173701")
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.screenshot("查詢公司編號")
 
         with allure.step("商務公司刪除舊綁定"):
-            web.base_page.click_target_ikey("0000173701", grid=3)
-            web.base_page.click_toolbar_with_icon("edit").sleep(1)
+            web.athena_base_page.click_target_ikey("0000173701", grid=3)
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(1)
             web.share_panel_component.click_detail_tab("contract").sleep(1)
             web.company_panel_component.click_target_contract()
             web.company_panel_component.click_remove_contract().sleep(1)
             web.tip_component.click_btn_by_text("確定").sleep(1)
             web.company_panel_component.click_save().sleep(2)
             web.tip_component.click_ok().sleep(1)
-            web.base_page.click_target_ikey("0000173701", grid=3)
-            web.base_page.click_toolbar_with_icon("edit").sleep(1)
+            web.athena_base_page.click_target_ikey("0000173701", grid=3)
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(1)
             web.share_panel_component.click_detail_tab("contract").sleep(1)
             web.share_panel_component.screenshot("商務公司刪除舊綁定")
 
@@ -588,8 +594,8 @@ class TestRateCod:
             web.tip_component.click_ok().sleep(1)
 
         with allure.step("驗證商務公司綁定資料"):
-            web.base_page.click_target_ikey("0000173701", grid=3)
-            web.base_page.click_toolbar_with_icon("edit").sleep(1)
+            web.athena_base_page.click_target_ikey("0000173701", grid=3)
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(1)
             web.share_panel_component.click_detail_tab("contract").sleep(1)
             web.share_panel_component.screenshot("驗證商務公司綁定資料")
             web.company_panel_component.assert_data(
@@ -642,7 +648,7 @@ class TestRateCod:
             TipComponent,
             SharePanelComponent,
             CompanyPanelComponent,
-            BasePage,
+            AthenaBasePage,
             RateCodDialog,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -650,10 +656,10 @@ class TestRateCod:
 
         web.header_component.expand_menu("業務")
         web.header_component.to_func_page("商務公司").sleep(2)
-        web.base_page.set_value_by_label("公司編號", "0000173701")
-        web.base_page.search().sleep(2)
-        web.base_page.click_target_ikey("0000173701", grid=3)
-        web.base_page.click_toolbar_with_icon("edit").sleep(1)
+        web.athena_base_page.set_value_by_label("公司編號", "0000173701")
+        web.athena_base_page.search().sleep(2)
+        web.athena_base_page.click_target_ikey("0000173701", grid=3)
+        web.athena_base_page.click_toolbar_with_icon("edit").sleep(1)
         web.share_panel_component.click_detail_tab("specialContract").sleep(1)
 
         with allure.step("刪除舊特殊約"):
@@ -692,10 +698,10 @@ class TestRateCod:
             web.share_panel_component.close_panel("商務公司維護")
             web.header_component.expand_menu("訂房")
             web.header_component.to_func_page("房價").sleep(2)
-            web.base_page.set_value_by_label("房價代號", con_rate_cod)
-            web.base_page.search().sleep(2)
-            web.base_page.click_target_rate_cod(con_rate_cod)
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.set_value_by_label("房價代號", con_rate_cod)
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.click_target_rate_cod(con_rate_cod)
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
             web.rate_cod_dialog.click_tab("specialContract").sleep(1)
             web.rate_cod_dialog.screenshot("驗證特殊約綁定成功")
             web.rate_cod_dialog.assert_data(

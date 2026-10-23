@@ -1,8 +1,8 @@
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.room_assignment_locator import RoomAssignmentLocator
 
 
-class RoomAssignmentPage(BasePage):
+class RoomAssignmentPage(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, RoomAssignmentLocator())

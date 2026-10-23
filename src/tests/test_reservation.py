@@ -1,7 +1,7 @@
 import allure
 import names
 import pytest
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from pages.checkin_page import CheckinPage
 from pages.components.header_component import HeaderComponent
 from pages.components.share_panel_component import SharePanelComponent
@@ -24,7 +24,14 @@ class TestReservation:
     @pytest.mark.xdist_group("roomno_reservation")
     @pytest.mark.dependency(name="test_roomno_reservation", scope="session")
     def test_roomno_reservation(self, logged_in_driver, cache):
-        pages = [BasePage, LoginPage, HomePage, HeaderComponent, TipComponent, ReservationPage]
+        pages = [
+            AthenaBasePage,
+            LoginPage,
+            HomePage,
+            HeaderComponent,
+            TipComponent,
+            ReservationPage,
+        ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("選擇空房"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -56,7 +63,7 @@ class TestReservation:
             cache.set("full_name", full_name)
             cache.set("dialog_ikey", web.reservation_page.get_dialog_ikey().split(":")[1].strip())
             web.reservation_page.assert_data(
-                "訂房公司", web.base_page.get_dropdown_input_value("acustCode"), "一般散客"
+                "訂房公司", web.athena_base_page.get_dropdown_input_value("acustCode"), "一般散客"
             )
             web.reservation_page.assert_data(
                 "稱謂", web.reservation_page.get_salute_code(), "Miss."
@@ -300,7 +307,13 @@ class TestReservation:
 
     @allure.story("依房型訂房")
     def test_roomtype_reservation(self, logged_in_driver, cache):
-        pages = [BasePage, HeaderComponent, TipComponent, SharePanelComponent, ReservationPage]
+        pages = [
+            AthenaBasePage,
+            HeaderComponent,
+            TipComponent,
+            SharePanelComponent,
+            ReservationPage,
+        ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         with allure.step("選擇房型"):
             web.header_component.expand_menu("訂房").sleep(1)
@@ -329,7 +342,7 @@ class TestReservation:
 
         with allure.step("建立訂房卡後，可查詢到訂房資料"):
             panel_title = web.reservation_page.get_dialog_ikey()
-            web.base_page.sleep(2)
+            web.athena_base_page.sleep(2)
             web.reservation_page.close_panel_by_title(panel_title)
             dialog_ikey = panel_title.split(":")[1].strip()
             cache.set("dialog_ikey", dialog_ikey)
@@ -348,7 +361,7 @@ class TestReservation:
     @pytest.mark.parametrize("month, day", [("1月", "6"), ("1月", "12"), ("2月", "4")])
     def test_roomtype_reservation_with_contract(self, month, day):
         pages = [
-            BasePage,
+            AthenaBasePage,
             HeaderComponent,
             TipComponent,
             SharePanelComponent,
@@ -376,13 +389,13 @@ class TestReservation:
             web.reservation_page.screenshot("When 點擊訂房並建立住客歷史")
 
         with allure.step("And 更改退房日期"):
-            web.base_page.click_date_icon("coDate")
-            web.base_page.select_date("2024年", month, day)
+            web.athena_base_page.click_date_icon("coDate")
+            web.athena_base_page.select_date("2024年", month, day)
             web.reservation_page.screenshot("And 更改退房日期")
 
         with allure.step("And 選擇商務公司"):
-            web.base_page.click_by_data_field("acustCode").sleep(1)
-            web.base_page.set_dropdown_filter("測測").sleep(1)
+            web.athena_base_page.click_by_data_field("acustCode").sleep(1)
+            web.athena_base_page.set_dropdown_filter("測測").sleep(1)
             web.reservation_page.select_company("測測BB22").sleep(1)
             web.reservation_page.screenshot("And 選擇商務公司")
 
@@ -415,9 +428,9 @@ class TestReservation:
             web.reservation_page.search().sleep(1)
             web.reservation_page.screenshot("And 住客查詢功能查詢驗證")
 
-            web.base_page.assert_data(
+            web.athena_base_page.assert_data(
                 "訂房卡存在", web.reservation_page.has_target_ikey(dialog_ikey), True
             )
-            web.base_page.assert_data(
-                "訂房公司", web.base_page.get_field_text("acust_nam"), "測測BB22"
+            web.athena_base_page.assert_data(
+                "訂房公司", web.athena_base_page.get_field_text("acust_nam"), "測測BB22"
             )

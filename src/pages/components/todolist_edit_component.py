@@ -1,9 +1,9 @@
 from selenium.webdriver.support.wait import WebDriverWait
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.todolist_edit_locator import TodolistEditLocator
 
 
-class TodolistEditComponent(BasePage):
+class TodolistEditComponent(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, TodolistEditLocator())

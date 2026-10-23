@@ -44,56 +44,56 @@ class CMPRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "CMP:COMPLIMENTARY",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "02:旅行社訂房",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -113,56 +113,56 @@ class DRRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "DR:浮動房價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "02:旅行社訂房",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -181,56 +181,56 @@ class DURateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "DU:Day use",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "DU:DAY USE",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -282,56 +282,56 @@ class GRRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), "以天計價"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -351,56 +351,56 @@ class HURateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "HU:HOUSE USE",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -423,61 +423,61 @@ class MBRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "MON:以月計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "入帳方式",
             web.share_panel_component.get_value_by_label_span_3("入帳方式"),
             "BEGIN_OF_MONTH:月初入帳",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -511,61 +511,61 @@ class MDRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "MON:以月計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "入帳方式",
             web.share_panel_component.get_value_by_label_span_3("入帳方式"),
             "DAILY:逐日入帳",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -601,61 +601,61 @@ class MERateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "MON:以月計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "入帳方式",
             web.share_panel_component.get_value_by_label_span_3("入帳方式"),
             "END_OF_MONTH:月底入帳",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -688,56 +688,56 @@ class NSTRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "NST:不統計",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -757,57 +757,57 @@ class RTRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "RT:以時計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "住宿時間", web.share_panel_component.get_value_by_label_span_3("住宿時數"), "3"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源", web.share_panel_component.get_value_by_label_span_3("訂房來源"), "RT:休息"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -855,56 +855,56 @@ class SaleRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -950,56 +950,56 @@ class ConRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "C:合約公司價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -1045,56 +1045,56 @@ class AddRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -1140,56 +1140,56 @@ class ComRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -1234,56 +1234,56 @@ class FixRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -1328,56 +1328,56 @@ class DaysRateCodStep(BaseRateCodStep):
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -1425,56 +1425,56 @@ class RateRateCodStep(BaseRateCodStep):
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
         web.rate_cod_dialog.click_tab("stander")
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "RATE_COD:依房價人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "ID:不連動",
@@ -1550,62 +1550,62 @@ class BSRateCodStep(BaseRateCodStep):
         self.web.rate_cod_dialog.click_data_field_id("itemNos").sleep(1)
         self.web.rate_cod_dialog.select_dropdown_list("1006:SPA")
         sleep(2)
-        self.web.base_page.screenshot("新增服務項目")
+        self.web.athena_base_page.screenshot("新增服務項目")
         self.web.rate_cod_dialog.click_data_field_id("save").sleep(2)
         self.web.tip_component.click_ok().sleep(2)
 
     def valid_rate_cod_info(self, rate_cod):
         web = self.web
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("房價代號"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("計價方式"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性-是否能填寫",
             web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
             True,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "01:簽約客戶",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "BS:主要房價",
@@ -1642,74 +1642,74 @@ class DPRatRateCodStep(BaseRateCodStep):
             web.share_panel_component.get_is_enabled_by_label_3("人數加價規則"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "04:自行訂房",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "DP:價格連動",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "連動主房價",
             web.share_panel_component.get_value_by_label_span_3("連動主房價"),
             self.bs_rate_cod,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格調整規則",
             web.share_panel_component.get_value_by_label_span_3("價格調整規則"),
             "RAT:%",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "調整數字", web.share_panel_component.get_value_by_label_3("調整數字"), "10"
         )
 
         web.rate_cod_dialog.click_tab("serviceItem").sleep(1)
-        web.base_page.screenshot("服務項目唯獨無法新增、刪除、編輯")
-        web.base_page.assert_data(
+        web.athena_base_page.screenshot("服務項目唯獨無法新增、刪除、編輯")
+        web.athena_base_page.assert_data(
             "DP房價-服務項目唯獨無法新增、刪除、編輯", web.rate_cod_dialog.has_disable_grid(), True
         )
 
         with allure.step("驗證BS房價無法更改價格連動屬性"):
             web.rate_cod_dialog.close_panel()
-            web.base_page.clear().sleep(2)
-            web.base_page.set_value_by_label("房價代號", self.bs_rate_cod)
-            web.base_page.search().sleep(2)
-            web.base_page.click_target_rate_cod(self.bs_rate_cod).sleep(2)
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
-            web.base_page.screenshot("驗證BS房價無法更改價格連動屬性")
-            web.base_page.assert_data(
+            web.athena_base_page.clear().sleep(2)
+            web.athena_base_page.set_value_by_label("房價代號", self.bs_rate_cod)
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.click_target_rate_cod(self.bs_rate_cod).sleep(2)
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.screenshot("驗證BS房價無法更改價格連動屬性")
+            web.athena_base_page.assert_data(
                 "價格連動屬性-是否能填寫",
                 web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
                 False,
@@ -1746,74 +1746,74 @@ class DPAmtRateCodStep(BaseRateCodStep):
             web.share_panel_component.get_is_enabled_by_label_3("人數加價規則"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "合約價-是否能填寫",
             web.share_panel_component.get_is_enabled_by_checkbox("合約價"),
             False,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價代號", web.share_panel_component.get_value_by_label_3("房價代號"), rate_cod[:8]
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價名稱", web.share_panel_component.get_value_by_label_3("房價名稱"), rate_cod
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "計價方式",
             web.share_panel_component.get_value_by_label_span_3("計價方式"),
             "GR:以天計價",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "房價群組",
             web.share_panel_component.get_value_by_label_span_3("房價群組"),
             "F:散客專用",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "訂房來源",
             web.share_panel_component.get_value_by_label_span_3("訂房來源"),
             "04:自行訂房",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "市場類別", web.share_panel_component.get_value_by_label_span_3("市場類別"), "FIT:散客"
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "人數加價規則",
             web.share_panel_component.get_value_by_label_span_3("人數加價規則"),
             "ROOM_COD:依房型人數",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格連動屬性",
             web.share_panel_component.get_value_by_label_span_3("價格連動屬性"),
             "DP:價格連動",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "連動主房價",
             web.share_panel_component.get_value_by_label_span_3("連動主房價"),
             self.bs_rate_cod,
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "價格調整規則",
             web.share_panel_component.get_value_by_label_span_3("價格調整規則"),
             "AMT:$",
         )
-        web.base_page.assert_data(
+        web.athena_base_page.assert_data(
             "調整數字", web.share_panel_component.get_value_by_label_3("調整數字"), "100"
         )
 
         web.rate_cod_dialog.click_tab("serviceItem").sleep(1)
-        web.base_page.screenshot("服務項目唯獨無法新增、刪除、編輯")
-        web.base_page.assert_data(
+        web.athena_base_page.screenshot("服務項目唯獨無法新增、刪除、編輯")
+        web.athena_base_page.assert_data(
             "DP房價-服務項目唯獨無法新增、刪除、編輯", web.rate_cod_dialog.has_disable_grid(), True
         )
 
         with allure.step("驗證BS房價無法更改價格連動屬性"):
             web.rate_cod_dialog.close_panel()
-            web.base_page.clear().sleep(2)
-            web.base_page.set_value_by_label("房價代號", self.bs_rate_cod)
-            web.base_page.search().sleep(2)
-            web.base_page.click_target_rate_cod(self.bs_rate_cod).sleep(2)
-            web.base_page.click_toolbar_with_icon("edit").sleep(2)
-            web.base_page.screenshot("驗證BS房價無法更改價格連動屬性")
-            web.base_page.assert_data(
+            web.athena_base_page.clear().sleep(2)
+            web.athena_base_page.set_value_by_label("房價代號", self.bs_rate_cod)
+            web.athena_base_page.search().sleep(2)
+            web.athena_base_page.click_target_rate_cod(self.bs_rate_cod).sleep(2)
+            web.athena_base_page.click_toolbar_with_icon("edit").sleep(2)
+            web.athena_base_page.screenshot("驗證BS房價無法更改價格連動屬性")
+            web.athena_base_page.assert_data(
                 "價格連動屬性-是否能填寫",
                 web.share_panel_component.get_is_enabled_by_label_3("價格連動屬性"),
                 False,

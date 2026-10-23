@@ -3,7 +3,7 @@ import allure
 import pytest
 import names
 
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from pages.components.share_panel_component import SharePanelComponent
 from pages.components.tip_component import TipComponent
 from pages.components.header_component import HeaderComponent
@@ -41,7 +41,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -63,7 +63,9 @@ class TestGuestServices:
                 3,
             )
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆")
+            web.athena_base_page.screenshot(
+                "Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆"
+            )
 
         with allure.step("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"):
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(2)
@@ -95,12 +97,14 @@ class TestGuestServices:
                 ),
             }
 
-            web.base_page.screenshot("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗")
+            web.athena_base_page.screenshot(
+                "And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"
+            )
 
         with allure.step("And 點擊下拉選單選擇或輸入必填欄位"):
             web.transport_services_component.set_transport_service("100").sleep(1)
             input_time = web.transport_services_component.get_transport_field_value("時間")
-            web.base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
+            web.athena_base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
 
         with allure.step("And 點擊右上的[橘色磁碟片]儲存"):
             ShareSteps.click_btn_save(web)
@@ -110,14 +114,14 @@ class TestGuestServices:
             web.share_panel_component.close_panel("接送服務編輯").sleep(1)
             web.reservation_card_dialog.click_detail_toolbar("save").sleep(1)
             web.tip_component.click_ok()
-            web.base_page.close_panel()
+            web.athena_base_page.close_panel()
 
         with allure.step("And 驗證接送服務表單欄位值正確"):
             web.reservation_card_dialog.click_card_toolbar("doOpenDtDetailDialog").sleep(1)
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
             web.transport_services_component.click_transport_grid_last_row().sleep(1)
-            web.base_page.screenshot("And 驗證接送服務表單欄位值正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表單欄位值正確")
             field_validations = [
                 ("接/送", "combobox", "接/送", initial_values["type"]),
                 ("日期", "field", "日期", initial_values["date"]),
@@ -140,38 +144,38 @@ class TestGuestServices:
             ]
             for title, method, field, expected in field_validations:
                 if method == "field":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_value(field),
                         expected,
                     )
                 elif method == "direct":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_direct_value(field),
                         expected,
                     )
                 elif method == "spinbutton":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_spinbutton_value(field),
                         expected,
                     )
                 elif method == "combobox":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_combobox_text(field),
                         expected,
                     )
 
         with allure.step("And 驗證接送服務表格資料正確"):
-            web.base_page.screenshot("And 驗證接送服務表格資料正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表格資料正確")
             for title, col, expected in [
                 ("接/送", "1", initial_values["type"]),
                 ("日期", "2", initial_values["date"]),
                 ("時間", "4", input_time),
             ]:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title,
                     web.transport_services_component.get_transport_grid_cell_text(col),
                     expected,
@@ -191,7 +195,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -201,11 +205,11 @@ class TestGuestServices:
             ShareSteps.create_or_enter_reservation_detail(
                 web, "guestName", full_name, "doOpenDtDetailDialog"
             )
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗")
+            web.athena_base_page.screenshot("Given 使用者進入「訂房明細」視窗")
 
         with allure.step("When 驗證服務項目資料"):
             web.reservation_card_dialog.click_tab("service").sleep(1)
-            web.base_page.screenshot("When 驗證服務項目資料")
+            web.athena_base_page.screenshot("When 驗證服務項目資料")
             info_list = [
                 ("服務類別", "commandOption", "****: ALL"),
                 ("服務項目", "itemNos", "交通接駁(接)"),
@@ -218,13 +222,13 @@ class TestGuestServices:
                 ("來源", "fromSys", "PICK_UP: 交通接駁"),
             ]
             for title, label, target in info_list:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title, web.reservation_card_dialog.get_tab_service_info(label), target
                 )
 
         with allure.step("Then 驗證費用明細資料"):
             web.reservation_card_dialog.click_tab("expenseDetail")
-            web.base_page.screenshot("Then 驗證費用明細資料")
+            web.athena_base_page.screenshot("Then 驗證費用明細資料")
             info_list = [
                 ("入帳日", "useDate", "2024/01/05 週五"),
                 ("消費項目", "itemSna", "交通接駁(接)"),
@@ -234,7 +238,7 @@ class TestGuestServices:
                 ("服務日", "servDate", "2024/01/05 週五"),
             ]
             for title, label, target in info_list:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title,
                     web.reservation_card_dialog.get_tab_expense_info_in_row("2024/01/05", label),
                     target,
@@ -254,7 +258,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -267,12 +271,16 @@ class TestGuestServices:
                 web, "guestName", full_name, "doOpenDtDetailDialog"
             )
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆")
+            web.athena_base_page.screenshot(
+                "Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆"
+            )
 
         with allure.step("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"):
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
-            web.base_page.click_toolbar_with_icon("add").sleep(1)
-            web.base_page.screenshot("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(1)
+            web.athena_base_page.screenshot(
+                "And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"
+            )
 
         with allure.step("And 點擊下拉選單選擇或輸入必填欄位"):
             web.transport_services_component.set_transport_service(
@@ -305,7 +313,7 @@ class TestGuestServices:
                     "退房日期"
                 ),
             }
-            web.base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
+            web.athena_base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
 
         with allure.step("And 點擊右上的[橘色磁碟片]儲存"):
             ShareSteps.click_btn_save(web)
@@ -315,14 +323,14 @@ class TestGuestServices:
             web.share_panel_component.close_panel("接送服務編輯").sleep(1)
             web.reservation_card_dialog.click_detail_toolbar("save").sleep(1)
             web.tip_component.click_ok()
-            web.base_page.close_panel()
+            web.athena_base_page.close_panel()
 
         with allure.step("And 驗證接送服務表單欄位值正確"):
             web.reservation_card_dialog.click_card_toolbar("doOpenDtDetailDialog").sleep(1)
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
             web.transport_services_component.click_transport_grid_last_row().sleep(2)
-            web.base_page.screenshot("And 驗證接送服務表單欄位值正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表單欄位值正確")
             field_validations = [
                 ("接/送", "combobox", "接/送", "L : 送"),
                 ("日期", "field", "日期", initial_values["date"]),
@@ -345,38 +353,38 @@ class TestGuestServices:
             ]
             for title, method, field, expected in field_validations:
                 if method == "field":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_value(field),
                         expected,
                     )
                 elif method == "direct":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_direct_value(field),
                         expected,
                     )
                 elif method == "spinbutton":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_spinbutton_value(field),
                         expected,
                     )
                 elif method == "combobox":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_combobox_text(field),
                         expected,
                     )
 
         with allure.step("And 驗證接送服務表格資料正確"):
-            web.base_page.screenshot("And 驗證接送服務表格資料正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表格資料正確")
             for title, col, expected in [
                 ("接/送", "1", "L : 送"),
                 ("日期", "2", initial_values["date"]),
                 ("時間", "4", input_time),
             ]:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title,
                     web.transport_services_component.get_transport_grid_cell_text(col),
                     expected,
@@ -396,7 +404,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -406,11 +414,11 @@ class TestGuestServices:
             ShareSteps.create_or_enter_reservation_detail(
                 web, "guestName", full_name, "doOpenDtDetailDialog"
             )
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗")
+            web.athena_base_page.screenshot("Given 使用者進入「訂房明細」視窗")
 
         with allure.step("When 驗證服務項目資料"):
             web.reservation_card_dialog.click_tab("service").sleep(1)
-            web.base_page.screenshot("When 驗證服務項目資料")
+            web.athena_base_page.screenshot("When 驗證服務項目資料")
             info_list = [
                 ("服務類別", "commandOption", "****: ALL"),
                 ("服務項目", "itemNos", "交通接駁(送)"),
@@ -423,13 +431,13 @@ class TestGuestServices:
                 ("來源", "fromSys", "PICK_UP: 交通接駁"),
             ]
             for title, label, target in info_list:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title, web.reservation_card_dialog.get_tab_service_info(label), target
                 )
 
         with allure.step("Then 驗證費用明細資料"):
             web.reservation_card_dialog.click_tab("expenseDetail")
-            web.base_page.screenshot("Then 驗證費用明細資料")
+            web.athena_base_page.screenshot("Then 驗證費用明細資料")
             info_list = [
                 ("入帳日", "useDate", "2024/01/05 週五"),
                 ("消費項目", "itemSna", "交通接駁(送)"),
@@ -439,7 +447,7 @@ class TestGuestServices:
                 ("服務日", "servDate", "2024/01/06 週六"),
             ]
             for title, label, target in info_list:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title,
                     web.reservation_card_dialog.get_tab_expense_info_in_row("2024/01/05", label),
                     target,
@@ -455,7 +463,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -477,12 +485,16 @@ class TestGuestServices:
                 3,
             )
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆")
+            web.athena_base_page.screenshot(
+                "Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆"
+            )
 
         with allure.step("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"):
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
-            web.base_page.click_toolbar_with_icon("add").sleep(1)
-            web.base_page.screenshot("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(1)
+            web.athena_base_page.screenshot(
+                "And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"
+            )
 
         with allure.step("And 點擊下拉選單選擇或輸入必填欄位"):
             web.transport_services_component.set_transport_service().sleep(1)
@@ -513,7 +525,7 @@ class TestGuestServices:
                 ),
                 "input_time": web.transport_services_component.get_transport_field_value("時間"),
             }
-            web.base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
+            web.athena_base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
 
         with allure.step("And 點擊右上的[橘色磁碟片]儲存"):
             ShareSteps.click_btn_save(web)
@@ -528,7 +540,7 @@ class TestGuestServices:
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
             web.transport_services_component.click_transport_grid_last_row().sleep(2)
-            web.base_page.screenshot("And 驗證接送服務表單欄位值正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表單欄位值正確")
             field_validations = [
                 ("接/送", "combobox", "接/送", initial_values["type"]),
                 ("日期", "field", "日期", initial_values["date"]),
@@ -551,38 +563,38 @@ class TestGuestServices:
             ]
             for title, method, field, expected in field_validations:
                 if method == "field":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_value(field),
                         expected,
                     )
                 elif method == "direct":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_direct_value(field),
                         expected,
                     )
                 elif method == "spinbutton":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_spinbutton_value(field),
                         expected,
                     )
                 elif method == "combobox":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_combobox_text(field),
                         expected,
                     )
 
         with allure.step("And 驗證接送服務表格資料正確"):
-            web.base_page.screenshot("And 驗證接送服務表格資料正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表格資料正確")
             for title, col, expected in [
                 ("接/送", "1", initial_values["type"]),
                 ("日期", "2", initial_values["date"]),
                 ("時間", "4", initial_values["input_time"]),
             ]:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title,
                     web.transport_services_component.get_transport_grid_cell_text(col),
                     expected,
@@ -602,7 +614,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -615,12 +627,16 @@ class TestGuestServices:
                 web, "guestName", full_name, "doOpenDtDetailDialog"
             )
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆")
+            web.athena_base_page.screenshot(
+                "Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆"
+            )
 
         with allure.step("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"):
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
-            web.base_page.click_toolbar_with_icon("add").sleep(1)
-            web.base_page.screenshot("And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗")
+            web.athena_base_page.click_toolbar_with_icon("add").sleep(1)
+            web.athena_base_page.screenshot(
+                "And 點擊「接送」欄位的[綠色加號]，進入「接送服務編輯」視窗"
+            )
 
         with allure.step("And 點擊下拉選單選擇或輸入必填欄位"):
             web.transport_services_component.set_transport_service(
@@ -653,7 +669,7 @@ class TestGuestServices:
                 ),
                 "input_time": web.transport_services_component.get_transport_field_value("時間"),
             }
-            web.base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
+            web.athena_base_page.screenshot("And 點擊下拉選單選擇或輸入必填欄位")
 
         with allure.step("And 點擊右上的[橘色磁碟片]儲存"):
             ShareSteps.click_btn_save(web)
@@ -668,7 +684,7 @@ class TestGuestServices:
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
             web.transport_services_component.click_transport_grid_last_row().sleep(2)
-            web.base_page.screenshot("And 驗證接送服務表單欄位值正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表單欄位值正確")
             field_validations = [
                 ("接/送", "combobox", "接/送", initial_values["type"]),
                 ("日期", "field", "日期", initial_values["date"]),
@@ -691,38 +707,38 @@ class TestGuestServices:
             ]
             for title, method, field, expected in field_validations:
                 if method == "field":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_value(field),
                         expected,
                     )
                 elif method == "direct":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_direct_value(field),
                         expected,
                     )
                 elif method == "spinbutton":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_spinbutton_value(field),
                         expected,
                     )
                 elif method == "combobox":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_combobox_text(field),
                         expected,
                     )
 
         with allure.step("And 驗證接送服務表格資料正確"):
-            web.base_page.screenshot("And 驗證接送服務表格資料正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表格資料正確")
             for title, col, expected in [
                 ("接/送", "1", initial_values["type"]),
                 ("日期", "2", initial_values["date"]),
                 ("時間", "4", initial_values["input_time"]),
             ]:
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     title,
                     web.transport_services_component.get_transport_grid_cell_text(col),
                     expected,
@@ -738,7 +754,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -758,7 +774,9 @@ class TestGuestServices:
                 4,
             )
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆")
+            web.athena_base_page.screenshot(
+                "Given 使用者進入「訂房明細」視窗，然後點擊住客的黑色鉛筆"
+            )
 
         with allure.step("And 點擊「接送」欄位的[勾勾]，進入「接送服務編輯」視窗"):
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
@@ -794,14 +812,14 @@ class TestGuestServices:
             }
             cache.set("batch_transport_data", initial_values)
 
-            web.base_page.click_toolbar_with_icon("save").sleep(1)
+            web.athena_base_page.click_toolbar_with_icon("save").sleep(1)
             web.tip_component.click_ok()
-            web.base_page.screenshot("And 點擊右側表格中想要批次新增的項目")
+            web.athena_base_page.screenshot("And 點擊右側表格中想要批次新增的項目")
 
         with allure.step("And 點擊左上的[批次新增]，進入「批次新增」視窗"):
             web.transport_services_component.click_transport_batch_add().sleep(1)
             web.transport_services_component.click_save_transport_batch().sleep(1)
-            web.base_page.screenshot("And 點擊左上的[批次新增]，進入「批次新增」視窗")
+            web.athena_base_page.screenshot("And 點擊左上的[批次新增]，進入「批次新增」視窗")
 
         with allure.step("Then 顯示'儲存成功'訊息"):
             ShareSteps.verify_save_success_tip(web)
@@ -813,10 +831,10 @@ class TestGuestServices:
         with allure.step("And 驗證右方表格顯示批次新增的接送服務筆數"):
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
-            web.base_page.screenshot("And 驗證右方表格顯示批次新增的接送服務筆數")
+            web.athena_base_page.screenshot("And 驗證右方表格顯示批次新增的接送服務筆數")
 
             transport_rows = web.transport_services_component.get_transport_row_count()
-            web.base_page.assert_data("接送服務表格行數", transport_rows, 2)
+            web.athena_base_page.assert_data("接送服務表格行數", transport_rows, 2)
 
     @allure.story("驗證批次新增接送服務資料")
     @pytest.mark.xdist_group("test_transport_service")
@@ -832,7 +850,7 @@ class TestGuestServices:
             TipComponent,
             SharePanelComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
             TransportServicesComponent,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
@@ -844,15 +862,17 @@ class TestGuestServices:
                 web, "guestName", full_name, "doOpenDtDetailDialog"
             )
             web.reservation_card_dialog.click_tab_toolbar("guest", "編輯")
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗")
+            web.athena_base_page.screenshot("Given 使用者進入「訂房明細」視窗")
 
         with allure.step("When 點擊「接送」欄位的[勾勾]，進入「接送服務編輯」視窗"):
             web.reservation_card_dialog.click_tab_guest_function("transferButton").sleep(1)
-            web.base_page.screenshot("When 點擊「接送」欄位的[勾勾]，進入「接送服務編輯」視窗")
+            web.athena_base_page.screenshot(
+                "When 點擊「接送」欄位的[勾勾]，進入「接送服務編輯」視窗"
+            )
 
         with allure.step("And 驗證接送服務表單欄位值正確"):
             web.transport_services_component.click_transport_grid_last_row().sleep(5)
-            web.base_page.screenshot("And 驗證接送服務表單欄位值正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表單欄位值正確")
 
             field_validations = [
                 ("接/送", "combobox", "接/送", transport_data["type"]),
@@ -877,51 +897,51 @@ class TestGuestServices:
 
             for title, method, field, expected in field_validations:
                 if method == "field":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_value(field),
                         expected,
                     )
                 elif method == "direct":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_field_direct_value(field),
                         expected,
                     )
                 elif method == "spinbutton":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_spinbutton_value(field),
                         expected,
                     )
                 elif method == "combobox":
-                    web.base_page.assert_data(
+                    web.athena_base_page.assert_data(
                         title,
                         web.transport_services_component.get_transport_combobox_text(field),
                         expected,
                     )
 
         with allure.step("And 驗證接送服務表格資料正確"):
-            web.base_page.screenshot("And 驗證接送服務表格資料正確")
+            web.athena_base_page.screenshot("And 驗證接送服務表格資料正確")
             transport_rows = web.transport_services_component.get_transport_row_count()
             date = ["2024/01/05", "2024/01/06"]
 
             for row_index in range(1, transport_rows + 1):
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     f"第{row_index}筆-接/送",
                     web.transport_services_component.get_transport_grid_cell_text_by_row(
                         row_index, "1"
                     ),
                     transport_data["type"],
                 )
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     f"第{row_index}筆-日期",
                     web.transport_services_component.get_transport_grid_cell_text_by_row(
                         row_index, "2"
                     ),
                     date[row_index - 1],
                 )
-                web.base_page.assert_data(
+                web.athena_base_page.assert_data(
                     f"第{row_index}筆-時間",
                     web.transport_services_component.get_transport_grid_cell_text_by_row(
                         row_index, "4"
@@ -952,7 +972,7 @@ class TestGuestServices:
             SharePanelComponent,
             ServiceItemComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         service_item_step = globals()[f"{service_way}ServiceItemStep"](web)
@@ -968,34 +988,34 @@ class TestGuestServices:
                 "現場訂房含早",
                 1,
             )
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗")
+            web.athena_base_page.screenshot("Given 使用者進入「訂房明細」視窗")
 
         with allure.step("When 點擊「服務項目」頁籤並新增服務項目"):
             web.reservation_card_dialog.click_tab("service").sleep(1)
             service_item_step.clear_service_item()
             web.reservation_card_dialog.click_tab_add_btn("service").sleep(1)
-            web.base_page.screenshot("When 點擊「服務項目」頁籤並新增服務項目")
+            web.athena_base_page.screenshot("When 點擊「服務項目」頁籤並新增服務項目")
 
         with allure.step("And 輸入服務項目資訊"):
             service_item_step.input_service_item_info("SPA", "2,000")
-            web.base_page.screenshot("And 輸入服務項目資訊")
+            web.athena_base_page.screenshot("And 輸入服務項目資訊")
 
         with allure.step("And 點擊右上的[橘色磁碟片]儲存"):
-            web.base_page.click_toolbar_with_icon("save")
+            web.athena_base_page.click_toolbar_with_icon("save")
             web.reservation_card_dialog.click_detail_toolbar("save").sleep(1)
             web.tip_component.click_ok()
-            web.base_page.screenshot("And 點擊右上的[橘色磁碟片]儲存")
+            web.athena_base_page.screenshot("And 點擊右上的[橘色磁碟片]儲存")
 
         with allure.step("Then 驗證服務項目資料"):
-            web.base_page.close_panel()
+            web.athena_base_page.close_panel()
             web.reservation_card_dialog.click_card_toolbar("doOpenDtDetailDialog").sleep(1)
             web.reservation_card_dialog.click_tab("service").sleep(1)
-            web.base_page.screenshot("Then 驗證服務項目資料")
+            web.athena_base_page.screenshot("Then 驗證服務項目資料")
             service_item_step.valid_tab_service_info("SPA", "2,000")
 
         with allure.step("And 驗證費用明細資料"):
             web.reservation_card_dialog.click_tab("expenseDetail")
-            web.base_page.screenshot("And 驗證費用明細資料")
+            web.athena_base_page.screenshot("And 驗證費用明細資料")
             service_item_step.valid_tab_expense_detail_info("SPA", "2,000")
 
     @allure.story("住客明細-新增服務項目(不可改金額)")
@@ -1025,7 +1045,7 @@ class TestGuestServices:
             SharePanelComponent,
             ServiceItemComponent,
             ReservationPage,
-            BasePage,
+            AthenaBasePage,
         ]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
         service_item_step = globals()[f"{service_way}ServiceItemStep"](web)
@@ -1041,32 +1061,32 @@ class TestGuestServices:
                 "現場訂房含早",
                 1,
             )
-            web.base_page.screenshot("Given 使用者進入「訂房明細」視窗")
+            web.athena_base_page.screenshot("Given 使用者進入「訂房明細」視窗")
 
         with allure.step("When 點擊「服務項目」頁籤並新增服務項目"):
             web.reservation_card_dialog.click_tab("service").sleep(1)
             service_item_step.clear_service_item()
             web.reservation_card_dialog.click_tab_add_btn("service").sleep(1)
-            web.base_page.screenshot("When 點擊「服務項目」頁籤並新增服務項目")
+            web.athena_base_page.screenshot("When 點擊「服務項目」頁籤並新增服務項目")
 
         with allure.step("And 輸入服務項目資訊"):
             service_item_step.input_service_item_info("DISC", "-300", price_editable=False)
-            web.base_page.screenshot("And 輸入服務項目資訊")
+            web.athena_base_page.screenshot("And 輸入服務項目資訊")
 
         with allure.step("And 點擊右上的[橘色磁碟片]儲存"):
-            web.base_page.click_toolbar_with_icon("save")
+            web.athena_base_page.click_toolbar_with_icon("save")
             web.reservation_card_dialog.click_detail_toolbar("save").sleep(1)
             web.tip_component.click_ok()
-            web.base_page.screenshot("And 點擊右上的[橘色磁碟片]儲存")
+            web.athena_base_page.screenshot("And 點擊右上的[橘色磁碟片]儲存")
 
         with allure.step("Then 驗證服務項目資料"):
-            web.base_page.close_panel()
+            web.athena_base_page.close_panel()
             web.reservation_card_dialog.click_card_toolbar("doOpenDtDetailDialog").sleep(1)
             web.reservation_card_dialog.click_tab("service").sleep(1)
-            web.base_page.screenshot("Then 驗證服務項目資料")
+            web.athena_base_page.screenshot("Then 驗證服務項目資料")
             service_item_step.valid_tab_service_info("DISC", "-300", price_editable=False)
 
         with allure.step("And 驗證費用明細資料"):
             web.reservation_card_dialog.click_tab("expenseDetail")
-            web.base_page.screenshot("And 驗證費用明細資料")
+            web.athena_base_page.screenshot("And 驗證費用明細資料")
             service_item_step.valid_tab_expense_detail_info("DISC", "-300")

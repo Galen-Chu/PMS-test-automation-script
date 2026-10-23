@@ -1,8 +1,8 @@
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.tip_locator import TipLocator
 
 
-class TipComponent(BasePage):
+class TipComponent(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, TipLocator())

@@ -55,11 +55,13 @@ class ShareSteps:
     @staticmethod
     def verify_save_success_tip(web, message=None):  # 顯示'儲存成功'提示
         if message:
-            web.base_page.screenshot(f"Then 顯示'{message}'提示")
-            web.base_page.assert_data(message, web.tip_component.get_tip_text(), message)
+            web.athena_base_page.screenshot(f"Then 顯示'{message}'提示")
+            web.athena_base_page.assert_data(message, web.tip_component.get_tip_text(), message)
         else:
-            web.base_page.screenshot("Then 顯示'儲存成功'提示")
-            web.base_page.assert_data("儲存成功", web.tip_component.get_tip_text(), "儲存成功")
+            web.athena_base_page.screenshot("Then 顯示'儲存成功'提示")
+            web.athena_base_page.assert_data(
+                "儲存成功", web.tip_component.get_tip_text(), "儲存成功"
+            )
         web.tip_component.click_ok()
 
     @staticmethod
@@ -67,5 +69,5 @@ class ShareSteps:
         if save_method:
             save_method()
         else:
-            web.base_page.click_toolbar_with_icon("save").sleep(1)
-        web.base_page.screenshot("And 點擊儲存")
+            web.athena_base_page.click_toolbar_with_icon("save").sleep(1)
+        web.athena_base_page.screenshot("And 點擊儲存")

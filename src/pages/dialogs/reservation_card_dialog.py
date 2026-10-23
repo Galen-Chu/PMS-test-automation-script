@@ -1,10 +1,10 @@
 import re
 from selenium.webdriver.common.keys import Keys
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.reservation_card_locator import ReservationCardLocator
 
 
-class ReservationCardDialog(BasePage):
+class ReservationCardDialog(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, ReservationCardLocator())

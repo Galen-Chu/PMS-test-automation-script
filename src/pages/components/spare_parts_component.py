@@ -1,8 +1,8 @@
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.spare_parts_locator import SparePartsLocator
 
 
-class SparePartsComponent(BasePage):
+class SparePartsComponent(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, SparePartsLocator())

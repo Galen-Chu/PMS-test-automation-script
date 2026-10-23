@@ -1,9 +1,9 @@
 from time import sleep
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.rate_cod_locator import RateCodLocator
 
 
-class RateCodDialog(BasePage):
+class RateCodDialog(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, RateCodLocator())

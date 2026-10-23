@@ -1,10 +1,10 @@
 from time import sleep
 from selenium.webdriver.common.keys import Keys
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.lost_item_locator import LostItemLocator
 
 
-class LostItemDialog(BasePage):
+class LostItemDialog(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, LostItemLocator())

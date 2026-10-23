@@ -1,8 +1,8 @@
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.checkin_locator import CheckinLocator
 
 
-class CheckinPage(BasePage):
+class CheckinPage(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, CheckinLocator())

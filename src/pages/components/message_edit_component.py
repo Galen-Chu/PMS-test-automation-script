@@ -1,8 +1,8 @@
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.message_edit_locator import MessageEditLocator
 
 
-class MessageEditComponent(BasePage):
+class MessageEditComponent(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, MessageEditLocator())

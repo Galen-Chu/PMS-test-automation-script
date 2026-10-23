@@ -1,9 +1,9 @@
 from time import sleep
-from pages.base_page import BasePage
+from pages.athena_base_page import AthenaBasePage
 from locators.company_panel_locator import CompanyPanelLocator
 
 
-class CompanyPanelComponent(BasePage):
+class CompanyPanelComponent(AthenaBasePage):
 
     def __init__(self, driver):
         super().__init__(driver, CompanyPanelLocator())
