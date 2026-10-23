@@ -1,10 +1,17 @@
-import os
+import tempfile
+from pathlib import Path
 from time import sleep
 from PIL import Image
 import pytesseract
+from tools.app_config import AppConfig
 from tools.driver_helper import DriverHelper
 from pages.athena_base_page import AthenaBasePage
 from locators.login_locator import LoginLocator
+
+# 驗證碼截圖寫到系統暫存（不污染工作目錄）
+CAPTCHA_IMAGE_PATH = Path(tempfile.gettempdir()) / "pms_captcha.png"
+# 登入（含驗證碼辨識失敗重試）���最大嘗試次數
+MAX_LOGIN_RETRIES = 30
 
 
 class LoginPage(AthenaBasePage):
@@ -34,8 +41,8 @@ class LoginPage(AthenaBasePage):
         retry = 0
         self.input(self.locator.input_username, username)
 
-        if int(os.getenv("VERSION")) >= 130:
-            while retry == 0 or (retry < 30 and self.has_wrong_captcha_tip()):
+        if AppConfig.is_sso_login():
+            while retry == 0 or (retry < MAX_LOGIN_RETRIES and self.has_wrong_captcha_tip()):
                 # 若已離開 auth 頁面（登入成功跳轉），跳出迴圈
                 if retry > 0 and "auth.athena.com.tw" not in self.driver.current_url:
                     break
@@ -47,7 +54,7 @@ class LoginPage(AthenaBasePage):
                 retry += 1
         else:
             self.input(self.locator.input_password, password)
-            while retry == 0 or (retry < 30 and self.has_dialog_tip()):
+            while retry == 0 or (retry < MAX_LOGIN_RETRIES and self.has_dialog_tip()):
                 self.close_dialog_tip()
                 self.captcha_screenshot()
                 captcha_text = self._solve_captcha(captcha_model)
@@ -63,11 +70,11 @@ class LoginPage(AthenaBasePage):
         """ML 模型優先，無模型時用 pytesseract OCR"""
         if captcha_model is not None:
             try:
-                return captcha_model.predict_captcha("image.png")
+                return captcha_model.predict_captcha(str(CAPTCHA_IMAGE_PATH))
             except Exception:
                 pass
         # pytesseract 後備
-        image = Image.open("image.png")
+        image = Image.open(CAPTCHA_IMAGE_PATH)
         processed_image = image.convert("L").resize((400, 128))
         captcha_text = pytesseract.image_to_string(
             processed_image,
@@ -75,11 +82,11 @@ class LoginPage(AthenaBasePage):
         )
         return captcha_text
 
-    def captcha_screenshot(self, fix=""):
+    def captcha_screenshot(self):
         captcha_element = self.driver.find_element(*self.locator.img_captcha)
         captcha_element.click()
-        sleep(2)
-        captcha_element.screenshot(f"image{fix}.png")
+        sleep(2)  # 等驗證碼圖片刷新（無 DOM 條件可等待）
+        captcha_element.screenshot(str(CAPTCHA_IMAGE_PATH))
         return self
 
     def has_dialog_tip(self):
