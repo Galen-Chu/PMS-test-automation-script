@@ -1,7 +1,11 @@
 from pages.base_page import BasePage
+from locators.spare_parts_locator import SparePartsLocator
 
 
 class SparePartsComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, SparePartsLocator())
 
     def check_spare_parts_exist(self):
         spare_parts_exist = self.driver.find_element(

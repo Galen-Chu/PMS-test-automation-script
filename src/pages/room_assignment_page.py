@@ -1,7 +1,11 @@
 from pages.base_page import BasePage
+from locators.room_assignment_locator import RoomAssignmentLocator
 
 
 class RoomAssignmentPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, RoomAssignmentLocator())
 
     def has_assign_rmk(self):
         assign_remark = self.driver.find_elements(*self.locator.assign_remark_icon)

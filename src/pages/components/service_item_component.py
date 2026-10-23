@@ -1,7 +1,11 @@
 from pages.base_page import BasePage
+from locators.service_item_locator import ServiceItemLocator
 
 
 class ServiceItemComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, ServiceItemLocator())
 
     def click_service_dropdown(self, label_name):
         tmp_locator = self.formator_locator(self.locator.service_dropdown, label_name)

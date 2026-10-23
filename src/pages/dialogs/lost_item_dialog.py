@@ -1,9 +1,14 @@
 from time import sleep
 from selenium.webdriver.common.keys import Keys
 from pages.base_page import BasePage
+from locators.lost_item_locator import LostItemLocator
 
 
 class LostItemDialog(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, LostItemLocator())
+
     def select_status_in_dialog(self, status):
         sleep(2)
         self.click(self.locator.status_dropdown)

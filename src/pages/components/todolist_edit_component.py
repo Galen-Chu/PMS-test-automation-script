@@ -1,8 +1,12 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from pages.base_page import BasePage
+from locators.todolist_edit_locator import TodolistEditLocator
 
 
 class TodolistEditComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, TodolistEditLocator())
 
     def create_todo(self, departments):
         self.click(self.locator.department_dropdown)

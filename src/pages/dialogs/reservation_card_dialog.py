@@ -1,9 +1,13 @@
 import re
 from selenium.webdriver.common.keys import Keys
 from pages.base_page import BasePage
+from locators.reservation_card_locator import ReservationCardLocator
 
 
 class ReservationCardDialog(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, ReservationCardLocator())
 
     # ----- 訂房卡共用 (多筆、單筆) -----
     def click_btn_add(self):

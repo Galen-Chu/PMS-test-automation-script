@@ -1,8 +1,13 @@
 from selenium.webdriver.common.keys import Keys
 from pages.base_page import BasePage
+from locators.maindesk_locator import MaindeskLocator
 
 
 class MaindeskPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, MaindeskLocator())
+
     # ----- 多筆頁面 -----
     def click_room_status_tag(self, tag):
         tmp_locator = self.formator_locator(self.locator.room_status_tag, tag)

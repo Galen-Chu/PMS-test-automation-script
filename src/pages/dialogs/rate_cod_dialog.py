@@ -1,8 +1,12 @@
 from time import sleep
 from pages.base_page import BasePage
+from locators.rate_cod_locator import RateCodLocator
 
 
 class RateCodDialog(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, RateCodLocator())
 
     def click_add_use_date(self):
         self.click(self.locator.btn_add_use_date)

@@ -1,8 +1,12 @@
 from time import sleep
 from pages.base_page import BasePage
+from locators.room_control_locator import RoomControlLocator
 
 
 class RoomControlPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, RoomControlLocator())
 
     def change_floor(self, floor):
         tmp_locator = self.formator_locator(self.locator.btn_change_floor, floor)

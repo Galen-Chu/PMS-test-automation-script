@@ -1,8 +1,12 @@
 from time import sleep
 from pages.base_page import BasePage
+from locators.reservation_locator import ReservationLocator
 
 
 class ReservationPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, ReservationLocator())
 
     def set_condition_value(self, field, value):
         locator_input = self.formator_locator(self.locator.input_condition, field)

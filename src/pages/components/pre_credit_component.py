@@ -1,7 +1,11 @@
 from pages.base_page import BasePage
+from locators.pre_credit_locator import PreCreditLocator
 
 
 class PreCreditComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, PreCreditLocator())
 
     def click_add_precredit(self):
         self.click(self.locator.btn_add_precredit)

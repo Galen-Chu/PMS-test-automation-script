@@ -1,9 +1,13 @@
 from time import sleep
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
+from locators.guest_account_locator import GuestAccountLocator
 
 
 class GuestAccountPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, GuestAccountLocator())
 
     def set_condition_value(self, field, value):
         locator_input = self.formator_locator(self.locator.input_condition, field)

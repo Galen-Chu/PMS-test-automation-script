@@ -4,9 +4,13 @@ from PIL import Image
 import pytesseract
 from tools.driver_helper import DriverHelper
 from pages.base_page import BasePage
+from locators.login_locator import LoginLocator
 
 
 class LoginPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, LoginLocator())
 
     def login(self, username, password):
         # Lazy import: keeps the TF/cv2 stack out of module import time, so

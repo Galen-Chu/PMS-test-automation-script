@@ -1,9 +1,13 @@
 from time import sleep
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
+from locators.check_in_list_locator import CheckInListLocator
 
 
 class CheckInListPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, CheckInListLocator())
 
     def expand_filter(self):
         """展開下拉篩選欄位"""

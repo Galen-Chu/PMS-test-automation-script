@@ -1,8 +1,12 @@
 from time import sleep
 from pages.base_page import BasePage
+from locators.share_panel_locator import SharePanelLocator
 
 
 class SharePanelComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, SharePanelLocator())
 
     def click_panel_footer_btn(self, title, btn_name):
         locator_panel_confirm = self.formator_locator(

@@ -1,7 +1,11 @@
 from pages.base_page import BasePage
+from locators.spare_parts_batch_locator import SparePartsBatchLocator
 
 
 class SparePartsBatchComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, SparePartsBatchLocator())
 
     def create_batch_spare(self, batch_spare_option):
         self.click(self.locator.batch_spare_dropdown)

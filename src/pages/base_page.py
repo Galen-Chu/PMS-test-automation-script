@@ -12,43 +12,14 @@ from selenium.common.exceptions import (
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# pylint: disable=unused-import
-from locators.header_locator import HeaderLocator
-from locators.login_locator import LoginLocator
-from locators.home_locator import HomeLocator
-from locators.reservation_locator import ReservationLocator
-from locators.housekeeping_account_locator import HousekeepingAccountLocator
-from locators.share_panel_locator import SharePanelLocator
-from locators.tip_locator import TipLocator
-from locators.guest_account_locator import GuestAccountLocator
-from locators.checkin_locator import CheckinLocator
-from locators.company_panel_locator import CompanyPanelLocator
-from locators.service_item_locator import ServiceItemLocator
-from locators.rate_cod_locator import RateCodLocator
-from locators.room_control_locator import RoomControlLocator
 from locators.base_locator import BaseLocator
-from locators.lost_management_locator import LostManagementLocator
-from locators.reservation_card_locator import ReservationCardLocator
-from locators.spare_parts_locator import SparePartsLocator
-from locators.spare_parts_batch_locator import SparePartsBatchLocator
-from locators.transport_services_locator import TransportServicesLocator
-from locators.todolist_edit_locator import TodolistEditLocator
-from locators.pre_credit_locator import PreCreditLocator
-from locators.message_edit_locator import MessageEditLocator
-from locators.room_assignment_locator import RoomAssignmentLocator
-from locators.maindesk_locator import MaindeskLocator
-from locators.check_in_list_locator import CheckInListLocator
-
-# pylint: enable=unused-import
 
 
 class BasePage:
 
-    def __init__(self, driver):
-        prefix = (
-            type(self).__name__.replace("Page", "").replace("Component", "").replace("Dialog", "")
-        )
-        self.locator = globals()[f"{prefix}Locator"]
+    def __init__(self, driver, locator=None):
+        # 預設 BaseLocator：測試的 pages 清單會直接實例化 BasePage 取用通用方法
+        self.locator = locator if locator is not None else BaseLocator()
         self.driver = driver
 
     def formator_locator(self, locator, values):

@@ -1,8 +1,12 @@
 from time import sleep
 from pages.base_page import BasePage
+from locators.company_panel_locator import CompanyPanelLocator
 
 
 class CompanyPanelComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, CompanyPanelLocator())
 
     def get_td_input_value(self, field):
         tmp_locator = self.formator_locator(self.locator.td_input_value, field)

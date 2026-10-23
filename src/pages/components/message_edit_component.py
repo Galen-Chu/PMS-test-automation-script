@@ -1,7 +1,11 @@
 from pages.base_page import BasePage
+from locators.message_edit_locator import MessageEditLocator
 
 
 class MessageEditComponent(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, MessageEditLocator())
 
     def fill_message_fields(self, message_from, phone_number, message_content):
         locator_from = self.formator_locator(self.locator.message_input_field, "留言者")

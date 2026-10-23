@@ -1,8 +1,12 @@
 from time import sleep
 from pages.base_page import BasePage
+from locators.housekeeping_account_locator import HousekeepingAccountLocator
 
 
 class HousekeepingAccountPage(BasePage):
+
+    def __init__(self, driver):
+        super().__init__(driver, HousekeepingAccountLocator())
 
     def add_housekeeping_account(self):
         self.click(self.locator.btn_add)

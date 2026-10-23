@@ -1,7 +1,13 @@
 from pages.dialogs.lost_item_dialog import LostItemDialog
+from locators.lost_management_locator import LostManagementLocator
 
 
 class LostManagementPage(LostItemDialog):
+
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.locator = LostManagementLocator()
+
     def click_first_row(self, row=0):
         locator_by_row = self.formator_locator(self.locator.text_data_in_page, (row, "code"))
         self.click(locator_by_row)
