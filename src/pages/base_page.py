@@ -101,9 +101,7 @@ class BasePage:
         避免與 WebDriverWait 混用造成逾時時間不可預期（Selenium 反模式）。"""
         self.driver.implicitly_wait(0)
         try:
-            WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located(locator)
-            )
+            WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
             return True
         except TimeoutException:
             return False
