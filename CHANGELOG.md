@@ -22,6 +22,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   static JSON/CSV data, data-driven example suite (38 tests)
 - CLI toolchain: interactive Selenium CLI, Qase API CLI, knowledge docs
 - Page structure documentation (10 pages) + PMS menu map
+- A-series upgrades (2026-10-20/21): session-scoped browser lifecycle
+  (`shared_driver`/`logged_in_driver` fixtures with keep-alive thread
+  and persistent Chrome profile), `SessionPersistence` cross-run state
+  restore, ML captcha model training pipeline + retrained model (A3,
+  5.6x faster login), performance suite (`performance_monitor`,
+  `perf_analyzer`, `perf_report`, perf reservation tests, `perf`
+  marker)
 
 ### Changed
 - Dependency modernization: pytest 8 -> 9.1.1 (with xdist 3.8,
@@ -35,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pre-commit hook versions aligned with requirements-dev.txt (black
   26.5.1, pylint 4.0.9, mypy 2.3.1, bandit 1.9.4); local hooks no
   longer drift from CI
+- CI: Allure report generated via CLI instead of the Docker-based
+  action (Ubuntu 26 runner compatibility)
 
 ### Removed
 - 14 stale root-level page objects (`src/pages/*_component.py`,
@@ -62,6 +71,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   typo)
 - `.gitignore` excludes `security-report.json` written by the bandit
   pre-commit hook
+- Removed dead `DriverHelper.create_web_browser` (superseded by the
+  fixture lifecycle; `session_storages.json` kept for selenium_cli)
+- Sanitized QA credentials/URLs out of `verify_a3_login.py` and moved
+  it to `src/tools/` — the exposed QA password should be rotated, as
+  git history still contains the old values
+- P7 naming cleanups: `click_toolbar_item(item, panel, toolbar=)` and
+  `click_target_ikey(ikey, grid=)` replace the numbered `_2`/`_3`
+  variants, `get_by_data_field` now reads instead of clicking,
+  `get_diplaying_items_count` typo fixed
+- Docs synced to the fixture-based lifecycle (ARCHITECTURE,
+  FRAMEWORK_GUIDE, FAQ, BEST_PRACTICES, SETUP, README)
 
 ## [1.0.0] - 2026-03-11
 

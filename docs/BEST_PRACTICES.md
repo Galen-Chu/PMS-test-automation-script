@@ -342,18 +342,16 @@ def test_reservation(browser):
 
 ## Performance Optimization
 
-### 1. Use Session Storage
+### 1. Reuse the Logged-in Session
+
+The `logged_in_driver` fixture handles login once per session and
+restores it across runs:
 
 ```python
-# Save session once
-def test_setup_session(browser):
-    browser.login.login("user", "password")
-    DriverHelper.save_session_storages()
-
-# Reuse in other tests
-def test_reservation(browser):
-    # Session already exists - faster!
-    browser.home.navigate_to_reservations()
+def test_reservation(logged_in_driver):
+    # Already logged in - faster!
+    web = DriverHelper.get_logged_in_browser([ReservationPage])
+    web.reservation_page.search()
 ```
 
 ### 2. Run Tests in Parallel

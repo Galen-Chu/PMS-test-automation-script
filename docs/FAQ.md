@@ -486,11 +486,9 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
 ### Q: How can I make tests run faster?
 
 **A:**
-1. **Use session storage** (already implemented):
-```python
-# Login once, reuse session
-DriverHelper.save_session_storages()
-```
+1. **Reuse the logged-in session** (built in): the `logged_in_driver`
+   fixture logs in once per run and restores sessions across runs —
+   no manual save/restore calls.
 
 2. **Run in parallel:**
 ```bash

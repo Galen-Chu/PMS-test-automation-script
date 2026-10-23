@@ -14,11 +14,12 @@ A comprehensive test automation framework for Property Management System (PMS) a
 - **Parallel Execution** - Run tests concurrently with Docker Selenium Grid
 - **Allure Reporting** - Comprehensive HTML reports with screenshots
 - **Session Management** - Efficient test execution with session persistence
+- **Performance Testing** - Automated page-load/flow timing with self-contained reports
 - **Multi-Browser Support** - Chrome, Firefox, and Edge compatibility
 
 ## 📊 Project Statistics
 
-- **230 Test Cases** across 15 test suites
+- **233 Test Cases** across 17 test files
 - **26 Page Objects** plus 11 reusable components and 3 dialog handlers
 - **26 Locator Classes** for element identification
 - **Machine Learning** integration for intelligent testing
@@ -132,6 +133,8 @@ allure serve allure-results
 | `test_check_in_list.py` | C/I list check-in | 1 |
 | `test_lost_management.py` | Lost & found | 11 |
 | `examples/test_data_examples.py` | Data-driven testing examples | 38 |
+| `test_perf_reservation.py` | Performance (page load, booking flow) | 2 |
+| `test_perf_example.py` | Performance testing example | 1 |
 
 ## 🤖 ML Captcha Recognition
 

@@ -19,47 +19,37 @@ Learn how to write tests using the PMS Test Automation Framework.
 
 ```python
 # src/tests/test_example.py
-import pytest
-from pages.login_page import LoginPage
-from pages.home_page import HomePage
-from utils.driver_helper import DriverHelper
+import allure
+from pages.components.header_component import HeaderComponent
+from pages.maindesk_page import MaindeskPage
+from tools.driver_helper import DriverHelper
 
-def test_login_success():
-    """Test successful login"""
-    # Initialize browser with required pages
-    web = DriverHelper.create_web_browser([LoginPage, HomePage])
+def test_example(logged_in_driver):
+    """Login is already handled by the logged_in_driver fixture"""
+    # Build the page objects this test needs on the shared driver
+    pages = [HeaderComponent, MaindeskPage]
+    web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
-    # Perform login
-    web.login.login("username", "password")
-
-    # Assert we're on home page
-    assert web.home.has_welcome_message()
-
-    # Cleanup happens automatically
+    # Act + assert
+    web.header_component.expand_menu("接待")
 ```
 
 ### Using pytest Fixtures
 
-```python
-# src/tests/conftest.py
-import pytest
-from utils.driver_helper import DriverHelper
+Session-scoped fixtures live in `src/tests/conftest.py`:
 
-@pytest.fixture
-def browser():
-    """Fixture to provide browser instance"""
-    pages = [LoginPage, HomePage, ReservationPage]
-    web = DriverHelper.create_web_browser(pages)
-    yield web
-    web.driver.quit()
-```
+- `shared_driver` — one Chrome for the whole run (persistent profile,
+  keep-alive thread); quits in teardown
+- `logged_in_driver` — guarantees a logged-in state (saved session →
+  Chrome profile → full login) and saves the session for the next run
+- `perf_monitor` — per-test performance hooks for `@pytest.mark.perf`
 
 ```python
-# Test using fixture
-def test_with_fixture(browser):
-    """Test using browser fixture"""
-    browser.login.login("user", "pass")
-    assert browser.home.is_displayed()
+# Test using the fixtures
+def test_with_fixture(logged_in_driver):
+    """Browser is up and logged in already"""
+    web = DriverHelper.get_logged_in_browser([MaindeskPage])
+    web.maindesk_page.search()
 ```
 
 ## Page Object Model
@@ -670,15 +660,9 @@ time.sleep(5)  # Don't do this!
 
 ### 5. Clean Up Resources
 
-```python
-@pytest.fixture
-def browser():
-    """Browser fixture with cleanup"""
-    web = DriverHelper.create_web_browser([LoginPage])
-    yield web
-    # Cleanup
-    web.driver.quit()
-```
+The `shared_driver` session fixture owns teardown: it stops the
+keep-alive thread and quits the browser after the whole session.
+Tests never call `driver.quit()` themselves.
 
 ---
 

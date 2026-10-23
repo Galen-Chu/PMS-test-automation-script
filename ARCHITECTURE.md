@@ -103,17 +103,15 @@ BasePage
 
 ### 5. Factory Pattern
 
-Dynamic page object creation via DriverHelper:
+Dynamic page-object bundles built on the session-scoped driver via
+DriverHelper:
 
 ```python
-def create_web_browser(pages):
-    driver = webdriver.Chrome()
-    web = type("Expando", (object,), {})()
-
-    for page in pages:
-        page_name = decamelize(page.__name__)
-        web[page_name] = page(driver)
-
+def get_logged_in_browser(pages, path=None):
+    driver = DriverHelper.DRIVER  # provided by the logged_in_driver fixture
+    web = type("Expando", (object,), {
+        decamelize(p.__name__): p(driver) for p in pages
+    })()
     return web
 ```
 
@@ -142,10 +140,12 @@ pms-test-automation-script/
 │   │
 │   └── tools/ # Utility modules
 │       ├── driver_helper.py
+│       ├── session_persistence.py  # Cross-run session restore
+│       ├── performance_monitor.py  # + perf_analyzer / perf_report
 │       ├── date_helper.py
 │       ├── random_helper.py
 │       └── captcha/        # ML captcha solver
-│           └── captcha_helper.py
+��           └── captcha_helper.py
 │
 ├── ml-models/              # Trained ML models
 │   ├── captcha_model.keras
@@ -170,25 +170,23 @@ pms-test-automation-script/
 
 ### 1. DriverHelper
 
-Manages WebDriver lifecycle and session storage:
+Builds page-object bundles on the shared driver and persists sessions:
 
 ```python
 class DriverHelper:
     @staticmethod
-    def create_web_browser(pages):
-        # Create driver
-        # Load session storage (for faster testing)
-        # Initialize page objects
-        # Return web object with all pages
+    def get_logged_in_browser(pages, path=None):
+        # Wrap the fixture-provided driver with the requested page
+        # objects; optionally navigate to a page path first
 
     @staticmethod
     def save_session_storages():
-        # Persist session data for reuse
+        # Persist sessionStorage for selenium_cli reuse
 ```
 
 **Features:**
-- Session persistence to avoid repeated logins
-- Multi-browser support
+- Session-scoped driver via the `logged_in_driver` fixture (one login per run)
+- Three-tier session recovery: saved state -> Chrome profile -> full login
 - Selenium Grid integration
 
 ### 2. BasePage
@@ -423,23 +421,21 @@ def pytest_runtest_makereport(item, call):
 
 ## Performance Optimization
 
-### Session Storage Persistence
+### Session Reuse (built into fixtures)
 
-```python
-# First test: Login
-driver.get(login_url)
-# ... perform login ...
-DriverHelper.save_session_storages()
+The `logged_in_driver` session fixture (conftest.py) logs in once per
+run and restores sessions across runs, trying in order:
 
-# Subsequent tests: Skip login
-session_data = load_session_storages()
-driver.execute_script(f"sessionStorage.setItem('{key}', '{value}');")
-driver.get(app_url)  # Already logged in!
-```
+1. Saved cookies + sessionStorage (`SessionPersistence`)
+2. The persistent Chrome profile (`.chrome-profile/`)
+3. A full captcha-solved login
+
+A background keep-alive thread pings the app every 3 minutes to avoid
+idle timeouts during long runs.
 
 **Impact:**
-- Reduces test time by 60-70%
-- Avoids repeated captcha solving
+- Captcha solved at most once per session
+- Subsequent runs skip login entirely
 - Minimizes authentication overhead
 
 ### Lazy Loading
@@ -447,13 +443,10 @@ driver.get(app_url)  # Already logged in!
 Page objects are created on-demand:
 
 ```python
-# Only create needed pages
-web = DriverHelper.create_web_browser([
-    LoginPage,
-    ReservationPage
-])
-
-# Other pages not instantiated
+# Only create the pages this test needs, on the shared driver
+web = DriverHelper.get_logged_in_browser(
+    [ReservationPage], "reservation/PMS0110010"
+)
 ```
 
 ## Best Practices

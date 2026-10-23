@@ -342,8 +342,8 @@ FileNotFoundError: session_storages.json
 
 **Solution:**
 ```bash
-# Create empty session storage file
-echo "{}" > src/utils/session_storages.json
+# selenium_cli.py expects this file; create an empty one
+echo "{}" > src/tools/session_storages.json
 
 # Or run login test first to create it
 pytest src/tests/test_login.py
