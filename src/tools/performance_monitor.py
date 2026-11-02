@@ -161,7 +161,10 @@ class PerformanceMonitor:
         """Insert a named marker at the current time."""
         import json as _json
 
+        # start() 只在當時的頁面注入 __perf_ops；導航後新頁面沒有這個陣列，
+        # 需先確保存在再 push（否則 undefined.push 會炸）
         self.driver.execute_script(
+            "window.__perf_ops = window.__perf_ops || [];"
             "var m = " + _json.dumps({"t": "performance.now()", "type": "mark", "tag": tag}) + ";"
             "m.t = performance.now(); window.__perf_ops.push(m);"
         )
