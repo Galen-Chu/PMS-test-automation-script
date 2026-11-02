@@ -43,9 +43,7 @@ class LoginPage(AthenaBasePage):
 
         # 設定 tesseract 路徑（Windows 安裝位置）
         if not shutil.which("tesseract"):
-            pytesseract.pytesseract.tesseract_cmd = (
-                r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-            )
+            pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
         retry = 0
         attempts = []
@@ -69,12 +67,8 @@ class LoginPage(AthenaBasePage):
                 self.input(self.locator.input_password, password)
                 self.captcha_screenshot()
                 captcha_text, conf, solver = self._solve_captcha(captcha_model)
-                self._record_captcha_attempt(
-                    attempts, retry + 1, captcha_text, conf, solver
-                )
-                self.input_with_clear(
-                    self.locator.input_valid_code, captcha_text.strip()
-                )
+                self._record_captcha_attempt(attempts, retry + 1, captcha_text, conf, solver)
+                self.input_with_clear(self.locator.input_valid_code, captcha_text.strip())
                 self.click(self.locator.btn_login)
                 retry += 1
                 # 提交後等待明確結果：跳轉（成功）或錯誤提示（重試）。
@@ -89,20 +83,14 @@ class LoginPage(AthenaBasePage):
                 self.close_dialog_tip()
                 self.captcha_screenshot()
                 captcha_text, conf, solver = self._solve_captcha(captcha_model)
-                self._record_captcha_attempt(
-                    attempts, retry + 1, captcha_text, conf, solver
-                )
-                self.input_with_clear(
-                    self.locator.input_valid_code, captcha_text.strip()
-                )
+                self._record_captcha_attempt(attempts, retry + 1, captcha_text, conf, solver)
+                self.input_with_clear(self.locator.input_valid_code, captcha_text.strip())
                 self.click(self.locator.btn_login)
                 retry += 1
 
         login_ok = self._wait_login_redirect()
         self._mark_last_captcha_outcome(attempts, login_ok)
-        print(
-            f"[captcha] login {'OK' if login_ok else 'FAIL'}: {len(attempts)} attempts"
-        )
+        print(f"[captcha] login {'OK' if login_ok else 'FAIL'}: {len(attempts)} attempts")
 
         sleep(1)
         DriverHelper.save_session_storages()
@@ -112,9 +100,7 @@ class LoginPage(AthenaBasePage):
         """ML 模型優先，無模型時用 pytesseract OCR；回傳 (文字, 信心度, 解法)"""
         if captcha_model is not None:
             try:
-                text, conf = captcha_model.predict_captcha_detailed(
-                    str(CAPTCHA_IMAGE_PATH)
-                )
+                text, conf = captcha_model.predict_captcha_detailed(str(CAPTCHA_IMAGE_PATH))
                 return text, conf, "ml"
             except Exception:
                 pass
@@ -134,9 +120,7 @@ class LoginPage(AthenaBasePage):
         try:
             CAPTCHA_SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
             ts = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-            dest = (
-                CAPTCHA_SAMPLES_DIR / f"{ts}_a{number}_{text}_c{conf:.2f}_{solver}.png"
-            )
+            dest = CAPTCHA_SAMPLES_DIR / f"{ts}_a{number}_{text}_c{conf:.2f}_{solver}.png"
             shutil.copy(CAPTCHA_IMAGE_PATH, dest)
         except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"[captcha] sample save failed: {e}")
