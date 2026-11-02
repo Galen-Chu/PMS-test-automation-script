@@ -14,7 +14,7 @@ mypy==2.4.1
 # Testing
 pytest-cov==7.1.0
 pytest-mock==3.17.0
-faker==40.39.0
+faker==40.44.0
 freezegun==1.5.5
 
 # Documentation
