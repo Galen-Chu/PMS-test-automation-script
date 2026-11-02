@@ -1,4 +1,4 @@
-allure-pytest==2.16.1
+allure-pytest==2.16.2
 allure_python_commons==2.16.1
 names==0.3.0
 faker==40.39.0
