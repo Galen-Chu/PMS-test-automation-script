@@ -5,6 +5,7 @@ from pathlib import Path
 from time import sleep
 from PIL import Image
 import pytesseract
+from selenium.common.exceptions import NoSuchElementException
 from tools.app_config import AppConfig
 from tools.driver_helper import DriverHelper
 from pages.athena_base_page import AthenaBasePage
@@ -46,17 +47,29 @@ class LoginPage(AthenaBasePage):
         self.input(self.locator.input_username, username)
 
         if AppConfig.is_sso_login():
-            while retry == 0 or (retry < MAX_LOGIN_RETRIES and self.has_wrong_captcha_tip()):
-                # 若已離開 auth 頁面（登入成功跳轉），跳出迴圈
+            outcome = None
+            while retry < MAX_LOGIN_RETRIES:
                 if retry > 0 and "auth.athena.com.tw" not in self.driver.current_url:
                     break
-                self.input(self.locator.input_password, password)
+                try:
+                    self.input(self.locator.input_password, password)
+                except NoSuchElementException:
+                    # 前一次提交其實成功、頁面正在轉跳：欄位已消失
+                    if "auth.athena.com.tw" not in self.driver.current_url:
+                        break
+                    raise
                 self.captcha_screenshot()
                 captcha_text, conf, solver = self._solve_captcha(captcha_model)
                 self._record_captcha_attempt(attempts, retry + 1, captcha_text, conf, solver)
                 self.input_with_clear(self.locator.input_valid_code, captcha_text.strip())
                 self.click(self.locator.btn_login)
                 retry += 1
+                # 提交後等待明確結果：跳轉（成功）或錯誤提示（重試）。
+                # 只查一次提示會在提示未渲染時誤判成「完成」而提前出場；
+                # 轉跳（token 交換）有時超過 8 秒，等待要夠長。
+                outcome = self._wait_submit_outcome()
+                if outcome == "redirect":
+                    break
         else:
             self.input(self.locator.input_password, password)
             while retry == 0 or (retry < MAX_LOGIN_RETRIES and self.has_dialog_tip()):
@@ -68,7 +81,7 @@ class LoginPage(AthenaBasePage):
                 self.click(self.locator.btn_login)
                 retry += 1
 
-        login_ok = "auth.athena.com.tw" not in self.driver.current_url
+        login_ok = self._wait_login_redirect()
         self._mark_last_captcha_outcome(attempts, login_ok)
         print(f"[captcha] login {'OK' if login_ok else 'FAIL'}: {len(attempts)} attempts")
 
@@ -105,6 +118,30 @@ class LoginPage(AthenaBasePage):
         except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"[captcha] sample save failed: {e}")
 
+    def _wait_submit_outcome(self, timeout=20):
+        """提交後輪詢至明確結果：回傳 redirect（成功跳轉）/ wrong_captcha（重試）/ timeout"""
+        polled = 0.0
+        while polled < timeout:
+            if "auth.athena.com.tw" not in self.driver.current_url:
+                return "redirect"
+            if self.has_wrong_captcha_tip():
+                return "wrong_captcha"
+            sleep(0.25)
+            polled += 0.25
+        return "timeout"
+
+    def _wait_login_redirect(self, timeout=5):
+        """最後一次提交後的轉跳是非同步的：等 URL 離開 auth 再判定成敗，
+        否則會把已成功的登入誤判為失敗（並錯標樣本）"""
+        sleep_seconds = 0.25
+        waited = 0.0
+        while waited < timeout:
+            if "auth.athena.com.tw" not in self.driver.current_url:
+                return True
+            sleep(sleep_seconds)
+            waited += sleep_seconds
+        return False
+
     def _mark_last_captcha_outcome(self, attempts, login_ok):
         """成功登入時，最後一次嘗試的樣本即為正確標籤（檔名加 _OK）"""
         if not attempts:
@@ -119,8 +156,13 @@ class LoginPage(AthenaBasePage):
 
     def captcha_screenshot(self):
         captcha_element = self.driver.find_element(*self.locator.img_captcha)
+        old_src = captcha_element.get_attribute("src")
         captcha_element.click()
-        sleep(2)  # 等驗證碼圖片刷新（無 DOM 條件可等待）
+        # 等圖片真的換掉再截圖（盲等固定秒數在伺服器慢時會拍到舊圖）
+        for _ in range(20):
+            sleep(0.25)
+            if captcha_element.get_attribute("src") != old_src:
+                break
         captcha_element.screenshot(str(CAPTCHA_IMAGE_PATH))
         return self
 
