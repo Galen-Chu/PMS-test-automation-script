@@ -1,6 +1,6 @@
 services:
   selenium-hub:
-    image: selenium/hub:4.35.0-20250828
+    image: selenium/hub:4.51.0-20261010
     container_name: selenium-hub
     ports:
       - "4442:4442"
@@ -14,7 +14,7 @@ services:
       timeout: 5s
       retries: 5
   chrome:
-    image: selenium/node-chrome:4.35.0-20250828
+    image: selenium/node-chrome:4.51.0-20261010
     container_name: node-chrome
     platform: linux/amd64
     shm_size: 2gb
@@ -32,7 +32,7 @@ services:
       - "5900:5900" # Optional: for VNC access to the browser within the container
 
   edge:
-    image: selenium/node-edge:4.35.0-20250828
+    image: selenium/node-edge:4.51.0-20261010
     platform: linux/amd64
     shm_size: 2gb
     depends_on:
@@ -49,7 +49,7 @@ services:
       - "5901:5901" # Optional: for VNC access to the browser within the container
 
   firefox:
-    image: selenium/node-firefox:4.35.0-20250828
+    image: selenium/node-firefox:4.51.0-20261010
     shm_size: 2gb
     depends_on:
       - selenium-hub
