@@ -34,9 +34,6 @@ updates:
       # commons-only bumps are unmergeable. Bump allure-pytest and pin
       # commons to the matching version in the same change instead.
       - dependency-name: "allure-python-commons"
-      # numpy >=2.5 requires Python >=3.12; the CI matrix still tests 3.11.
-      # Re-evaluate when the 3.11 matrix entry is dropped.
-      - dependency-name: "numpy"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"

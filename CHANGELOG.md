@@ -57,6 +57,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the target element instead of fixed sleeps
 - Dependencies: selenium 4.49.0, scikit-learn 1.9.1, pytest-env 1.7.1,
   allure-pytest 2.16.1 (dependabot #56-59)
+- November dependency sync (#69-75 + follow-up): allure-pytest/commons
+  2.16.2 (paired - merging allure alone breaks pip resolution),
+  selenium 4.52.0, pytest 9.2.0, pytest-env 1.8.4, pillow 13.0.0,
+  faker 40.44.0, numpy 2.5.4 (stale ignore removed - CI is 3.12-only),
+  dev group (black 26.10.1, pylint 4.1.3, mypy 2.4.1, flake8 7.5.0,
+  pytest-mock 3.17.0, ipython 9.18.0, pre-commit 4.7.0); pre-commit
+  revs and the CI lint pins aligned to match; Selenium Grid images
+  4.35.0-20250828 -> 4.51.0-20261010 (CI browsers were ~14 months old)
 - P4/P5/P6 remainders: `formator_locator` renamed to `format_locator`
   (267 call sites); a typed `Browser` class replaces the Expando
   attribute bag; `AppConfig` centralizes VERSION parsing (clear error
