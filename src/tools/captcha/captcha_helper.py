@@ -137,10 +137,12 @@ class CaptchaTrainer:
             verbose=1,
         )
 
-        # 儲存模型和映射
-        model.save("captcha_model.keras")
+        # 儲存模型和映射（固定存在套件目錄，與 load_model 對齊；
+        # 訓練當下的工作目錄可能不同，存相對路徑會造成模型四散）
+        package_dir = Path(__file__).resolve().parent
+        model.save(package_dir / "captcha_model.keras")
 
-        with open("char_mappings.pkl", "wb") as f:
+        with open(package_dir / "char_mappings.pkl", "wb") as f:
             pickle.dump(self.mappings, f)
 
         return model, history
@@ -157,17 +159,26 @@ class CaptchaTrainer:
 
     def predict_captcha(self, image_path):
         # 預測驗證碼
+        text, _ = self.predict_captcha_detailed(image_path)
+        return text
+
+    def predict_captcha_detailed(self, image_path):
+        """預測驗證碼，回傳 (文字, 平均信心度 0~1)"""
         img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(img, (self.img_width, self.img_height))
         img = img.astype(np.float32) / 255.0
         img = img.reshape((1, self.img_height, self.img_width, 1))  # 修復參數傳遞問題
 
-        predictions = self.model.predict(img)
+        predictions = self.model.predict(img, verbose=0)
 
         predicted_text = ""
+        confidences = []
         for i in range(self.max_length):
-            pred_char_idx = np.argmax(predictions[i])
+            probs = predictions[i][0]
+            pred_char_idx = int(np.argmax(probs))
             if pred_char_idx < len(self.mappings["characters"]):
                 predicted_text += self.mappings["num_to_char"][pred_char_idx]
+                confidences.append(float(probs[pred_char_idx]))
 
-        return predicted_text
+        confidence = sum(confidences) / len(confidences) if confidences else 0.0
+        return predicted_text, confidence
