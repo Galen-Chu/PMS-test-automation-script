@@ -83,6 +83,28 @@ class TestReportHtml:
         assert "<script>alert" not in html
         assert "&lt;script&gt;" in html
 
+    def test_common_root_annotated_and_stripped(self):
+        apis = [
+            {"name": "node/api/booking/save", "start": 0, "duration": 100},
+            {"name": "node/api/booking/recalculate", "start": 10, "duration": 200},
+            {"name": "node/api/grid/query", "start": 20, "duration": 300},
+        ]
+        html = build_report_html(apis, {})
+        assert "共同根路徑" in html and "<code>node/api/</code>" in html
+        # 條列與明細只顯示差異段
+        assert ">booking/save<" in html
+        assert ">grid/query<" in html
+        # 游標提示（title）仍保留完整���稱
+        assert "title='node/api/booking/save'" in html
+
+    def test_no_common_root_no_annotation(self):
+        apis = [
+            {"name": "booking/save", "start": 0, "duration": 100},
+            {"name": "auth/token", "start": 10, "duration": 200},
+        ]
+        html = build_report_html(apis, {})
+        assert "共同根路徑" not in html
+
 
 class TestHistory:
     def test_record_and_trend(self, history_file):

@@ -49,8 +49,12 @@ _TOKENS = """
   th { color: #6a6a6a; font-weight: 600; font-size: 11px; text-transform: none; }
   tr:last-child td { border-bottom: none; }
   .pr-bar-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
-  .pr-bar-name { flex: 0 0 42%; overflow: hidden; text-overflow: ellipsis;
-                 white-space: nowrap; color: #0b0b0b; }
+  .pr-bar-name { flex: 0 0 42%; overflow-wrap: anywhere; color: #0b0b0b; }
+  .pr-root { font-size: 11px; color: #6a6a6a; margin: 2px 0 6px; }
+  .pr-root code { background: #f0f2f5; border-radius: 3px; padding: 1px 5px;
+                  font-size: 11px; color: #1758bf; }
+  .pr-sub-inline { color: #999; margin-left: 4px; }
+  td.api-name { overflow-wrap: anywhere; }
   .pr-bar-track { flex: 1 1 auto; }
   .pr-bar { height: 10px; border-radius: 4px 2px 2px 4px; background: #1758bf; }
   .pr-bar-val { flex: 0 0 auto; color: #0b0b0b; font-variant-numeric: tabular-nums; }
@@ -101,17 +105,46 @@ def _tile(label, value, now=None, prev=None, lower_is_better=True):
     )
 
 
+def _common_root(names):
+    """取共用的路徑前綴（以 / 分段比對）。少於 2 筆或無共用段則回傳 None。"""
+    path_names = [n for n in names if "/" in n]
+    if len(path_names) < 2:
+        return None
+    segments = [n.split("/") for n in path_names]
+    common = []
+    for seg in zip(*segments):
+        if all(s == seg[0] for s in seg):
+            common.append(seg[0])
+        else:
+            break
+    # 至少要有一個以上的共用段，且不能等於完整名稱（全同名無意義）
+    if len(common) < 1 or all(len(s) == len(common) for s in segments):
+        return None
+    return "/".join(common) + "/"
+
+
 def _bar_rows(apis, top=12):
-    """量級條：單一色相、明度隨值漸深（透明度衰減＝同色相漸層）"""
+    """量級條：單一色相、明度隨值漸深（透明度衰減＝同色相漸層）。
+
+    各列只顯示扣除共同根路徑後的差異段（游標停留顯示全名），
+    欄位允許換行、不刪節。
+    """
+    root = _common_root([a["name"] for a in apis])
     rows = []
+    if root:
+        rows.append(
+            f"<div class='pr-root'>共同根路徑 <code>{_esc(root)}</code>"
+            f"<span class='pr-sub-inline'>（各列顯示其後差異段）</span></div>"
+        )
     max_v = apis[0]["duration"] if apis else 1
     for a in apis[:top]:
         ratio = a["duration"] / max_v if max_v else 0
         alpha = 0.35 + 0.65 * ratio  # 明度單調：值越大越深
         w = max(ratio * 100, 0.8)
+        shown = a["name"][len(root) :] if root and a["name"].startswith(root) else a["name"]
         rows.append(
             f"<div class='pr-bar-row'>"
-            f"<span class='pr-bar-name' title='{_esc(a['name'])}'>{_esc(a['name'])}</span>"
+            f"<span class='pr-bar-name' title='{_esc(a['name'])}'>{_esc(shown)}</span>"
             f"<span class='pr-bar-track'><span class='pr-bar' "
             f"style='width:{w:.1f}%;opacity:{alpha:.2f}'></span></span>"
             f"<span class='pr-bar-val'>{format_ms(a['duration'])}</span></div>"
@@ -342,12 +375,29 @@ def build_report_html(
             parts.append(trend)
 
     if slowest:
+        table_root = _common_root([a["name"] for a in slowest])
+        root_line = (
+            f"<div class='pr-root'>共同根路徑 <code>{_esc(table_root)}</code>"
+            f"<span class='pr-sub-inline'>（下表 API 欄顯示其後差異段）</span></div>"
+            if table_root
+            else ""
+        )
         rows = [
-            [str(i), _esc(a["name"]), format_ms(a["duration"]), str(a.get("size", ""))]
+            [
+                str(i),
+                _esc(
+                    a["name"][len(table_root) :]
+                    if table_root and a["name"].startswith(table_root)
+                    else a["name"]
+                ),
+                format_ms(a["duration"]),
+                str(a.get("size", "")),
+            ]
             for i, a in enumerate(slowest, 1)
         ]
         parts.append(
             "<div class='pr-card'><details open><summary>全部 API 明細</summary>"
+            + root_line
             + _table(["#", "API", "耗時", "Size"], rows)
             + "</details></div>"
         )
