@@ -19,6 +19,55 @@ from pathlib import Path
 HISTORY_PATH = Path("perf-reports") / "history.json"
 HISTORY_KEEP_PER_TEST = 20
 
+# 值可安全顯示的參數（分頁/型別類，無識別資訊）；其餘參數只留名稱
+_SAFE_PARAM_KEYS = {
+    "page",
+    "size",
+    "pagesize",
+    "limit",
+    "offset",
+    "rows",
+    "draw",
+    "type",
+    "kind",
+    "lang",
+    "locale",
+    "status",
+    "sort",
+    "order",
+    "env",
+    "version",
+    "from",
+    "to",
+    "date",
+    "startdate",
+    "enddate",
+}
+
+
+def split_url_params(url: str) -> tuple:
+    """完整 URL → (路徑, 消毒後參數字串)。
+
+    安全參數保留 key=value；其餘（token/ticket/session/id 類）只留
+    key=…——值不入報告（報告會發佈到公開 Pages，不得攜帶憑證值）。
+    最多顯示 6 個參數���值長度上限 40。
+    """
+    if "?" not in url:
+        return url, ""
+    path, _, query = url.partition("?")
+    parts = []
+    for kv in query.split("&")[:6]:
+        if not kv:
+            continue
+        key, _, value = kv.partition("=")
+        key = key.lower()
+        if key in _SAFE_PARAM_KEYS and value:
+            parts.append(f"{key}={value[:40]}")
+        else:
+            parts.append(f"{key}=…")
+    return path, " & ".join(parts)
+
+
 # Allure2 對齊的視覺 token（light）
 _TOKENS = """
 <style>
@@ -53,6 +102,7 @@ _TOKENS = """
   .pr-root { font-size: 11px; color: #6a6a6a; margin: 2px 0 6px; }
   .pr-root code { background: #f0f2f5; border-radius: 3px; padding: 1px 5px;
                   font-size: 11px; color: #1758bf; }
+  .pr-params { color: #6a6a6a; font-size: 11px; overflow-wrap: anywhere; }
   .pr-sub-inline { color: #999; margin-left: 4px; }
   td.api-name { overflow-wrap: anywhere; }
   .pr-bar-track { flex: 1 1 auto; }
@@ -396,13 +446,14 @@ def build_report_html(
                 ),
                 format_ms(a["duration"]),
                 str(a.get("size", "")),
+                f"<span class='pr-params'>{_esc(a.get('params', ''))}</span>",
             ]
             for i, a in enumerate(slowest, 1)
         ]
         parts.append(
             "<div class='pr-card'><details open><summary>全部 API 明細</summary>"
             + root_line
-            + _table(["#", "API", "耗時", "Size"], rows)
+            + _table(["#", "API", "耗時", "Size", "參數"], rows)
             + "</details></div>"
         )
     parts.append("</div>")

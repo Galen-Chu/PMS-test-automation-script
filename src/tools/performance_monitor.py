@@ -63,7 +63,7 @@ _DUMP_JS = """
         })
         .map(function(e) {
             return {
-                name: e.name.replace(/[?].*$/, ''),
+                name: e.name,
                 start: Math.round(e.startTime),
                 duration: Math.round(e.duration),
                 size: e.transferSize
@@ -117,7 +117,7 @@ class PerformanceMonitor:
                     })
                     .map(function(e) {
                         return {
-                            name: e.name.split('?')[0],
+                            name: e.name,
                             start: Math.round(e.startTime),
                             duration: Math.round(e.duration),
                             size: e.transferSize
@@ -127,10 +127,20 @@ class PerformanceMonitor:
                 """)
             if not raw:
                 return []
-            return json.loads(raw)
+            return [self._sanitize_api(a) for a in json.loads(raw)]
         except Exception as e:
             print(f"  [perf_debug] collect_page_load error: {e}")
             return []
+
+    @staticmethod
+    def _sanitize_api(entry: dict) -> dict:
+        """把完整 URL 拆成路徑＋消毒後的參數（token 類值不得進報告）"""
+        from tools.perf_reporting import split_url_params
+
+        path, params = split_url_params(entry.get("name", ""))
+        entry["name"] = path
+        entry["params"] = params
+        return entry
 
     def stop(self):
         """Collect timing data from the browser."""
@@ -140,6 +150,7 @@ class PerformanceMonitor:
         self._results = json.loads(raw) if raw else {"ops": [], "apis": []}
         self._results["wall_time"] = round(time.time() - self._start_time, 2)
         self._active = False
+        self._results["apis"] = [self._sanitize_api(a) for a in self._results["apis"]]
         return self._results
 
     def get_api_timings(self):

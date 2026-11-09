@@ -12,6 +12,7 @@ from tools.perf_reporting import (
     build_report_html,
     compute_kpis,
     record_history,
+    split_url_params,
 )
 
 
@@ -132,6 +133,41 @@ class TestReportHtml:
         ]
         html = build_report_html(apis, {})
         assert "共同根路徑" not in html
+
+
+class TestParamSanitize:
+    def test_safe_params_kept_sensitive_masked(self):
+        url = (
+            "https://qa.example.com/pms/16/node/api/booking/save"
+            "?page=2&size=500&access_token=SECRET123&guestId=G99"
+        )
+        path, params = split_url_params(url)
+        assert path == "https://qa.example.com/pms/16/node/api/booking/save"
+        assert "page=2" in params and "size=500" in params
+        assert "SECRET123" not in params and "G99" not in params
+        assert "access_token=…" in params and "guestid=…" in params
+
+    def test_no_query(self):
+        path, params = split_url_params("https://x.y/api/save")
+        assert params == ""
+
+    def test_params_shown_in_detail_table(self):
+        apis = [
+            {
+                "name": "https://qa.example.com/api/grid",
+                "start": 0,
+                "duration": 100,
+                "params": "page=2 & size=500",
+            },
+            {
+                "name": "https://qa.example.com/api/booking",
+                "start": 10,
+                "duration": 200,
+                "params": "token=…",
+            },
+        ]
+        html = build_report_html(apis, {})
+        assert "參數" in html and "page=2 &amp; size=500" in html
 
 
 class TestHistory:
