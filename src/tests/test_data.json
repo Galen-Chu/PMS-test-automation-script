@@ -1,142 +1,1169 @@
 {
-  "$schema": "test_data_schema",
-  "description": "測試資料分配表。groups 存 common 資料和 test-specific 資料。依賴鏈由 scan_test_file() 從 .py decorator 即時掃描，不存在此檔。",
-  "rules": {
-    "group_max_tests": 5,
-    "exclusive_resources": {
-      "spare_parts": "同一個備品只能被一個 group 使用（影響數量統計）",
-      "rooms": "同一間房只能被一個 group 使用",
-      "link_nos_target": "關聯單號綁定後不可重複綁定"
+    "$schema": "test_data_schema",
+    "description": "測試資料分配表。groups 存 common 資料和 test-specific 資料。依賴鏈由 scan_test_file() 從 .py decorator 即時掃描，不存在此檔。",
+    "rules": {
+        "group_max_tests": 5,
+        "exclusive_resources": {
+            "spare_parts": "同一個備品只能被一個 group 使用（影響數量統計）",
+            "rooms": "同一間房只能被一個 group 使用",
+            "link_nos_target": "關聯單號綁定後不可重複綁定"
+        },
+        "room_allocation": "4F 給綜合櫃台腳本、5F-STD 給房務帳腳本，新 group 按區域選房"
     },
-    "room_allocation": "4F 給綜合櫃台腳本、5F-STD 給房務帳腳本，新 group 按區域選房"
-  },
-  "new_group_guide": {
-    "room_pool": "CLI 掃綜合櫃台頁面取得全部房間，扣除 shared_resources.rooms 和各 group common.room 已佔用的 = 可用房間",
-    "card_setup": "可用 Walk-In 流程自動建卡（CLI 操作綜合櫃台），或請使用者手動建立",
-    "card_naming": "Card Maindesk FLow {letter}，letter 遞增（A~E 已用）",
-    "card_search_by": "住客姓名",
-    "checkin_date": "與環境 system_date 一致"
-  },
-  "environments": {
-    "autotest": {
-      "system_date": "2024/01/05",
-      "groups": {
-        "test_maindesk_flow_a": {
-          "common": {
-            "card_name": "Card Maindesk FLow A",
-            "room": "204",
-            "checkin_date": "+0",
-            "checkout_date": "+1"
-          },
-          "tests": [
-            { "key": "add_link_nos", "link_nos_target": "00008236" }
-          ]
-        },
-        "test_maindesk_flow_b": {
-          "common": {
-            "card_name": "Card Maindesk FLow B",
-            "room": "205",
-            "checkin_date": "+0",
-            "checkout_date": "+1"
-          },
-          "tests": [
-            { "key": "change_room", "swap_room": "206" },
-            { "key": "assign_deposit", "deposit_nos": "2204" },
-            { "key": "add_spare_parts", "spare_part": "熨斗", "spare_part_dept": "A001 : 客務部-櫃台" }
-          ]
-        },
-        "test_maindesk_flow_c": {
-          "common": {
-            "card_name": "Card Maindesk FLow C",
-            "room": "207",
-            "checkin_date": "+0",
-            "checkout_date": "+1"
-          },
-          "tests": [
-            { "key": "add_guest", "guest_name": "cathy" },
-            { "key": "add_precredit", "card_type": "VISA", "card_number": "4826008693090653", "expire_date": "11/29", "auth_code": "492", "amount": 10000 },
-            { "key": "add_todo_item", "dept": "A001 : 客務部-櫃台" }
-          ]
-        },
-        "test_maindesk_flow_d": {
-          "common": {
-            "card_name": "Card Maindesk FLow D",
-            "room": "208",
-            "checkin_date": "+0",
-            "checkout_date": "+1"
-          },
-          "tests": []
-        },
-        "test_maindesk_flow_e": {
-          "common": {
-            "card_name": "Card Maindesk FLow E",
-            "room": "209",
-            "checkin_date": "+0",
-            "checkout_date": "+1"
-          },
-          "tests": []
-        },
-        "test_maindesk_edit_note": {
-          "common": {
-            "card_name": "Steven"
-          },
-          "tests": []
-        },
-        "test_ci_list_flow_a": {
-          "common": {
-            "card_name": "Card CO List A",
-            "room": "301",
-            "checkin_date": "+0",
-            "checkout_date": "+1"
-          },
-          "tests": [
-            { "key": "single_check_in" }
-          ]
-        }
-      },
-      "shared_resources": {
-        "rooms": {
-          "maindesk_flow": ["204", "205", "206", "207", "208", "209"],
-          "group_list": ["202", "203"],
-          "room_control": ["215", "217", "220", "221", "222", "223", "224", "225", "226", "227", "228", "229"],
-          "reservation": "5F-STD"
-        },
-        "spare_parts_occupied": {
-          "充電器": "Card Test（自動入帳測試）",
-          "除濕機": "備品設定（入交辦，處理部門：西餐廳）",
-          "Baby Cot": "備品設定（入交辦，處理部門：西餐廳）",
-          "熨斗": "test_maindesk_flow_b（入交辦，處理部門：客務部-櫃台）"
-        },
-        "link_nos_occupied": {
-          "00008234": "test_edit_reservation_card_add_link_nos（已綁 00008235，不可再綁）",
-          "00008236": "test_maindesk_flow_a"
-        },
-        "companies": {
-          "commercial": "測測BB22"
-        },
-        "contract_rates": ["comcon", "comcon 2", "comcon3"]
-      }
+    "new_group_guide": {
+        "room_pool": "CLI 掃綜合櫃台頁面取得全部房間，扣除 shared_resources.rooms 和各 group common.room 已佔用的 = 可用房間",
+        "card_setup": "可用 Walk-In 流程自動建卡（CLI 操作綜合櫃台），或請使用者手動建立",
+        "card_naming": "Card Maindesk FLow {letter}，letter 遞增（A~E 已用）",
+        "card_search_by": "住客姓名",
+        "checkin_date": "與環境 system_date 一致"
     },
-    "qa": {
-      "system_date": "2026/05/19",
-      "groups": {
-        "test_ci_list_flow_a": {
-          "common": {
-            "card_name": "Galen ChuChu 5",
-            "room": "110",
-            "checkin_date": "+0",
-            "checkout_date": "+1"
-          },
-          "tests": [
-            { "key": "single_check_in" }
-          ]
+    "environments": {
+        "autotest": {
+            "system_date": "2024/01/05",
+            "groups": {
+                "test_maindesk_flow_a": {
+                    "common": {
+                        "card_name": "Card Maindesk FLow A",
+                        "room": "204",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "add_link_nos",
+                            "link_nos_target": "00008236"
+                        }
+                    ]
+                },
+                "test_maindesk_flow_b": {
+                    "common": {
+                        "card_name": "Card Maindesk FLow B",
+                        "room": "205",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "change_room",
+                            "swap_room": "206"
+                        },
+                        {
+                            "key": "assign_deposit",
+                            "deposit_nos": "2204"
+                        },
+                        {
+                            "key": "add_spare_parts",
+                            "spare_part": "熨斗",
+                            "spare_part_dept": "A001 : 客務部-櫃台"
+                        }
+                    ]
+                },
+                "test_maindesk_flow_c": {
+                    "common": {
+                        "card_name": "Card Maindesk FLow C",
+                        "room": "207",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "add_guest",
+                            "guest_name": "cathy"
+                        },
+                        {
+                            "key": "add_precredit",
+                            "card_type": "VISA",
+                            "card_number": "4826008693090653",
+                            "expire_date": "11/29",
+                            "auth_code": "492",
+                            "amount": 10000
+                        },
+                        {
+                            "key": "add_todo_item",
+                            "dept": "A001 : 客務部-櫃台"
+                        }
+                    ]
+                },
+                "test_maindesk_flow_d": {
+                    "common": {
+                        "card_name": "Card Maindesk FLow D",
+                        "room": "208",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": []
+                },
+                "test_maindesk_flow_e": {
+                    "common": {
+                        "card_name": "Card Maindesk FLow E",
+                        "room": "209",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": []
+                },
+                "test_maindesk_edit_note": {
+                    "common": {
+                        "card_name": "Steven"
+                    },
+                    "tests": []
+                },
+                "test_ci_list_flow_a": {
+                    "common": {
+                        "card_name": "Card CO List A",
+                        "room": "301",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "single_check_in"
+                        }
+                    ]
+                },
+                "test_guest_registration_card": {
+                    "common": {},
+                    "tests": [
+                        {
+                            "key": "single_print",
+                            "ikeys": [
+                                "00008234"
+                            ],
+                            "main_card": {
+                                "ikey": "00008234",
+                                "name_kw": "test 123",
+                                "arrival": "2024/01/05",
+                                "departure": "2024/01/06",
+                                "room": "211",
+                                "room_type": "STD",
+                                "person": "2",
+                                "room_rate": "7,900",
+                                "deposit": "1,000",
+                                "balance": "6,900"
+                            },
+                            "link_nos_target_name": "Card Todo"
+                        },
+                        {
+                            "key": "multi_print",
+                            "ikeys": [
+                                "00008234",
+                                "00008235",
+                                "00008236"
+                            ],
+                            "main_card": {
+                                "ikey": "00008234",
+                                "name_kw": "test 123",
+                                "arrival": "2024/01/05",
+                                "departure": "2024/01/06",
+                                "room": "211",
+                                "room_type": "STD",
+                                "person": "2",
+                                "room_rate": "7,900",
+                                "deposit": "1,000",
+                                "balance": "6,900"
+                            }
+                        },
+                        {
+                            "key": "batch_setting_1",
+                            "count_desc": "1筆",
+                            "ikeys": [
+                                "00008234"
+                            ],
+                            "is_print": "否",
+                            "is_print_revert": "是",
+                            "revert_code": "Y",
+                            "expected_echo": "N : 否",
+                            "revert_echo": "Y : 是"
+                        },
+                        {
+                            "key": "batch_setting_3",
+                            "count_desc": "3筆",
+                            "ikeys": [
+                                "00008234",
+                                "00008235",
+                                "00008236"
+                            ],
+                            "is_print": "否",
+                            "is_print_revert": "是",
+                            "revert_code": "Y",
+                            "expected_echo": "N : 否",
+                            "revert_echo": "Y : 是"
+                        }
+                    ]
+                },
+                "test_ci_list_multi_check_in": {
+                    "common": {
+                        "card_name": "Card CI List Multi",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "multi_check_in_partial_blocked",
+                            "clean_room": "305",
+                            "dirty_room": "306",
+                            "guest_name_dirty_row": "Card CI List Multi A"
+                        },
+                        {
+                            "key": "multi_check_in_reassign_and_retry",
+                            "dirty_room": "306",
+                            "reassign_target": "307",
+                            "room_type": "SPD",
+                            "guest_name_dirty_row": "Card CI List Multi A"
+                        }
+                    ]
+                },
+                "test_shift_daily_report": {
+                    "common": {},
+                    "tests": [
+                        {
+                            "key": "query_shift_daily_report",
+                            "hall_option": "FO :",
+                            "hall_code": "FO"
+                        }
+                    ]
+                },
+                "test_arrival_guest_report": {
+                    "common": {
+                        "checkin_date": "+0"
+                    },
+                    "tests": [
+                        {
+                            "key": "main_defaults",
+                            "is_not_ci": true,
+                            "is_print_rent": true,
+                            "sort_option": "SORT_BY_IKEY : 依訂房卡號排序",
+                            "sort_by": "ikey",
+                            "sort_echo": "依訂房卡號排序",
+                            "sql_option": "group : group",
+                            "sql_echo": "group"
+                        },
+                        {
+                            "key": "sort_link_nos_detail",
+                            "is_not_ci": true,
+                            "is_print_rent": true,
+                            "sort_option": "SORT_BY_LINK_NOS : 依關聯單號排序",
+                            "sort_by": "link_nos",
+                            "sort_echo": "依關聯單號排序",
+                            "sql_option": "detail : detail",
+                            "sql_echo": "detail"
+                        },
+                        {
+                            "key": "sort_room_detail",
+                            "is_not_ci": true,
+                            "is_print_rent": true,
+                            "sort_option": "SORT_BY_ROOM : 依房號排序",
+                            "sort_by": "room",
+                            "sort_echo": "依房號排序",
+                            "sql_option": "detail : detail",
+                            "sql_echo": "detail"
+                        },
+                        {
+                            "key": "not_ci_off_detail",
+                            "is_not_ci": false,
+                            "is_print_rent": true,
+                            "sort_option": "SORT_BY_IKEY : 依訂房卡號排序",
+                            "sort_by": "ikey",
+                            "sort_echo": "依訂房卡號排序",
+                            "sql_option": "detail : detail",
+                            "sql_echo": "detail"
+                        },
+                        {
+                            "key": "print_rent_off_detail",
+                            "is_not_ci": true,
+                            "is_print_rent": false,
+                            "sort_option": "SORT_BY_IKEY : 依訂房卡號排序",
+                            "sort_by": "ikey",
+                            "sort_echo": "依訂房卡號排序",
+                            "sql_option": "detail : detail",
+                            "sql_echo": "detail"
+                        }
+                    ]
+                },
+                "test_shift_detail_report": {
+                    "common": {},
+                    "tests": [
+                        {
+                            "key": "query_shift_detail_report",
+                            "hall_option": "FO :",
+                            "hall_code": "FO"
+                        }
+                    ]
+                },
+                "test_service_quantity_report": {
+                    "common": {
+                        "service_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "detail_by_date",
+                            "sort_option": "BY_DATE : 依服務日期",
+                            "sort_echo": "BY_DATE",
+                            "report_option": "DETAIL : 明細",
+                            "report_echo": "DETAIL",
+                            "range_label": "CI : 已入住",
+                            "range_echo": "CI"
+                        },
+                        {
+                            "key": "detail_by_room",
+                            "sort_option": "BY_ROOM : 依房號",
+                            "sort_echo": "BY_ROOM",
+                            "report_option": "DETAIL : 明細",
+                            "report_echo": "DETAIL",
+                            "range_label": "CI : 已入住",
+                            "range_echo": "CI",
+                            "sort_by": "room"
+                        },
+                        {
+                            "key": "detail_by_ikey",
+                            "sort_option": "BY_IKEY : 依訂房卡號",
+                            "sort_echo": "BY_IKEY",
+                            "report_option": "DETAIL : 明細",
+                            "report_echo": "DETAIL",
+                            "range_label": "CI : 已入住",
+                            "range_echo": "CI",
+                            "sort_by": "ikey"
+                        },
+                        {
+                            "key": "detail_by_item",
+                            "sort_option": "BY_ITEM : 依服務項目",
+                            "sort_echo": "BY_ITEM",
+                            "report_option": "DETAIL : 明細",
+                            "report_echo": "DETAIL",
+                            "range_label": "CI : 已入住",
+                            "range_echo": "CI"
+                        },
+                        {
+                            "key": "summary_by_date",
+                            "sort_option": "BY_DATE : 依服務日期",
+                            "sort_echo": "BY_DATE",
+                            "report_option": "SUMMARY : 彙總",
+                            "report_echo": "SUMMARY",
+                            "range_label": "CI : 已入住",
+                            "range_echo": "CI"
+                        },
+                        {
+                            "key": "detail_all",
+                            "sort_option": "BY_DATE : 依服務日期",
+                            "sort_echo": "BY_DATE",
+                            "report_option": "DETAIL : 明細",
+                            "report_echo": "DETAIL",
+                            "range_label": "ALL : 全部",
+                            "range_echo": "ALL"
+                        }
+                    ]
+                },
+                "test_rate_audit_report": {
+                    "common": {},
+                    "tests": [
+                        {
+                            "key": "guest_way_f",
+                            "code": "F"
+                        },
+                        {
+                            "key": "guest_way_g",
+                            "code": "G"
+                        },
+                        {
+                            "key": "guest_way_c",
+                            "code": "C"
+                        }
+                    ]
+                },
+                "test_co_list_flow": {
+                    "common": {
+                        "card_name": "Card Checkout A",
+                        "room": "9015",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "transfer_to_pm",
+                            "target": "pm",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "pm_room": "325",
+                            "pm_folio": "2"
+                        },
+                        {
+                            "key": "transfer_from_sub",
+                            "target": "pm",
+                            "room": "325",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "transfer_folio": "1:1",
+                            "pm_room": "9015",
+                            "pm_folio": "1"
+                        },
+                        {
+                            "key": "transfer_to_other_room",
+                            "target_card": "Card Checkout B",
+                            "target_type": "全部房號",
+                            "room": "325",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "transfer_folio": "1:1",
+                            "pm_room": "326",
+                            "pm_folio": "1"
+                        },
+                        {
+                            "key": "transfer_to_cash",
+                            "target_type": "選擇房號",
+                            "room": "325",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "transfer_folio": "1:1",
+                            "room_filter": "C",
+                            "pm_room": "C002",
+                            "pm_folio": "1"
+                        },
+                        {
+                            "key": "bind_deposit",
+                            "deposit_name": "Checkout Deposit",
+                            "deposit_folio": "1:1",
+                            "deposit_amount": 1000
+                        },
+                        {
+                            "key": "split_amount",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "split_method": "AMOUNT",
+                            "split_value": 500
+                        },
+                        {
+                            "key": "move_folio",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "target_folio": "2",
+                            "enter_amount": 1000
+                        }
+                    ]
+                },
+                "test_guest_account": {
+                    "common": {
+                        "card_name": "Card Guest Account A",
+                        "room": "343",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "open_cash_account",
+                            "cash_name": "Autotest Cash",
+                            "cash_room": "C005"
+                        },
+                        {
+                            "key": "bind_deposit",
+                            "deposit_name": "Guest Account Deposit",
+                            "deposit_folio": "1:1",
+                            "deposit_amount": 1000
+                        },
+                        {
+                            "key": "move_folio",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "target_folio": "2",
+                            "enter_amount": 1000
+                        },
+                        {
+                            "key": "transfer_other_room",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "transfer_folio": "1:1",
+                            "target_type": "全部房號",
+                            "target_room": "344",
+                            "target_folio": "1"
+                        },
+                        {
+                            "key": "transfer_to_cash",
+                            "enter_item": "1001 : 房租",
+                            "enter_folio": "1",
+                            "transfer_folio": "1:1",
+                            "target_type": "選擇房號",
+                            "room_filter": "C004",
+                            "target_room": "C004",
+                            "target_folio": "1"
+                        }
+                    ]
+                },
+                "test_co_list_pay": {
+                    "common": {
+                        "card_name": "Card Checkout Pay",
+                        "room": "327",
+                        "checkin_date": "+0",
+                        "checkout_date": "+0",
+                        "card_setup": "In house 可結帳"
+                    },
+                    "tests": [
+                        {
+                            "key": "checkout_cash",
+                            "payments": [
+                                {
+                                    "pay_code": "10"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "checkout_visa",
+                            "payments": [
+                                {
+                                    "pay_code": "31",
+                                    "credit_nos": "4111111111111111",
+                                    "expira_mm": "12",
+                                    "expira_yyyy": "2028"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "checkout_master",
+                            "payments": [
+                                {
+                                    "pay_code": "32",
+                                    "credit_nos": "5500000000000004",
+                                    "expira_mm": "11",
+                                    "expira_yyyy": "2028"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "checkout_sign",
+                            "payments": [
+                                {
+                                    "pay_code": "41",
+                                    "company_name": "德安線上訂房"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "checkout_deposit",
+                            "deposit_pay_code": "10",
+                            "deposit_amount": 1000
+                        },
+                        {
+                            "key": "checkout_multi_credit",
+                            "pay_amount": 125,
+                            "payments": [
+                                {
+                                    "pay_code": "31",
+                                    "credit_nos": "4111111111111111",
+                                    "expira_mm": "12",
+                                    "expira_yyyy": "2028"
+                                },
+                                {
+                                    "pay_code": "32",
+                                    "credit_nos": "5500000000000004",
+                                    "expira_mm": "11",
+                                    "expira_yyyy": "2028"
+                                },
+                                {
+                                    "pay_code": "34",
+                                    "credit_nos": "378282246310005",
+                                    "expira_mm": "10",
+                                    "expira_yyyy": "2028"
+                                },
+                                {
+                                    "pay_code": "31",
+                                    "credit_nos": "4111111111111111",
+                                    "expira_mm": "12",
+                                    "expira_yyyy": "2028"
+                                },
+                                {
+                                    "pay_code": "32",
+                                    "credit_nos": "5500000000000004",
+                                    "expira_mm": "11",
+                                    "expira_yyyy": "2028"
+                                },
+                                {
+                                    "pay_code": "34",
+                                    "credit_nos": "378282246310005",
+                                    "expira_mm": "10",
+                                    "expira_yyyy": "2028"
+                                },
+                                {
+                                    "pay_code": "31",
+                                    "credit_nos": "4111111111111111",
+                                    "expira_mm": "12",
+                                    "expira_yyyy": "2028"
+                                },
+                                {
+                                    "pay_code": "32",
+                                    "credit_nos": "5500000000000004",
+                                    "expira_mm": "11",
+                                    "expira_yyyy": "2028"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "test_co_list_invoice1": {
+                    "common": {
+                        "card_name": "Card Checkout Inv1",
+                        "room": "328",
+                        "checkin_date": "+0",
+                        "checkout_date": "+0",
+                        "card_setup": "In house 可結帳，發票設定齊全"
+                    },
+                    "tests": [
+                        {
+                            "key": "checkout_invoice_none",
+                            "invoice_type": "none",
+                            "pay_code": "10"
+                        },
+                        {
+                            "key": "checkout_invoice_ubn",
+                            "invoice_type": "ubn",
+                            "pay_code": "10",
+                            "ubn": "23598233"
+                        },
+                        {
+                            "key": "checkout_invoice_carrier",
+                            "invoice_type": "carrier",
+                            "pay_code": "10",
+                            "carrier_type": "3J0002",
+                            "carrier_id": "/QA123TE"
+                        },
+                        {
+                            "key": "checkout_invoice_love",
+                            "invoice_type": "love",
+                            "pay_code": "10",
+                            "love_code": "0012005"
+                        }
+                    ]
+                },
+                "test_co_list_invoiceN": {
+                    "common": {
+                        "card_name": "Card Checkout InvN",
+                        "room": "329",
+                        "checkin_date": "+0",
+                        "checkout_date": "+0",
+                        "card_setup": "In house 可結帳，發票設定齊全"
+                    },
+                    "tests": [
+                        {
+                            "key": "multi_equal",
+                            "pay_code": "10",
+                            "invoice_count": 2,
+                            "is_divided": true,
+                            "copies": [
+                                {
+                                    "invoice_type": "none",
+                                    "expected_amount": 500
+                                },
+                                {
+                                    "invoice_type": "none",
+                                    "expected_amount": 500
+                                }
+                            ]
+                        },
+                        {
+                            "key": "multi_unequal",
+                            "pay_code": "10",
+                            "invoice_count": 3,
+                            "is_divided": false,
+                            "copies": [
+                                {
+                                    "invoice_type": "none",
+                                    "unit_price": 200,
+                                    "expected_amount": 200
+                                },
+                                {
+                                    "invoice_type": "none",
+                                    "unit_price": 300,
+                                    "expected_amount": 300
+                                },
+                                {
+                                    "invoice_type": "none",
+                                    "expected_amount": 500
+                                }
+                            ]
+                        },
+                        {
+                            "key": "multi_diff_attrs",
+                            "pay_code": "10",
+                            "invoice_count": 4,
+                            "is_divided": false,
+                            "copies": [
+                                {
+                                    "invoice_type": "carrier",
+                                    "carrier_type": "3J0002",
+                                    "carrier_id": "/QA123TE",
+                                    "unit_price": 250,
+                                    "expected_amount": 250
+                                },
+                                {
+                                    "invoice_type": "none",
+                                    "unit_price": 250,
+                                    "expected_amount": 250
+                                },
+                                {
+                                    "invoice_type": "ubn",
+                                    "ubn": "23598233",
+                                    "unit_price": 250,
+                                    "expected_amount": 250
+                                },
+                                {
+                                    "invoice_type": "love",
+                                    "love_code": "0012005",
+                                    "unit_price": 250,
+                                    "expected_amount": 250
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "test_co_list_restore": {
+                    "common": {
+                        "card_name": "Card Checkout Restore",
+                        "room": "330",
+                        "checkin_date": "+0",
+                        "checkout_date": "+0",
+                        "card_setup": "In house，單 folio（check_out_guest 復原段確保入帳消費）"
+                    },
+                    "tests": [
+                        {
+                            "key": "checkout_complete"
+                        },
+                        {
+                            "key": "restore_checkout"
+                        },
+                        {
+                            "key": "cancel_checkout"
+                        },
+                        {
+                            "key": "edit_visa",
+                            "payments": [
+                                {
+                                    "pay_code": "31",
+                                    "credit_nos": "4111111111111111",
+                                    "expira_mm": "12",
+                                    "expira_yyyy": "2028"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "edit_multi",
+                            "pay_amount": 500,
+                            "payments": [
+                                {
+                                    "pay_code": "10"
+                                },
+                                {
+                                    "pay_code": "31",
+                                    "credit_nos": "4111111111111111",
+                                    "expira_mm": "12",
+                                    "expira_yyyy": "2028"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "edit_sign",
+                            "payments": [
+                                {
+                                    "pay_code": "41",
+                                    "company_name": "德安線上訂房"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "edit_deposit",
+                            "payments": [
+                                {
+                                    "pay_code": "00",
+                                    "deposit_name": "Auto Deposit"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "test_co_list_reinvoice": {
+                    "common": {
+                        "card_name": "Card Checkout ReInv",
+                        "room": "331",
+                        "checkin_date": "+0",
+                        "checkout_date": "+0",
+                        "card_setup": "In house，folio 有當班結帳記錄（已結帳未退房）"
+                    },
+                    "tests": [
+                        {
+                            "key": "reinvoice_none",
+                            "invoice_type": "none"
+                        },
+                        {
+                            "key": "reinvoice_ubn",
+                            "invoice_type": "ubn",
+                            "ubn": "23598233"
+                        },
+                        {
+                            "key": "reinvoice_carrier",
+                            "invoice_type": "carrier",
+                            "carrier_type": "3J0002",
+                            "carrier_id": "/QA123TE"
+                        },
+                        {
+                            "key": "reinvoice_love",
+                            "invoice_type": "love",
+                            "love_code": "0012005"
+                        }
+                    ]
+                },
+                "test_group_management": {
+                    "common": {
+                        "card_name": "Card Group A",
+                        "master_nos": "9017",
+                        "group_nos": "Card Group A",
+                        "ikey": "00008392",
+                        "rooms": [
+                            "361",
+                            "362"
+                        ]
+                    },
+                    "tests": [
+                        {
+                            "key": "change_co_date_extend",
+                            "original_co_day": "7",
+                            "original_co_date": "2024/01/07",
+                            "new_co_day": "8",
+                            "new_co_date": "2024/01/08"
+                        },
+                        {
+                            "key": "change_co_date_shorten",
+                            "original_co_day": "7",
+                            "original_co_date": "2024/01/07",
+                            "new_co_day": "6",
+                            "new_co_date": "2024/01/06"
+                        },
+                        {
+                            "key": "clear_sub_room",
+                            "room_no": "361"
+                        }
+                    ]
+                },
+                "test_forex_exchange": {
+                    "common": {
+                        "full_name": "CLI TEST",
+                        "room_no": "702",
+                        "ikey": "00008375",
+                        "id_code": "A123456789",
+                        "birthday_day": "13",
+                        "foreign_amount": 100,
+                        "service_amount": 50
+                    },
+                    "tests": [
+                        {
+                            "key": "forex_non_cny",
+                            "currency": "USD"
+                        },
+                        {
+                            "key": "forex_cny",
+                            "currency": "CNY"
+                        }
+                    ]
+                },
+                "test_forex_rate": {
+                    "common": {},
+                    "tests": [
+                        {
+                            "key": "add_forex_rate",
+                            "currency": "EUR",
+                            "buy_rate": 35,
+                            "service_amt": 10
+                        }
+                    ]
+                },
+                "test_housekeeping_account": {
+                    "common": {
+                        "card_name": "Card Housekeeping A",
+                        "room": "373",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "minibar_disc",
+                            "small_type": "H002",
+                            "product": "M001",
+                            "minibar_rate": 10,
+                            "laundry_rate": 0,
+                            "expected_disc": 6,
+                            "expected_subtotal": 54,
+                            "expected_service": 6,
+                            "expected_total": 60,
+                            "expected_folio_items": [
+                                "4001:冰箱飲料",
+                                "4001:冰箱飲料"
+                            ]
+                        },
+                        {
+                            "key": "laundry_disc",
+                            "small_type": "H001",
+                            "product": "L01",
+                            "minibar_rate": 0,
+                            "laundry_rate": 20,
+                            "expected_disc": 40,
+                            "expected_subtotal": 160,
+                            "expected_service": 20,
+                            "expected_total": 180,
+                            "expected_folio_items": [
+                                "1017:洗衣",
+                                "1101:洗衣"
+                            ]
+                        },
+                        {
+                            "key": "both_zero",
+                            "small_type": "H001",
+                            "product": "L01",
+                            "minibar_rate": 0,
+                            "laundry_rate": 0,
+                            "clear_rates": true,
+                            "expected_disc": 0,
+                            "expected_subtotal": 200,
+                            "expected_service": 20,
+                            "expected_total": 220,
+                            "expected_folio_items": [
+                                "1017:洗衣",
+                                "1101:洗衣"
+                            ]
+                        },
+                        {
+                            "key": "minibar_disc_l0",
+                            "small_type": "H002",
+                            "product": "M002",
+                            "minibar_rate": 30,
+                            "laundry_rate": 0,
+                            "expected_disc": 18,
+                            "expected_subtotal": 42,
+                            "expected_service": 6,
+                            "expected_total": 48,
+                            "expected_folio_items": [
+                                "4001:冰箱飲料",
+                                "4001:冰箱飲料"
+                            ]
+                        },
+                        {
+                            "key": "m0_laundry_disc",
+                            "small_type": "H001",
+                            "product": "L01",
+                            "minibar_rate": 0,
+                            "laundry_rate": 50,
+                            "expected_disc": 100,
+                            "expected_subtotal": 100,
+                            "expected_service": 20,
+                            "expected_total": 120,
+                            "expected_folio_items": [
+                                "1017:洗衣",
+                                "1101:洗衣"
+                            ]
+                        },
+                        {
+                            "key": "both_disc",
+                            "small_type": "H002",
+                            "product": "M001",
+                            "minibar_rate": 20,
+                            "laundry_rate": 10,
+                            "expected_disc": 12,
+                            "expected_subtotal": 48,
+                            "expected_service": 6,
+                            "expected_total": 54,
+                            "expected_folio_items": [
+                                "4001:冰箱飲料",
+                                "4001:冰箱飲料"
+                            ]
+                        }
+                    ]
+                },
+                "test_business_company": {
+                    "common": {
+                        "company_cod": "0000173703",
+                        "contract_no": "TEST775",
+                        "start_date": "2024/01/17",
+                        "end_date": "2024/01/27"
+                    },
+                    "tests": [
+                        {
+                            "key": "modify_rate_cod",
+                            "field": "rate_cod"
+                        },
+                        {
+                            "key": "modify_remark1",
+                            "field": "remark1",
+                            "new_value": "TEST776"
+                        },
+                        {
+                            "key": "modify_source_typ",
+                            "field": "source_typ"
+                        },
+                        {
+                            "key": "modify_guest_typ",
+                            "field": "guest_typ"
+                        }
+                    ]
+                },
+                "test_sign_pay": {
+                    "common": {
+                        "room": "601",
+                        "company_cod": "0000173701"
+                    },
+                    "tests": []
+                },
+                "test_pay_folio": {
+                    "common": {
+                        "card_name": "Card Online Pay A",
+                        "pay_amount": "1,000"
+                    },
+                    "tests": []
+                },
+                "test_room_assign": {
+                    "common": {
+                        "card_name": "Card Room Assign A",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1",
+                        "room": "222",
+                        "room_type": "STD"
+                    },
+                    "tests": [
+                        {
+                            "key": "detail"
+                        },
+                        {
+                            "key": "lock"
+                        }
+                    ]
+                },
+                "test_reservation_card": {
+                    "common": {},
+                    "tests": [
+                        {
+                            "key": "load_existing_deposit",
+                            "deposit_amo": "1000",
+                            "deposit_account_name": "Card Deposit Add"
+                        }
+                    ]
+                }
+            },
+            "shared_resources": {
+                "rooms": {
+                    "maindesk_flow": [
+                        "204",
+                        "205",
+                        "206",
+                        "207",
+                        "208",
+                        "209"
+                    ],
+                    "group_list": [
+                        "202",
+                        "203"
+                    ],
+                    "room_control": [
+                        "215",
+                        "217",
+                        "220",
+                        "221",
+                        "222",
+                        "223",
+                        "224",
+                        "225",
+                        "226",
+                        "227",
+                        "228",
+                        "229"
+                    ],
+                    "reservation": "5F-STD",
+                    "ci_list": [
+                        "301",
+                        "302",
+                        "303",
+                        "304"
+                    ],
+                    "ci_list_multi": [
+                        "305",
+                        "306",
+                        "307"
+                    ],
+                    "co_list": [
+                        "9015",
+                        "C002",
+                        "325",
+                        "326",
+                        "327",
+                        "328",
+                        "329",
+                        "330",
+                        "331"
+                    ],
+                    "guest_account": [
+                        "343",
+                        "344",
+                        "C004"
+                    ],
+                    "group_management": [
+                        "361",
+                        "362"
+                    ],
+                    "housekeeping_account": [
+                        "373"
+                    ]
+                },
+                "spare_parts_occupied": {
+                    "充電器": "Card Test（自動入帳測試）",
+                    "除濕機": "備品設定（入交辦，處理部門：西餐廳）",
+                    "Baby Cot": "備品設定（入交辦，處理部門：西餐廳）",
+                    "熨斗": "test_maindesk_flow_b（入交辦，處理部門：客務部-櫃台）"
+                },
+                "link_nos_occupied": {
+                    "00008234": "test_edit_reservation_card_add_link_nos（已綁 00008235，不可再綁）",
+                    "00008236": "test_maindesk_flow_a",
+                    "Card Search Spare Parts": "test_maindesk_flow_a（已被 Card Maindesk FLow A 綁定）"
+                },
+                "companies": {
+                    "commercial": "測測BB22"
+                },
+                "contract_rates": [
+                    "comcon",
+                    "comcon 2",
+                    "comcon3"
+                ],
+                "deposits": {
+                    "Checkout Deposit": "test_co_list_flow (#488 綁定)"
+                }
+            },
+            "reserved_ranges": {
+                "description": "房間預留地圖（SoT，2026-08-14 使用者確認）。預留 ≠ 已使用；實際佔用看 shared_resources.rooms 與各 group room。新 group 選房先查本表，只能用對應家族預留段內未佔用房",
+                "2F": "215, 217, 220-229 → 房控管理（狀態類：清掃/修理/瑕疵房）",
+                "4F": "204-209 → 綜合櫃台腳本（固定房號）",
+                "CI 清單": "301-324（已用 301-307）",
+                "C/O 清單": "325-342（含 PM房 9015、現金帳 C002；已用 325-331）",
+                "住客帳維護": "343-360（已用 343、344；現金帳 C002-C005 另計，非本段）",
+                "團體管理": "361-372（已用 361、362）",
+                "房控管理-房務入帳": "373（#292 專用 Card Housekeeping A；2026-08-14 暫借，2F 段房間不足）",
+                "5F-STD": "訂房腳本動態選房（test_reservation，不固定房號；#553/#464 依賴，固定房號測試禁用）"
+            }
+        },
+        "qa": {
+            "system_date": "2026/05/19",
+            "groups": {
+                "test_ci_list_flow_a": {
+                    "common": {
+                        "card_name": "Galen ChuChu 5",
+                        "room": "110",
+                        "checkin_date": "+0",
+                        "checkout_date": "+1"
+                    },
+                    "tests": [
+                        {
+                            "key": "single_check_in"
+                        }
+                    ]
+                }
+            },
+            "shared_resources": {
+                "rooms": {
+                    "ci_list": [
+                        "110"
+                    ]
+                }
+            }
         }
-      },
-      "shared_resources": {
-        "rooms": {
-          "ci_list": ["110"]
-        }
-      }
     }
-  }
 }

@@ -3,6 +3,7 @@ allure_python_commons==2.16.2
 names==0.3.0
 faker==40.44.0
 pillow==13.0.0
+pdfplumber==0.11.10
 pyhumps==3.8.0
 pytesseract==0.3.13
 pytest==9.2.0
