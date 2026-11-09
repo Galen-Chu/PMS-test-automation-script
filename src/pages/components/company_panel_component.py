@@ -78,3 +78,7 @@ class CompanyPanelComponent(AthenaBasePage):
         locator_day = self.format_locator(self.locator.calendar_day, day)
         self.click(locator_day)
         return self
+
+    def input_contract_no_value(self, contract_no):
+        self.input(self.locator.input_contract_no, contract_no)
+        return self

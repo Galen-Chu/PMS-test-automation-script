@@ -119,3 +119,126 @@ class RoomControlLocator(BaseLocator):
         By.XPATH,
         "//div[@class='e-dlg-header' and descendant::div[text()='拆併床']]/preceding-sibling::button[@title='關閉']",
     )
+
+    # ----- 自 mainline 補入 (2026-11-09) -----
+    btn_room_no = (
+        By.XPATH,
+        "//div[@class='tab-content' and not(@style='display: none;')]//div[@class='card--room']//span[normalize-space()='%s']",
+    )
+
+    room_icon = (
+        By.XPATH,
+        "(//div[@slot='reference' and descendant::span[normalize-space()='%s']]//img)[%s]",
+    )
+
+    room_status_list = (
+        By.XPATH,
+        "//tbody[@role='rowgroup']//tr[@role='row']/td[@field='room_nos']",
+    )
+
+    room_checkbox = (
+        By.XPATH,
+        "//tbody[@role='rowgroup']//tr[@role='row']/td[text()='%s']/preceding-sibling::td",
+    )
+
+    btn_close_clean_floor = (
+        By.XPATH,
+        "//div[@class='e-dlg-header' and descendant::div[text()='清掃樓層']]/preceding-sibling::button[@title='關閉']",
+    )
+
+    select_category_item = (
+        By.XPATH,
+        "(//div[contains(@class, 'combobox-item') and text()='%s'])[last()]",
+    )
+
+    date_title_year = (
+        By.XPATH,
+        "(//span[@class='el-date-picker__header-label' and contains(text(), '年')] )[last()]",
+    )
+
+    date_year = (
+        By.XPATH,
+        "(//table[@class='el-year-table'])[last()]//td[@class='available']/a[text()='%s']",
+    )
+
+    date_day = (
+        By.XPATH,
+        "(//table[@class='el-date-table'])[last()]//td[@class='available']//span[normalize-space()='%s']",
+    )
+
+    input_reason = (
+        By.XPATH,
+        "//div/label[normalize-space()='修理/參觀原因']/following-sibling::textarea",
+    )
+
+    btn_repair_visit_save = (
+        By.XPATH,
+        "(//div[@class='panel-title' and text()='修理/參觀']/parent::div//following-sibling::div//button)[1]",
+    )
+
+    date_by_room = (
+        By.XPATH,
+        "//div[@slot='reference' and descendant::span[normalize-space()='%s']] \
+                    //div[@class='card-row']/span[normalize-space()='%s']",
+    )
+
+    reason_by_room = (
+        By.XPATH,
+        "//div[@slot='reference' and descendant::span[normalize-space()='%s']] \
+                      //div[@class='card-row' and normalize-space()='%s']",
+    )
+
+    checkbox_room_floor = (
+        By.XPATH,
+        "//div[@class='table__scroll']//td[@class='text-center' and following-sibling::td[normalize-space()='%s']]",
+    )
+
+    room_errors = (
+        By.XPATH,
+        "//div[@class='table--fix-head']//td[@class='text-center' and child::p[contains(text(),'設定失敗')]]",
+    )
+
+    room_repair_list_item = (By.XPATH, "//table[@class='datagrid-btable']//td[@field='room_nos' \
+                                    and child::div[normalize-space()='%s']]/preceding-sibling::td")
+
+    room_repair_datepicker = (
+        By.XPATH,
+        "//div[child::div/span[normalize-space()='%s']]/following-sibling::div//span[@aria-label='select']",
+    )
+
+    room_repair_day = (
+        By.XPATH,
+        "//div[contains(@class, 'e-month')]//span[@data-ripple='true' and text()='%s']",
+    )
+
+    input_room_search = (By.XPATH, "//div[@data-field-id='room_nos']//input")
+
+    btn_do_search = (By.XPATH, "//button[@data-field-id='PMS0410010_doSearch']")
+
+    btn_housekeeping_account = (By.XPATH, "//button[normalize-space()='房務入帳']")
+    # dialog 關閉後須「立刻」連續關 panel，隔操作後 close icon 轉 hidden 不可 click
+
+    btn_close_edit_dialog = (By.XPATH, "//button[contains(@class,'e-dlg-closeicon-btn')]")
+    btn_close_options_panel = (
+        By.XPATH,
+        "(//div[contains(@class,'window')][.//div[contains(@class,'panel-title') "
+        "and normalize-space()='功能選項']])[1]//a[contains(@class,'panel-tool-close')]",
+    )
+    # ----- 房務入帳（#292）END -----
+
+    # 拆併床相關 locator
+
+    checkbox_bed_setup_room = (
+        By.XPATH,
+        "//tbody[@role='rowgroup']//tr[@role='row']/td[text()='%s']/preceding-sibling::td",
+    )
+
+    bed_setup_status = (
+        By.XPATH,
+        "//tbody[@role='rowgroup']//tr[@role='row']/td[text()='%s']/following-sibling::td",
+    )
+
+    btn_close_bed = (
+        By.XPATH,
+        "//div[@class='e-dlg-header' and descendant::div[text()='拆併床']]/preceding-sibling::button[@title='關閉']",
+    )

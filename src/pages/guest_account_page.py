@@ -76,3 +76,25 @@ class GuestAccountPage(AthenaBasePage):
 
     def get_uni_cod(self):
         return self.driver.find_element(*self.locator.text_uni_cod).get_attribute("value")
+
+    def click_card_row(self, room):
+        locator = self.format_locator(self.locator.text_room_by_value, room)
+        self.click(locator)
+        return self
+
+    def click_checkout(self):
+        self.click(self.locator.btn_checkout)
+        return self
+
+    def close_single_dialog(self):
+        self.click(self.locator.btn_close_single)
+        return self
+
+    def has_cash_room_in_list(self, room):
+        locator = self.format_locator(self.locator.text_room_by_value, room)
+        return self.has_element(locator)
+
+    def search_room(self, room):
+        self.input_with_clear(self.locator.input_room_search, room)
+        self.click(self.locator.btn_search)
+        return self

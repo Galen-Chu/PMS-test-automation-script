@@ -165,3 +165,24 @@ class RoomControlPage(AthenaBasePage):
         """關閉拆併床設定對話框"""
         self.click(self.locator.btn_close_bed)
         return self
+
+    def click_housekeeping_account(self):
+        self.click(self.locator.btn_housekeeping_account)
+        return self
+
+    def close_housekeeping_dialogs(self):
+        """關房務帳資料編輯 dialog + 功能選項 panel。
+
+        兩者必須連續 click：dialog 關閉後隔其他操作，panel close icon 會轉 hidden
+        不可 native click（2026-08-14 兩次實證），window-mask 進而擋住全頁。
+        """
+        self.click(self.locator.btn_close_edit_dialog)
+        self.click(self.locator.btn_close_options_panel)
+        return self
+
+    def search_room_filter(self, room_no):
+        """搜尋區房號篩選。樓層 tab 對 3xx 高房號 lazy render（3F 只載到 330），
+        37x 房不先篩則房卡不在 DOM。"""
+        self.input_with_clear(self.locator.input_room_search, room_no)
+        self.click(self.locator.btn_do_search)
+        return self
