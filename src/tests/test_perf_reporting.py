@@ -97,7 +97,35 @@ class TestReportHtml:
         # 游標提示（title）仍保留完整���稱
         assert "title='node/api/booking/save'" in html
 
-    def test_no_common_root_no_annotation(self):
+    def test_common_root_shows_full_url_prefix(self):
+        apis = [
+            {
+                "name": "https://qa-cloud.athena.com.tw/pms/16/node/api/booking/save",
+                "start": 0,
+                "duration": 100,
+            },
+            {
+                "name": "https://qa-cloud.athena.com.tw/pms/16/node/api/grid/queryRows",
+                "start": 10,
+                "duration": 200,
+            },
+        ]
+        html = build_report_html(apis, {})
+        assert (
+            "共同根路徑" in html
+            and "<code>https://qa-cloud.athena.com.tw/pms/16/node/api/</code>" in html
+        )
+        assert ">booking/save<" in html and ">grid/queryRows<" in html
+
+    def test_mixed_hosts_no_annotation(self):
+        apis = [
+            {"name": "https://a.example.com/x/api/save", "start": 0, "duration": 100},
+            {"name": "https://b.example.com/y/api/save", "start": 10, "duration": 200},
+        ]
+        html = build_report_html(apis, {})
+        assert "共同根路徑" not in html
+
+    def test_no_shared_segment_no_annotation(self):
         apis = [
             {"name": "booking/save", "start": 0, "duration": 100},
             {"name": "auth/token", "start": 10, "duration": 200},

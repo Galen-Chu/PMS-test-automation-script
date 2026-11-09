@@ -63,7 +63,7 @@ _DUMP_JS = """
         })
         .map(function(e) {
             return {
-                name: e.name.replace(/[?].*$/, '').split('/').slice(-3).join('/'),
+                name: e.name.replace(/[?].*$/, ''),
                 start: Math.round(e.startTime),
                 duration: Math.round(e.duration),
                 size: e.transferSize
@@ -117,7 +117,7 @@ class PerformanceMonitor:
                     })
                     .map(function(e) {
                         return {
-                            name: e.name.split('?')[0].split('/').slice(-3).join('/'),
+                            name: e.name.split('?')[0],
                             start: Math.round(e.startTime),
                             duration: Math.round(e.duration),
                             size: e.transferSize

@@ -117,10 +117,14 @@ def _common_root(names):
             common.append(seg[0])
         else:
             break
-    # 至少要有一個以上的共用段，且不能等於完整名稱（全同名無意義）
+    # 至少要有一個以��的共用段，且不能等於完整名稱（全同名無意義）
     if len(common) < 1 or all(len(s) == len(common) for s in segments):
         return None
-    return "/".join(common) + "/"
+    root = "/".join(common) + "/"
+    # 混合不同主機時只會剩下 scheme（https://）——無資訊量，不標註
+    if root.rstrip("/") in ("https:", "http:"):
+        return None
+    return root
 
 
 def _bar_rows(apis, top=12):
