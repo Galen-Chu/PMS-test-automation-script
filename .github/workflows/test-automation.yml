@@ -274,12 +274,31 @@ jobs:
           sudo apt-get update && sudo apt-get install -y allure
         continue-on-error: true
 
+      - name: Restore Allure History
+        # 讓 Allure 原生 Trend 圖（通過率＋測試時長趨勢）跨 RUN 累積：
+        # 上一輪 report/history 注入 results 後 generate 會自動延續
+        uses: actions/cache@v4
+        with:
+          path: allure-history
+          key: allure-history-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            allure-history-${{ github.ref_name }}-
+            allure-history-
+
       - name: Generate Allure Report
         run: |
           # Ensure allure-results directory exists even if tests were empty
           mkdir -p allure-results allure-report
+          # Inject previous history so Trend continues across runs
+          if [ -d allure-history ] && [ -n "$(ls -A allure-history 2>/dev/null)" ]; then
+            mkdir -p allure-results/history
+            cp -r allure-history/. allure-results/history/
+          fi
           # Generate report (allure CLI, no Docker dependency)
           allure generate allure-results/ -o allure-report/ --clean || true
+          # Persist this run's history for the next run
+          mkdir -p allure-history
+          cp -r allure-report/history/. allure-history/ 2>/dev/null || true
           # Create index.html fallback if report generation failed
           if [ ! -f allure-report/index.html ]; then
             echo "<html><body><h1>Allure Report</h1><p>No test results available.</p></body></html>" > allure-report/index.html

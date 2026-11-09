@@ -15,7 +15,6 @@ import json
 import os
 import time
 from datetime import datetime
-from pathlib import Path
 
 import allure
 import pytest
@@ -23,14 +22,13 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-from tools.perf_analyzer import analyze_performance, format_duration
-from tools.perf_report import save_perf_report
+from tools.perf_analyzer import analyze_performance
+from tools.perf_reporting import emit
 
 pytestmark = [pytest.mark.perf]
 
 ROUNDS = int(os.getenv("PERF_ROUNDS", "2"))
 ROOM_COUNT = int(os.getenv("PERF_ROOMS", "150"))
-REPORT_DIR = Path("perf-reports")  # 由 save_perf_report 負責建立，不在 import 時副作用
 ENV_LABEL = os.getenv("ENV", "qa").upper()
 TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M")
 
@@ -55,28 +53,17 @@ class TestPageLoadPerf:
             all_apis.extend(apis)
             print(f"  Round {rd}: {len(apis)} APIs")
 
-        # Generate report
-        output = str(REPORT_DIR / f"page_load_{TIMESTAMP}.html")
-        meta = {
-            "test": f"PMS0110010 Page Load ({ROUNDS} rounds)",
-            "env": ENV_LABEL,
-            "date": TIMESTAMP,
-        }
-        save_perf_report(all_apis, output, meta, report_type="page_load")
-
-        # Attach to Allure
-        slowest = sorted(all_apis, key=lambda x: x["duration"], reverse=True)
-        summary = [
-            f"Page Load Performance ({ROUNDS} rounds, {len(all_apis)} APIs)",
-            "",
-            "Top 10 Slowest:",
-        ] + [f"  {format_duration(a['duration'])} {a['name']}" for a in slowest[:10]]
-        allure.attach("\n".join(summary), name="perf_page_load")
-        allure.attach.file(
-            output, name="perf_report_html", attachment_type=allure.attachment_type.HTML
+        # 統合輸出：Allure 附件（HTML+JSON）＋ 歷史趨勢 ＋ 獨立報告檔
+        kpis, _prev = emit(
+            all_apis,
+            {
+                "test": f"PMS0110010 Page Load ({ROUNDS} rounds)",
+                "env": ENV_LABEL,
+                "date": TIMESTAMP,
+            },
+            test_name="perf_page_load",
         )
-
-        assert len(all_apis) > 0, "No APIs collected — page load may have failed"
+        assert kpis["api_count"] > 0, "No APIs collected — page load may have failed"
 
 
 @allure.feature("Performance")
@@ -101,17 +88,21 @@ class TestBookingFlowPerf:
             thresholds={"booking": 30000, "recalculate": 10000},
         )
 
-        # Generate report
-        output = str(REPORT_DIR / f"booking_{TIMESTAMP}.html")
-        meta = {
-            "test": f"PMS0110010 Booking {ROOM_COUNT} Rooms ({ROUNDS} rounds)",
-            "env": ENV_LABEL,
-            "date": TIMESTAMP,
-        }
-        save_perf_report(analysis, output, meta, report_type="booking")
-
-        # Attach to Allure
-        self._attach_allure(analysis, output)
+        # 統合輸出：輪次明細、門檻違規與趨勢一併進報告
+        emit(
+            apis,
+            {
+                "test": f"PMS0110010 Booking {ROOM_COUNT} Rooms ({ROUNDS} rounds)",
+                "env": ENV_LABEL,
+                "date": TIMESTAMP,
+            },
+            test_name="perf_booking_flow",
+            wall_time=perf_monitor._results.get("wall_time"),
+            thresholds={"booking": 30000, "recalculate": 10000},
+            rounds=analysis["rounds"],
+            save_stats=analysis["stats"].get("save"),
+            recalc_stats=analysis["stats"].get("recalculate"),
+        )
         assert analysis["stats"]["total_api_count"] > 0, "No APIs collected"
 
     def _do_booking_round(self, driver, pm, rd):
@@ -236,30 +227,3 @@ class TestBookingFlowPerf:
                 time.sleep(1)
         except Exception:
             pass
-
-    def _attach_allure(self, analysis, report_path):
-        """Attach performance summary and report to Allure."""
-        stats = analysis.get("stats", {})
-        save = stats.get("save", {})
-        lines = [
-            f"Booking Flow Performance ({ROUNDS} rounds)",
-            f"Total APIs: {stats.get('total_api_count', 0)}",
-            "",
-            f"Save API: count={save.get('count', 0)}, "
-            f"median={format_duration(save.get('median'))}",
-        ]
-        recalc = stats.get("recalculate", {})
-        if recalc.get("count"):
-            lines.append(
-                f"Recalculate: count={recalc['count']}, "
-                f"median={format_duration(recalc.get('median'))}"
-            )
-        if analysis.get("violations"):
-            lines.append(f"\nViolations: {len(analysis['violations'])}")
-            for v in analysis["violations"]:
-                lines.append(f"  {v['api']}: {format_duration(v['duration_ms'])}")
-
-        allure.attach("\n".join(lines), name="perf_booking")
-        allure.attach.file(
-            report_path, name="perf_report_html", attachment_type=allure.attachment_type.HTML
-        )

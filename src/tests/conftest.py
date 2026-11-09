@@ -180,16 +180,21 @@ def _do_login(driver, login_page_class):
 
 
 @pytest.fixture(scope="function")
-def perf_monitor(logged_in_driver):
+def perf_monitor(logged_in_driver, request):
     """Per-test performance monitor (injects hooks, collects API timings).
 
-    Usage in test:
-        def test_xxx(self, logged_in_driver, perf_monitor):
-            perf_monitor.start()
-            # ... page operations ...
-            perf_monitor.attach_to_allure("test_xxx")
+    測試端只需操作 monitor；收尾（停測→報告→Allure 附件→歷史→獨立
+    匯出）在 fixture teardown 自動完成——測試忘記 attach 也不會漏報告。
+    測試自行呼叫 attach_to_allure() 時會標記已輸出，teardown 不重複。
     """
-    return PerformanceMonitor(logged_in_driver)
+    monitor = PerformanceMonitor(logged_in_driver)
+    yield monitor
+    has_data = bool(monitor._results.get("apis") or monitor._results.get("ops"))
+    if (monitor._active or has_data) and not monitor._report_attached:
+        try:
+            monitor.attach_to_allure(request.node.name)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            print(f"  [perf] fixture 自動收尾失敗: {e}")
 
 
 # ============================================================================
@@ -213,13 +218,7 @@ def pytest_runtest_makereport(item, call):  # pylint: disable=unused-argument
 
 
 def pytest_configure(config):
-    alluredir = config.getoption("--alluredir")
-    if alluredir:
-        properties_content = f"""
-        TestEnv={os.getenv('ENV')}
-        PmsVersion={os.getenv('VERSION')}
-        """.strip()
-        file_path = f"{alluredir}/environment.properties"
-        os.makedirs(alluredir, exist_ok=True)
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(properties_content)
+    # Allure 環境面板資料（ENV/VERSION/WEB_URL/Browser）統一由此寫入
+    from tools.perf_reporting import write_environment_properties
+
+    write_environment_properties(config)

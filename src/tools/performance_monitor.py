@@ -82,6 +82,7 @@ class PerformanceMonitor:
         self._active = False
         self._start_time = None
         self._results = {}
+        self._report_attached = False
 
     def start(self, clear_buffer: bool = True):
         """Inject monitoring hooks.
@@ -169,42 +170,27 @@ class PerformanceMonitor:
             "m.t = performance.now(); window.__perf_ops.push(m);"
         )
 
-    def attach_to_allure(self, test_name="perf"):
-        """Attach performance data to Allure report as JSON + summary."""
-        import allure
+    def attach_to_allure(self, test_name="perf", thresholds=None):
+        """統合輸出：效能報告 HTML＋JSON 附件、歷史記錄、獨立檔案匯出。
+
+        走 perf_reporting 的單一渲染路徑（與 Allure 主題一致），
+        回傳原始資料外加 kpis（供測試端斷言）。
+        """
+        import os
 
         data = self.stop()
+        self._report_attached = True
 
-        # Full data as JSON attachment
-        allure.attach(
-            json.dumps(data, indent=2, ensure_ascii=False),
-            name=f"{test_name}_perf_data",
-            attachment_type=allure.attachment_type.JSON,
+        from tools.perf_reporting import emit
+
+        kpis, _prev = emit(
+            data.get("apis", []),
+            {"test": test_name, "env": os.getenv("ENV", "").upper()},
+            test_name=test_name,
+            wall_time=data.get("wall_time"),
+            thresholds=thresholds,
         )
-
-        # Human-readable summary
-        apis = data.get("apis", [])
-        if apis:
-            slow = self.get_slow_apis()
-            summary_lines = [
-                f"Test: {test_name}",
-                f"Wall time: {data.get('wall_time', 'N/A')}s",
-                f"Total API calls: {len(apis)}",
-                f"Slow APIs (>3s): {len(slow)}",
-                "",
-                "Top 10 slowest APIs:",
-            ]
-            sorted_apis = sorted(apis, key=lambda x: x["duration"], reverse=True)
-            for a in sorted_apis[:10]:
-                summary_lines.append(f"  {a['duration']}ms  {a['name']}")
-
-            allure.attach(
-                "\n".join(summary_lines),
-                name=f"{test_name}_perf_summary",
-                attachment_type=allure.attachment_type.TEXT,
-            )
-
-        return data
+        return {**data, "kpis": kpis}
 
     def check_thresholds(self, thresholds=None):
         """Check API timings against thresholds. Returns list of violations.
