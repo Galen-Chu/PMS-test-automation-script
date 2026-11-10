@@ -73,7 +73,7 @@ jobs:
     # 不讓下游 job 在「收集全滅」的假綠燈下空轉（faker 事件教訓）
     name: Collect Guard
     runs-on: ubuntu-latest
-    needs: [lint-and-security, collect-guard]
+    needs: lint-and-security
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
 
     steps:
@@ -135,9 +135,6 @@ jobs:
 
       - name: Create test configuration
         run: cp pytest.ini.template pytest.ini
-          echo "Error: Selenium Grid timed out after 90 seconds"
-          docker compose logs  # Print logs to debug why it failed
-          exit 1
 
       - name: Run Smoke Tests (blocking)
         run: |
