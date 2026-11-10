@@ -68,10 +68,12 @@ jobs:
           name: security-report
           path: security-report.json
 
-  test-smoke:
-    name: Smoke Tests
+  collect-guard:
+    # 收集守門（阻斷）：依賴缺漏/設定壞掉/語法錯誤在此擋下，
+    # 不讓下游 job 在「收集全滅」的假綠燈下空轉（faker 事件教訓）
+    name: Collect Guard
     runs-on: ubuntu-latest
-    needs: lint-and-security
+    needs: [lint-and-security, collect-guard]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
 
     steps:
@@ -97,46 +99,52 @@ jobs:
           pip install -r requirements.txt
 
       - name: Create test configuration
-        run: |
-          cp pytest.ini.example pytest.ini
-          # Update with CI-specific values
-          sed -i 's|SELENIUM_HUB = http://localhost:4444/wd/hub|SELENIUM_HUB = ${{ env.SELENIUM_HUB }}|g' pytest.ini
+        run: cp pytest.ini.example pytest.ini
 
-      - name: Start Selenium Grid
-        run: docker compose up -d
+      - name: Collect all tests (blocking)
+        run: pytest src/tests/ --collect-only -q
 
-      - name: Wait for Selenium Grid
+  test-smoke:
+    # Smoke＝免環境單元層（資料驗證/報告管線），阻斷式：壞了就是紅
+    name: Smoke Tests
+    runs-on: ubuntu-latest
+    needs: [lint-and-security, collect-guard]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
         run: |
-          echo "Waiting for Selenium Grid to be ready..."
-          # Loop for max 90 seconds
-          for i in {1..30}; do
-            STATUS=$(curl -s http://localhost:4444/status | jq -r .value.ready)
-            if [ "$STATUS" = "true" ]; then
-              echo "Selenium Grid is READY!"
-              exit 0
-            fi
-            echo "Grid not ready yet... waiting 3s (Attempt $i)"
-            sleep 3
-          done
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create test configuration
+        run: cp pytest.ini.example pytest.ini
           echo "Error: Selenium Grid timed out after 90 seconds"
           docker compose logs  # Print logs to debug why it failed
           exit 1
 
-      - name: Run Smoke Tests
+      - name: Run Smoke Tests (blocking)
         run: |
-          RESULT=0
           pytest src/tests/ -m smoke \
             -v \
             --alluredir=allure-results \
-            --tb=short \
-            || RESULT=$?
-          # Demo endpoints cannot actually pass; surface the outcome in the
-          # run summary instead of failing or silently swallowing it.
-          echo "Smoke tests exit code: $RESULT (demo endpoints; non-blocking by design)" >> $GITHUB_STEP_SUMMARY
-
-      - name: Stop Selenium Grid
-        if: always()
-        run: docker compose down
+            --tb=short
 
       - name: Upload Allure Results
         uses: actions/upload-artifact@v7
@@ -155,7 +163,7 @@ jobs:
   test-regression:
     name: Regression Tests
     runs-on: ubuntu-latest
-    needs: lint-and-security
+    needs: [lint-and-security, collect-guard]
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
 
     strategy:

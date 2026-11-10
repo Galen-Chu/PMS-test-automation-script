@@ -8,6 +8,8 @@ import json
 
 import pytest
 
+pytestmark = [pytest.mark.smoke]
+
 from tools.perf_reporting import (
     build_report_html,
     compute_kpis,

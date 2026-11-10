@@ -9,6 +9,8 @@ This file shows how to use:
 """
 
 import pytest
+
+pytestmark = [pytest.mark.smoke]
 from tests.fixtures import GuestDataGenerator, ReservationDataGenerator, create_test_scenario
 
 
