@@ -28,7 +28,7 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.chrome.service import Service
 
 print("=" * 60)
-print("A3 驗收：ML 驗證碼模型 vs pytesseract OCR 效率比較")
+print("A3 驗收：ML 驗證碼模型 vs ddddocr OCR 效率比較")
 print("=" * 60)
 
 # Step 0: 確認 ML 模型可用
@@ -43,7 +43,7 @@ try:
     ml_available = True
 except Exception as e:
     print(f"    ML 模型載入失敗: {e}")
-    print("    將使用 pytesseract OCR 後備")
+    print("    將使用 ddddocr 後備")
     ml_available = False
 
 # Step 1: 開瀏覽器
@@ -62,7 +62,7 @@ time.sleep(3)
 print(f"    URL: {driver.current_url[:60]}")
 
 # Step 3: 計時登入
-print(f"\n[3] 開始登入（{'ML 模型' if ml_available else 'pytesseract OCR'}）...")
+print(f"\n[3] 開始登入（{'ML 模型' if ml_available else 'ddddocr OCR'}）...")
 t0 = time.time()
 
 login_page = LoginPage(driver)
@@ -89,7 +89,7 @@ else:
 print("\n" + "=" * 60)
 print("效率比較")
 print("=" * 60)
-print(f"  pytesseract OCR 基準: ~120 秒（昨天測試）")
+print(f"  OCR 後備基準: ~120 秒（歷史測試）")
 print(f"  ML 模型本次:          {elapsed:.1f} 秒")
 print(f"  改善:                 {120/elapsed:.1f}x" if elapsed > 0 else "")
 

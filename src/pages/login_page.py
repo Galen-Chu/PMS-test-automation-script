@@ -3,8 +3,6 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 from time import sleep
-from PIL import Image
-import pytesseract
 from tools.app_config import AppConfig
 from tools.driver_helper import DriverHelper
 from pages.athena_base_page import AthenaBasePage
@@ -29,22 +27,9 @@ class LoginPage(AthenaBasePage):
         super().__init__(driver, LoginLocator())
 
     def login(self, username, password):
-        # Lazy import: keeps the TF/cv2 stack out of module import time, so
-        # collecting unrelated tests does not require the ML dependencies.
-        captcha_model = None
-        try:
-            from tools.captcha.captcha_helper import CaptchaTrainer
-
-            captcha_model = CaptchaTrainer()
-            captcha_model.load_model()
-        except Exception:
-            # ML 模型未訓練或相依套件未安裝，改用 pytesseract OCR
-            captcha_model = None
-
-        # 設定 tesseract 路徑（Windows 安裝位置）
-        if not shutil.which("tesseract"):
-            pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
+        # 解碼器優先序在 _solve_captcha：ddddocr（99.5% 實測、輕量）
+        # → 自訓 CNN（僅 ddddocr 失手時才惰性載入 TF）→ ""。
+        # 不再於登入開頭預載 TF（每次登入省 5-10 秒）。
         retry = 0
         attempts = []
         self.input(self.locator.input_username, username)
@@ -66,7 +51,7 @@ class LoginPage(AthenaBasePage):
                     self.input(self.locator.input_username, username)
                 self.input(self.locator.input_password, password)
                 self.captcha_screenshot()
-                captcha_text, conf, solver = self._solve_captcha(captcha_model)
+                captcha_text, conf, solver = self._solve_captcha()
                 self._record_captcha_attempt(attempts, retry + 1, captcha_text, conf, solver)
                 self.input_with_clear(self.locator.input_valid_code, captcha_text.strip())
                 self.click(self.locator.btn_login)
@@ -82,7 +67,7 @@ class LoginPage(AthenaBasePage):
             while retry == 0 or (retry < MAX_LOGIN_RETRIES and self.has_dialog_tip()):
                 self.close_dialog_tip()
                 self.captcha_screenshot()
-                captcha_text, conf, solver = self._solve_captcha(captcha_model)
+                captcha_text, conf, solver = self._solve_captcha()
                 self._record_captcha_attempt(attempts, retry + 1, captcha_text, conf, solver)
                 self.input_with_clear(self.locator.input_valid_code, captcha_text.strip())
                 self.click(self.locator.btn_login)
@@ -96,22 +81,33 @@ class LoginPage(AthenaBasePage):
         DriverHelper.save_session_storages()
         return self
 
-    def _solve_captcha(self, captcha_model):
-        """ML 模型優先，無模型時用 pytesseract OCR；回傳 (文字, 信心度, 解法)"""
-        if captcha_model is not None:
-            try:
-                text, conf = captcha_model.predict_captcha_detailed(str(CAPTCHA_IMAGE_PATH))
-                return text, conf, "ml"
-            except Exception:
-                pass
-        # pytesseract 後備（無信心度概念，設 0）
-        image = Image.open(CAPTCHA_IMAGE_PATH)
-        processed_image = image.convert("L").resize((400, 128))
-        captcha_text = pytesseract.image_to_string(
-            processed_image,
-            config="-l eng -c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ --psm 13",
-        )
-        return captcha_text, 0.0, "ocr"
+    def _solve_captcha(self):
+        """驗證碼解碼：ddddocr 優先 → 自訓 CNN 後備；回傳 (文字, 信心度, 解法)
+
+        ddddocr 於 QA 產生器實測 199/200（99.5%）、輕量免 TF、對
+        autotest 舊式驗證碼亦泛化，故為首選；自訓 CNN 僅在 ddddocr
+        失手時惰性載入（TF import 約 5-10 秒，不提前付）。
+        """
+        try:
+            import ddddocr
+
+            if getattr(self, "_ddddocr", None) is None:
+                self._ddddocr = ddddocr.DdddOcr(show_ad=False)
+            captcha_text = self._ddddocr.classification(Path(CAPTCHA_IMAGE_PATH).read_bytes())
+            if captcha_text:
+                return captcha_text, 0.0, "ddddocr"
+        except Exception:  # pylint: disable=broad-exception-caught
+            pass
+        try:
+            if getattr(self, "_ml_model", None) is None:
+                from tools.captcha.captcha_helper import CaptchaTrainer
+
+                self._ml_model = CaptchaTrainer()
+                self._ml_model.load_model()
+            text, conf = self._ml_model.predict_captcha_detailed(str(CAPTCHA_IMAGE_PATH))
+            return text, conf, "ml"
+        except Exception:  # pylint: disable=broad-exception-caught
+            return "", 0.0, "none"
 
     def _record_captcha_attempt(self, attempts, number, text, conf, solver):
         """記錄並保存每次驗證碼嘗試（供準確率分析與訓練資料收集）"""

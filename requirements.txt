@@ -5,7 +5,7 @@ faker==40.44.0
 pillow==13.0.0
 pdfplumber==0.11.10
 pyhumps==3.8.0
-pytesseract==0.3.13
+ddddocr==1.6.1
 pytest==9.2.0
 selenium==4.52.0
 pytest-xdist==3.8.0
