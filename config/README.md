@@ -9,7 +9,7 @@ This directory contains configuration templates for the PMS Test Automation Fram
 Copy the example file and customize it for your environment:
 
 ```bash
-cp pytest.ini.example pytest.ini
+cp pytest.ini.template pytest.ini
 ```
 
 Edit `pytest.ini` and replace placeholder values with your actual:

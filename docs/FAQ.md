@@ -55,7 +55,7 @@ pytest src/tests/
 
 **A:** Create `pytest.ini` from template:
 ```bash
-cp pytest.ini.example pytest.ini
+cp pytest.ini.template pytest.ini
 ```
 
 Edit with your values:

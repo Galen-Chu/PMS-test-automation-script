@@ -103,7 +103,7 @@ If not using Selenium Grid:
 ### 1. Create pytest.ini
 
 ```bash
-cp pytest.ini.example pytest.ini
+cp pytest.ini.template pytest.ini
 ```
 
 Edit `pytest.ini` with your settings:

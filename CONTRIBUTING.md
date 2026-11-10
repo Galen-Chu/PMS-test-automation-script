@@ -96,7 +96,7 @@ Feature requests are welcome! Please:
 
 4. **Setup Configuration**
    ```bash
-   cp pytest.ini.example pytest.ini
+   cp pytest.ini.template pytest.ini
    # Edit pytest.ini with your test configuration
    ```
 

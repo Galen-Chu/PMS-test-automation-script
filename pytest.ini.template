@@ -1,3 +1,4 @@
+# 複製本檔為 pytest.ini 並填入環境值（pytest.ini 已 gitignore，憑證不進 git）
 [pytest]
 disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
 pythonpath = src

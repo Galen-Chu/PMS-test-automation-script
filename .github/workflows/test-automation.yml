@@ -9,7 +9,7 @@ on:
     paths:
       - 'src/**'
       - 'requirements*.txt'
-      - 'pytest.ini.example'
+      - 'pytest.ini.template'
       - 'docker-compose.yml'
       - '.github/workflows/test-automation.yml'
   workflow_dispatch:
@@ -99,7 +99,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Create test configuration
-        run: cp pytest.ini.example pytest.ini
+        run: cp pytest.ini.template pytest.ini
 
       - name: Collect all tests (blocking)
         run: pytest src/tests/ --collect-only -q
@@ -134,7 +134,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Create test configuration
-        run: cp pytest.ini.example pytest.ini
+        run: cp pytest.ini.template pytest.ini
           echo "Error: Selenium Grid timed out after 90 seconds"
           docker compose logs  # Print logs to debug why it failed
           exit 1
@@ -196,7 +196,7 @@ jobs:
 
       - name: Create test configuration
         run: |
-          cp pytest.ini.example pytest.ini
+          cp pytest.ini.template pytest.ini
           sed -i 's|SELENIUM_HUB = http://localhost:4444/wd/hub|SELENIUM_HUB = ${{ env.SELENIUM_HUB }}|g' pytest.ini
 
       - name: Start Selenium Grid

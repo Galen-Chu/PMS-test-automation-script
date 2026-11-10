@@ -10,7 +10,7 @@ class AppConfig:
         if raw is None or not raw.strip().isdigit():
             raise RuntimeError(
                 "環境變數 VERSION 未正確設定（應為整數，例如 131）；"
-                "請於 pytest.ini 或環境變數提供，參考 pytest.ini.example"
+                "請於 pytest.ini 或環境變數提供，參考 pytest.ini.template"
             )
         return int(raw)
 

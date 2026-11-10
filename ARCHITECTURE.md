@@ -160,7 +160,7 @@ pms-test-automation-script/
 │
 ├── reports/                # Test reports
 │
-├── pytest.ini.example      # Pytest configuration template
+├── pytest.ini.template      # Pytest configuration template
 ├── requirements.txt        # Python dependencies
 ├── docker-compose.yml      # Selenium Grid setup
 └── README.md               # Project documentation

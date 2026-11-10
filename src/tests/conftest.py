@@ -218,6 +218,14 @@ def pytest_runtest_makereport(item, call):  # pylint: disable=unused-argument
 
 
 def pytest_configure(config):
+    # Pre-flight：沒有設定檔（或 WEB_URL 空值）直接明確中止，
+    # 不讓 321 個測試在深層 RuntimeError 裡集體炸掉（對齊主線機制）
+    if config.inifile is None or not os.getenv("WEB_URL"):
+        pytest.exit(
+            "缺少 pytest 設定：請複製 pytest.ini.template 為 pytest.ini 並填入"
+            "環境值（pytest.ini 已 gitignore），或以 -c 指定設定檔",
+            returncode=4,
+        )
     # Allure 環境面板資料（ENV/VERSION/WEB_URL/Browser）統一由此寫入
     from tools.perf_reporting import write_environment_properties
 
