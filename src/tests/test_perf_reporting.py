@@ -11,6 +11,7 @@ import pytest
 pytestmark = [pytest.mark.smoke]
 
 from tools.perf_reporting import (
+    aggregate_by_endpoint,
     build_report_html,
     compute_kpis,
     record_history,
@@ -135,6 +136,33 @@ class TestReportHtml:
         ]
         html = build_report_html(apis, {})
         assert "共同根路徑" not in html
+
+
+class TestEndpointAggregation:
+    def test_aggregate_math(self):
+        apis = [
+            {"name": "x/api/save", "start": 0, "duration": 100},
+            {"name": "x/api/save", "start": 10, "duration": 300},
+            {"name": "x/api/query", "start": 20, "duration": 50},
+        ]
+        agg = aggregate_by_endpoint(apis)
+        assert agg[0]["name"] == "x/api/save"  # 總耗時最大者在前
+        assert agg[0]["count"] == 2
+        assert agg[0]["total_ms"] == 400
+        assert agg[0]["median_ms"] == 200
+        assert agg[0]["max_ms"] == 300
+
+    def test_section_renders_with_root(self):
+        apis = [
+            {"name": "https://q/api/booking/save", "start": 0, "duration": 100},
+            {"name": "https://q/api/booking/save", "start": 10, "duration": 900},
+            {"name": "https://q/api/grid/query", "start": 20, "duration": 200},
+        ]
+        html = build_report_html(apis, {})
+        assert "端點彙總" in html
+        assert ">booking/save<" in html  # 彙總表顯示剝離後端點
+        assert ">2<" in html  # 筆數
+        assert "最慢單次呼叫" in html  # 個別呼叫區塊仍在
 
 
 class TestParamSanitize:

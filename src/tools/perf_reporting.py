@@ -13,6 +13,7 @@
 import html
 import json
 import os
+import statistics
 from datetime import datetime
 from pathlib import Path
 
@@ -212,6 +213,61 @@ def _table(headers, rows):
     return f"<table><tr>{head}</tr>{body}</table>"
 
 
+def aggregate_by_endpoint(apis: list) -> list:
+    """依端點（路徑）彙總呼叫：筆數／總耗時／中位數／最大值，依總耗時排序。"""
+    groups = {}
+    for a in apis:
+        g = groups.setdefault(a["name"], [])
+        g.append(a["duration"])
+    rows = [
+        {
+            "name": name,
+            "count": len(ds),
+            "total_ms": sum(ds),
+            "median_ms": statistics.median(ds),
+            "max_ms": max(ds),
+        }
+        for name, ds in groups.items()
+    ]
+    return sorted(rows, key=lambda r: r["total_ms"], reverse=True)
+
+
+def _aggregate_section(apis, top=12):
+    """端點彙總區塊：同一端點多次呼叫不再逐筆洗版，看總量與分佈"""
+    agg = aggregate_by_endpoint(apis)
+    if not agg:
+        return ""
+    root = _common_root([r["name"] for r in agg])
+    max_total = agg[0]["total_ms"] or 1
+    rows = []
+    for r in agg[:top]:
+        shown = r["name"][len(root) :] if root and r["name"].startswith(root) else r["name"]
+        pct = r["total_ms"] / max_total * 100
+        rows.append(
+            [
+                f"<span class='pr-bar-name' title='{_esc(r['name'])}'>{_esc(shown)}</span>",
+                str(r["count"]),
+                format_ms(r["median_ms"]),
+                format_ms(r["max_ms"]),
+                f"<span class='pr-bar-track'><span class='pr-bar' "
+                f"style='width:{max(pct, 0.8):.0f}%'></span></span>",
+                format_ms(r["total_ms"]),
+            ]
+        )
+    head = f"<div class='pr-h2'>端點彙總（依總耗時 Top {min(top, len(agg))}）</div>"
+    if root:
+        head += (
+            f"<div class='pr-root'>共同根路徑 <code>{_esc(root)}</code>"
+            f"<span class='pr-sub-inline'>（端點欄顯示其後差異段）</span></div>"
+        )
+    return (
+        "<div class='pr-card'>"
+        + head
+        + _table(["端點", "筆數", "中位數", "最大", "總耗時", ""], rows)
+        + "</div>"
+    )
+
+
 def compute_kpis(apis, wall_time=None):
     """從 API 清單算 KPI（p95/最大值/慢於3s數量）"""
     durations = sorted(a["duration"] for a in apis)
@@ -377,10 +433,12 @@ def build_report_html(
     )
     parts.append(f"<div class='pr-tiles'>{''.join(tiles)}</div>")
 
+    parts.append(_aggregate_section(apis))
+
     slowest = sorted(apis, key=lambda x: x["duration"], reverse=True)
     if slowest:
         parts.append(
-            "<div class='pr-card'><h2 class='pr-h2'>最慢 API（Top 12）</h2>"
+            "<div class='pr-card'><h2 class='pr-h2'>最慢單次呼叫（Top 12）</h2>"
             + _bar_rows(slowest)
             + "</div>"
         )
