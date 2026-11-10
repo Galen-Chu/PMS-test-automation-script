@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY src/ ./src/
 COPY ml-models/ ./ml-models/
-COPY pytest.ini.example ./pytest.ini.example
+COPY pytest.ini.template ./pytest.ini.template
 COPY docker-compose.yml .
 
 # Create necessary directories
