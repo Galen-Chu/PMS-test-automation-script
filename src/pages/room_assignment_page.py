@@ -52,3 +52,10 @@ class RoomAssignmentPage(AthenaBasePage):
         self.input(tmp_locator, ikey)
         self.search()
         return self
+
+    def search_guest_name(self, guest_name):
+        """以住客姓名搜尋明細 grid（ikey 是流水號，資料重建後會變）。"""
+        tmp_locator = self.format_locator(self.locator.input_condition, "住客姓名")
+        self.input(tmp_locator, guest_name)
+        self.search()
+        return self

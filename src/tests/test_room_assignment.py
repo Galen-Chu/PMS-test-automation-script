@@ -6,6 +6,7 @@ from pages.components.tip_component import TipComponent
 from pages.components.header_component import HeaderComponent
 from pages.room_assignment_page import RoomAssignmentPage
 from tools.driver_helper import DriverHelper
+from tools.test_data_helper import get_test_data
 
 
 @allure.feature("排房作業")
@@ -15,6 +16,8 @@ class TestRoomAssignment:
     @pytest.mark.xdist_group("room_assignment")
     @pytest.mark.dependency(name="test_room_assignment_detail", scope="session")
     def test_room_assignment_detail(self, logged_in_driver):
+        data = get_test_data("test_room_assign", "detail")
+        card_name = data["card_name"]
         pages = [HeaderComponent, TipComponent, RoomAssignmentPage, AthenaBasePage]
         web = DriverHelper.get_logged_in_browser(pages, "reservation/PMS0110010")
 
@@ -27,11 +30,17 @@ class TestRoomAssignment:
             web.athena_base_page.click_toolbar_item("彙總").sleep(1)
             web.athena_base_page.screenshot("And 點擊「彙總」變更為「明細」Table")
 
-        with allure.step("And 搜尋訂房卡號"):
-            web.room_assignment_page.search_ikey("00012539").sleep(1)
+        with allure.step("And 搜尋住客姓名"):
+            # 用住客姓名搜尋而非 ikey：ikey 是流水號，環境資料重建後會變
+            web.room_assignment_page.search_guest_name(card_name).sleep(1)
             web.athena_base_page.screenshot("And 搜尋訂房卡號")
 
         with allure.step("And 從房間可排房Table點擊欲進行排房之方框"):
+            # 已排房判斷前等值載入：搜尋後 input 值非同步填充，裸讀搶在載入前
+            # 會誤判未排 → select 撞「已排房不在可排看板」
+            web.athena_base_page.wait_value_stable(
+                lambda: web.room_assignment_page.get_text_in_detail_tab("room_nos")
+            )
             if web.room_assignment_page.get_text_in_detail_tab("room_nos"):
                 web.room_assignment_page.click_room_sta_checkbox()
                 web.tip_component.click_ok().sleep(2)
@@ -78,7 +87,8 @@ class TestRoomAssignment:
             web.athena_base_page.screenshot("And 點擊[彙總]變更為「明細」Table")
 
         with allure.step(f"And {action}[鎖定排房]欄位之CheckBox"):
-            web.room_assignment_page.search_ikey("00012539").sleep(2)
+            data = get_test_data("test_room_assign", "detail")
+            web.room_assignment_page.search_guest_name(data["card_name"]).sleep(2)
             # 只有勾選鎖定的測試需要先判斷有沒有鎖定並解除，取消鎖定不用
             if web.room_assignment_page.is_lock_assign_checked() and action == "勾選鎖定":
                 web.room_assignment_page.click_lock_assignment_checkbox()

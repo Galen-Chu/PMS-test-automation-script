@@ -12,6 +12,7 @@ from pages.reservation_page import ReservationPage
 from pages.dialogs.reservation_card_dialog import ReservationCardDialog
 from tests.share_steps import ShareSteps
 from tools.driver_helper import DriverHelper
+from tools.test_data_helper import get_test_data
 from tools.random_helper import RandomHelper
 
 
@@ -154,7 +155,7 @@ class TestMaindesk:
             web.athena_base_page.screenshot("And 點擊[綠色加號]新增關聯單號")
 
         with allure.step("And 輸入欲查詢之[訂房卡號]、[房號]、[訂房名稱/團號]、[姓名]"):
-            web.reservation_card_dialog.search_link_nos("00008236").sleep(1)
+            web.reservation_card_dialog.search_link_nos("00008236", field="訂房卡號").sleep(1)
             web.athena_base_page.screenshot("And 輸入欲查詢之[訂房卡號]")
 
         with allure.step("And 從查詢Table勾選欲建立關聯單號之訂房客"):
@@ -565,8 +566,8 @@ class TestMaindesk:
                 web.tip_component.click_ok().sleep(1)
                 web.share_panel_component.close_panel("指定訂金").sleep(2)
                 web.maindesk_page.click_toolbar_button_roomdetail("指定訂金").sleep(2)
-            deposit_nos = "2204"
-            web.maindesk_page.select_specify_deposit(deposit_nos).sleep(2)
+            data = get_test_data("test_maindesk_flow_b", "assign_deposit")
+            web.maindesk_page.select_specify_deposit(data["deposit_account_name"]).sleep(2)
             web.athena_base_page.screenshot("And 選擇[訂金編號]")
 
         with allure.step("And 點擊[橘色磁碟片]進行儲存"):

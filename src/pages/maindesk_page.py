@@ -1,3 +1,5 @@
+from time import monotonic, sleep
+
 from selenium.webdriver.common.keys import Keys
 from pages.athena_base_page import AthenaBasePage
 from locators.maindesk_locator import MaindeskLocator
@@ -43,7 +45,10 @@ class MaindeskPage(AthenaBasePage):
         return self.driver.find_element(*tmp_locator).get_attribute("value")
 
     def _click_span_button(self, field):
+        # 編輯模式切換過渡期 span disabled 且 re-render 的 v-modal 攔 click
+        # ——等就緒再點
         tmp_locator = self.format_locator(self.locator.btn_guest_function_span, field)
+        self.wait_clickable(tmp_locator)
         return self.click(tmp_locator)
 
     # ----- 內部共用方法 End -----
@@ -66,7 +71,9 @@ class MaindeskPage(AthenaBasePage):
         return self
 
     def click_edit_button(self, field):
+        # 同 _click_span_button：edit 後過渡期 v-modal 攔 click
         tmp_locator = self.format_locator(self.locator.btn_edit_field, field)
+        self.wait_clickable(tmp_locator)
         self.click(tmp_locator)
         return self
 
@@ -184,12 +191,14 @@ class MaindeskPage(AthenaBasePage):
         self.input_clear(tmp_locator)
         return self
 
-    def select_specify_deposit(self, value):
+    def select_specify_deposit(self, keyword):
+        """用帳戶名過濾並選一筆已存在訂金（流水號換環境會漂，用可控的帳戶名查；
+        點姓名列後欄位自動帶入完整流水號，驗證段用 get_specify_deposit_nos 讀回）"""
         tmp_locator = self.format_locator(self.locator.input_dropdown_field, "訂金編號")
-        self.input(tmp_locator, value)
+        self.input(tmp_locator, keyword)
         self.sleep(2)
         self.input(tmp_locator, Keys.ENTER)
-        tmp_locator = self.format_locator(self.locator.room_dt_row, f"000000{value}")
+        tmp_locator = self.format_locator(self.locator.room_dt_row, keyword)
         self.click(tmp_locator)
         return self
 
@@ -227,6 +236,20 @@ class MaindeskPage(AthenaBasePage):
     def get_car_nos(self):
         tmp_locator = self.format_locator(self.locator.input_by_data_field_id, "carNos")
         return self.driver.find_element(*tmp_locator).get_attribute("value")
+
+    def wait_car_nos_loaded(self, timeout=5):
+        """等車號 dialog 的值載入完成（hidden input 由空轉為有值）。
+
+        dialog 開啟後值填充非同步，DB 有值時 input 從初始空值轉為載入值；
+        wait_value_stable 不適用（空值亦穩定）。等「非空」是載入完成訊號，
+        非期望值——DB 真無車號時 soft timeout 放行，值對不對由斷言層把關。
+        """
+        deadline = monotonic() + timeout
+        while monotonic() < deadline:
+            if self.get_car_nos():
+                return self
+            sleep(1)
+        return self
 
     def click_confirm_button(self):
         tmp_locator = self.format_locator(self.locator.button_by_text, "確定")

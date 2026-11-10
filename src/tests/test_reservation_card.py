@@ -11,6 +11,7 @@ from pages.reservation_page import ReservationPage
 from pages.room_assignment_page import RoomAssignmentPage
 from tests.share_steps import ShareSteps
 from tools.driver_helper import DriverHelper
+from tools.test_data_helper import get_test_data
 from tools.random_helper import RandomHelper
 
 
@@ -337,7 +338,10 @@ class TestReservationCard:
             web.athena_base_page.screenshot("And 填寫開班作業必填欄位")
 
         with allure.step("And 點擊[訂金編號]下拉選單，選擇一筆已存在的訂金"):
-            web.reservation_card_dialog.select_deposit_no("0000002203").sleep(1)
+            deposit_data = get_test_data("test_reservation_card", "load_existing_deposit")
+            web.reservation_card_dialog.select_deposit_no(
+                deposit_data["deposit_account_name"]
+            ).sleep(1)
             web.athena_base_page.screenshot("And 點擊[訂金編號]下拉選單，選擇一筆已存在的訂金")
 
         with allure.step("Then 點擊[磁碟片]儲存按鈕"):
@@ -393,7 +397,7 @@ class TestReservationCard:
             web.athena_base_page.screenshot("And 點擊[+]按鈕開啟新增關聯單號視窗")
 
         with allure.step("And 搜尋要關聯的訂房卡資訊"):
-            web.reservation_card_dialog.search_link_nos("00008235").sleep(1)
+            web.reservation_card_dialog.search_link_nos("00008235", field="訂房卡號").sleep(1)
             web.athena_base_page.screenshot("And 搜尋要關聯的訂房卡資訊")
 
         with allure.step("And 勾選要關聯的訂房卡資訊"):

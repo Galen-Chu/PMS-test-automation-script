@@ -1,4 +1,4 @@
-from time import sleep
+from time import monotonic, sleep
 import allure
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -102,6 +102,23 @@ class BasePage:
     def wait_until(self, condition, timeout=10):
         """等待自訂條件（condition 為接受 driver 的 callable，回傳 Truthy 即完成）"""
         WebDriverWait(self.driver, timeout).until(condition)
+        return self
+
+    def wait_value_stable(self, get_value, timeout=5, interval=1.0):
+        """等 get_value 連續兩次讀取（間隔 interval 秒）相同——async 載入完成的通用訊號。
+
+        interval 對準 server 回應數量級（1 秒）：兩次取樣跨過載入窗口才算穩定，
+        避開短間隔「兩次都讀到舊值」的假穩定。timeout 走 soft path——等不到穩定
+        就放行，穩定是輔助訊號，值對不對由斷言層把關（不把斷言內建進等待）。
+        """
+        deadline = monotonic() + timeout
+        last = get_value()
+        while monotonic() < deadline:
+            sleep(interval)
+            current = get_value()
+            if current == last:
+                return self
+            last = current
         return self
 
     def screenshot(self, file_name):

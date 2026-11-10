@@ -360,13 +360,11 @@ class ReservationCardDialog(AthenaBasePage):
         self.click(self.locator.btn_clear_depositNos)
         return self
 
-    def select_deposit_no(self, deposit_no):
-        """選擇已存在的訂金編號（下拉選單）"""
-        tmp_locator = self.format_locator(self.locator.col_by_data_field_id, "depositNos")
-        self.click(tmp_locator)
-        self.set_dropdown_filter(deposit_no)
-        deposit_option = self.format_locator(self.locator.select_option_dropdownbase, deposit_no)
-        self.wait_visible(deposit_option)
+    def select_deposit_no(self, keyword):
+        """用卡名過濾並選一筆已存在訂金（流水號換環境會漂，用可控的卡名查）"""
+        self.set_dropdown_filter(keyword).sleep(1)
+        # 選項文字 = 流水號+卡名+金額；點卡名欄 div（事件冒泡到 li 等同選中該筆）
+        deposit_option = self.format_locator(self.locator.select_option_dropdownbase, keyword)
         self.click(deposit_option)
         return self
 
@@ -416,11 +414,11 @@ class ReservationCardDialog(AthenaBasePage):
         self.click(self.locator.link_nos_add_button)
         return self
 
-    def search_link_nos(self, ikey):
-        """輸入訂房卡號進行查詢"""
-        tmp_locator = self.format_locator(self.locator.input_condition, "訂房卡號")
-        self.input_with_clear(tmp_locator, ikey)
-        self.click(self.locator.btn_search)
+    def search_link_nos(self, keyword, field="姓名"):
+        """輸入查詢條件搜尋可關聯訂房卡（預設姓名——ikey 是流水號，環境重建後會變）"""
+        tmp_locator = self.format_locator(self.locator.input_condition, field)
+        self.input_with_clear(tmp_locator, keyword)
+        self.search()
         return self
 
     def check_link_nos(self):

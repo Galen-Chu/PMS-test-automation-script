@@ -49,7 +49,7 @@
                         },
                         {
                             "key": "assign_deposit",
-                            "deposit_nos": "2204"
+                            "deposit_account_name": "Sunny Yang"
                         },
                         {
                             "key": "add_spare_parts",
@@ -1036,7 +1036,7 @@
                         {
                             "key": "load_existing_deposit",
                             "deposit_amo": "1000",
-                            "deposit_account_name": "Card Deposit Add"
+                            "deposit_account_name": "Sunny Yang"
                         }
                     ]
                 }
